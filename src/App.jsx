@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Routes,
-  Route,
-  Navigate,
-  Link,
+  Route
 } from "react-router-dom";
 import { SignIn } from "./pages/SignIn";
 import { ProfilePage } from "./pages/ProfilePage";
@@ -12,46 +10,10 @@ import { SignUp } from "./pages/SignUp";
 import { HomePage } from "./pages/HomePage";
 import MainPage from "./pages/MainPage";
 import PostPage from "./pages/PostPage";
-import { useDispatch, useSelector } from "react-redux";
-import { getUserData } from "./actions/userAction";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
-import Collapse from "@mui/material/Collapse";
-
-export const ProtectedRoute = ({ user, children }) => {
-  if (!user) {
-    return (
-      <>
-        <Collapse timeout={5000}>
-          <Alert
-            sx={{ width: "50em", height: "20em" }}
-            severity="error"
-            variant="filled"
-          >
-            <AlertTitle>User not logged in</AlertTitle>
-            You need to Sign Up or Log In — {" "}
-            <strong>
-              <Link to="/">Click here</Link>
-            </strong>
-          </Alert>
-        </Collapse>
-
-        <Navigate to="/" replace />
-      </>
-    );
-  }
-  return children;
-};
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export const App = () => {
-  const [user, setUser] = useState(null);
-  const dispatch = useDispatch();
-  const { currentUser } = useSelector((store) => store.user);
 
-  useEffect(() => {
-    dispatch(getUserData());
-    setUser(currentUser);
-  }, [dispatch, currentUser]);
   return (
     <>
       <Router>
@@ -59,7 +21,7 @@ export const App = () => {
           <Route
             path="/profile"
             element={
-              <ProtectedRoute user={user}>
+              <ProtectedRoute >
                 <ProfilePage />
               </ProtectedRoute>
             }
@@ -67,7 +29,7 @@ export const App = () => {
           <Route
             path="/main"
             element={
-              <ProtectedRoute user={user}>
+              <ProtectedRoute >
                 <MainPage />
               </ProtectedRoute>
             }
@@ -77,7 +39,7 @@ export const App = () => {
           <Route
             path="/post/:id"
             element={
-              <ProtectedRoute user={user}>
+              <ProtectedRoute >
                 <PostPage />
               </ProtectedRoute>
             }
