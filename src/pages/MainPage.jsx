@@ -127,7 +127,7 @@ export default function MainPage() {
               ></NewPostInput>
 
               <Tooltip title="add post">
-                <Button onClick={handleAddNewPost} variant="contained">
+                <Button onClick={handleAddNewPost} variant="contained" sx={{width: "13em"}}>
                   Add New Post
                 </Button>
               </Tooltip>

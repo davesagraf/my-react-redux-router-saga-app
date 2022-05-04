@@ -56,7 +56,7 @@ export const SignIn = () => {
             Sign In
           </Typography>
           <InputOutlined
-            label={"email"}
+            label={"Email"}
             handleEnter={handleEnterEmail}
             type="email"
             id="email"
@@ -64,7 +64,7 @@ export const SignIn = () => {
             required
           />
           <InputOutlined
-            label={"password"}
+            label={"Password"}
             handleEnter={handleEnterPassword}
             type="password"
             id="password"

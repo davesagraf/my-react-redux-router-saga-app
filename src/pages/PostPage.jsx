@@ -229,7 +229,7 @@ export default function PostPage() {
                           variant="contained"
                           id={comment.id}
                         >
-                          <EditIcon></EditIcon>
+                          <EditIcon id={comment.id}></EditIcon>
                         </IconButton>
                       </Tooltip>
 
