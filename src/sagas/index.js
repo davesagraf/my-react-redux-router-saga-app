@@ -239,7 +239,6 @@ function* fetchAddNewComment(payload) {
     "https://test-api-post.herokuapp.com/comments/add",
     requestOptions
   ).then((response) => response.json())
-  .then((result) => console.log(result))
 
   yield put({ type: "GET_CURRENT_POST", id: thisPostId })
 }
@@ -269,7 +268,6 @@ function* fetchDeleteComment (payload) {
     `https://test-api-post.herokuapp.com/comments/comment/${commentId}`,
     requestOptions
   ).then((response) => response.json())
-  .then((result) => console.log(result))
 
   yield put({ type: "GET_CURRENT_POST", id: postId })
 }

@@ -24,9 +24,6 @@ export const ProfilePage = () => {
     dispatch(getUserData());
   }, [dispatch]);
   
-
-  currentUser ? console.log (currentUser) : console.log("loading...")
-
   const thisUserEmail = currentUser.email
   const thisUserFirstName = currentUser.first_name
   const thisUserLastName = currentUser.last_name
@@ -133,7 +130,7 @@ export const ProfilePage = () => {
                   width: "540px",
                   display: "flex",
                   flexDirection: "column",
-                  marginLeft: "1.6em"
+                  marginLeft: "2.1em"
                 }}
               >
                 <Typography
