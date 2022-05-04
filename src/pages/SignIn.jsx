@@ -28,7 +28,7 @@ export const SignIn = () => {
 
   const handleLogin = () => {
     dispatch(logIn(userData));
-    navigate('/profile')
+    navigate('/main')
   };
 
   const handleRedirectToSignUp = () => {
