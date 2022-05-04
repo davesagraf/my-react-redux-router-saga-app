@@ -31,9 +31,7 @@ const fetchSignUp = async (payload) => {
     "https://test-api-post.herokuapp.com/auth/sign_up",
     requestOptions
   )
-    .then((response) => response.text())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
+    .then((response) => response.json())
 };
 
 export function* logIn() {
@@ -75,11 +73,11 @@ export function* getUser() {
   yield takeEvery(GET_USER_DATA, fetchGetUser);
 }
 
-const fetchGetUser = async () => {
+function* fetchGetUser () {
 
   let bearerToken = localStorage.getItem("Authorization").valueOf();
 
-  put({ type: "LOADING" });
+  yield put({ type: "LOADING" });
 
   try{
   const requestOptions = {
@@ -91,16 +89,13 @@ const fetchGetUser = async () => {
     redirect: "follow",
   };
 
-  const user = await fetch("https://test-api-post.herokuapp.com/user/profile", requestOptions)
+  const user = yield fetch("https://test-api-post.herokuapp.com/user/profile", requestOptions)
     .then((response) => response.json())
 
-    console.log(user)
-
-    put({ type: "SUCCESS_GET_USER", payload: user });
+    return yield put({ type: "SUCCESS_GET_USER", payload: user });
   } catch (error) {
-    put({ type: "ERRORS", payload: error });
+    yield put({ type: "ERRORS", payload: error });
   }
-
 };
 
 export function* getPosts() {
@@ -256,10 +251,8 @@ export function* deleteComment() {
 function* fetchDeleteComment (payload) {
   
   const commentId = payload.thisCommentId
-  console.log(commentId)
 
   const postId = payload.postId
-  console.log(postId)
 
   let bearerToken = localStorage.getItem("Authorization").valueOf();
 

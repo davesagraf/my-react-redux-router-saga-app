@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Button, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { Paper } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
-import { NewPostInput } from "../components/NewPostInput";
-import { useParams, useNavigate } from "react-router-dom";
+import { styled } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
+
 
 import { getUserData } from "../actions/userAction";
 import Avatar from "@mui/material/Avatar";
@@ -14,23 +14,25 @@ import HomeIcon from "@mui/icons-material/Home";
 import Tooltip from "@mui/material/Tooltip";
 
 export const ProfilePage = () => {
+ 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { currentUser } = useSelector((store) => store.user);
-
+  
   useEffect(() => {
     dispatch(getUserData());
   }, [dispatch]);
+  
 
-  currentUser ? console.log(currentUser) : console.log("loading...");
+  currentUser ? console.log (currentUser) : console.log("loading...")
 
-  const thisUserEmail = currentUser.email;
-  const thisUserFirstName = currentUser.first_name;
-  const thisUserLastName = currentUser.last_name;
+  const thisUserEmail = currentUser.email
+  const thisUserFirstName = currentUser.first_name
+  const thisUserLastName = currentUser.last_name
 
-  const userFirstNameFirstLetter = thisUserFirstName.charAt(0);
-  const userLastNameFirstLetter = thisUserLastName.charAt(0);
+  const userFirstNameFirstLetter = thisUserFirstName.charAt(0)
+  const userLastNameFirstLetter = thisUserLastName.charAt(0)
 
   const userInitials = userFirstNameFirstLetter + userLastNameFirstLetter;
 
@@ -45,7 +47,6 @@ export const ProfilePage = () => {
     marginTop: "5em"
   }));
 
-  const theme = createTheme({ palette: { mode: "light" } });
 
   const handleNavigateToMain = () => {
     try {
@@ -92,7 +93,7 @@ export const ProfilePage = () => {
                   marginTop: "3em"
                 }}
               >
-                <Avatar>{userInitials}</Avatar>
+                <Avatar> {userInitials} </Avatar>
               </Grid>
               <Grid
                 item
@@ -107,7 +108,7 @@ export const ProfilePage = () => {
                   color="text.secondary"
                   gutterBottom
                 >
-                  First Name: {currentUser.first_name}
+                  First Name: {thisUserFirstName}
                 </Typography>
               </Grid>
               <Grid
@@ -123,7 +124,7 @@ export const ProfilePage = () => {
                   color="text.secondary"
                   gutterBottom
                 >
-                  Last Name: {currentUser.last_name}
+                  Last Name: {thisUserLastName}
                 </Typography>
               </Grid>
               <Grid
@@ -140,7 +141,7 @@ export const ProfilePage = () => {
                   color="text.secondary"
                   gutterBottom
                 >
-                  email: {currentUser.email}
+                  email: {thisUserEmail}
                 </Typography>
               </Grid>
             </Item>
