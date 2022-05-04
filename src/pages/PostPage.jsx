@@ -216,11 +216,11 @@ export default function PostPage() {
               {comments ? (
                 comments.map((comment, index) => (
                   <Box key={index} id={comment.id}>
-                    <Item elevation={5} id={comment.id}>
+                    <Item elevation={5} id={comment.id} sx={{width: "45em", height: "10.6em"}}>
                       <Tooltip title="Edit Comment">
                         <IconButton
                           sx={{
-                            transform: "translate(17.1em, -1em)",
+                            transform: "translate(15.1em, -1em)",
                             alignSelf: "flex-start",
                           }}
                           onClick={() => {
@@ -236,7 +236,7 @@ export default function PostPage() {
                       <Tooltip title="Delete Comment">
                         <IconButton
                           sx={{
-                            transform: "translate(15.4em, 1em)",
+                            transform: "translate(13.3em, 1em)",
                             alignSelf: "flex-start",
                           }}
                           onClick={handleDeleteComment}
@@ -299,7 +299,7 @@ export default function PostPage() {
         ></NewCommentInput>
 
         <Tooltip title="add comment">
-          <Button onClick={handleAddNewComment} variant="contained">
+          <Button onClick={handleAddNewComment} variant="contained" sx={{width: "15em"}}>
             Add New Comment
           </Button>
         </Tooltip>

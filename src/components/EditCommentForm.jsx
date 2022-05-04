@@ -36,11 +36,12 @@ return <>
                <Grid
                item
                sx={{
-                 width: "540px",
+                 width: "25em",
+                 height: "9em",
                  display: "flex",
                  flexDirection: "column",
-                 marginLeft: "5vw",
-                 marginBottom: "10em"
+                 marginLeft: "8em",
+                 transform: "translate(-8em, -6.7em)"
                }}
              >
                <Typography
@@ -58,7 +59,7 @@ return <>
                ></NewCommentInput>
  
                <Tooltip title="edit comment">
-                 <Button onClick={handleEditComment} variant="contained">
+                 <Button onClick={handleEditComment} variant="contained" sx={{width: "13em"}}>
                    Save comment
                  </Button>
                </Tooltip>

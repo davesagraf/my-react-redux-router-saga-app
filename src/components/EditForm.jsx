@@ -45,8 +45,8 @@ return <>
                  width: "540px",
                  display: "flex",
                  flexDirection: "column",
-                 marginLeft: "5vw",
-                 marginBottom: "10em"
+                 marginLeft: "8em",
+                 transform: "translateY(-3em)"
                }}
              >
                <Typography
