@@ -75,11 +75,11 @@ export function* getUser() {
   yield takeEvery(GET_USER_DATA, fetchGetUser);
 }
 
-function* fetchGetUser () {
+const fetchGetUser = async () => {
 
   let bearerToken = localStorage.getItem("Authorization").valueOf();
 
-  yield put({ type: "LOADING" });
+  put({ type: "LOADING" });
 
   try{
   const requestOptions = {
@@ -91,12 +91,14 @@ function* fetchGetUser () {
     redirect: "follow",
   };
 
-  const user = yield fetch("https://test-api-post.herokuapp.com/user/profile", requestOptions)
+  const user = await fetch("https://test-api-post.herokuapp.com/user/profile", requestOptions)
     .then((response) => response.json())
 
-    return yield put({ type: "SUCCESS_GET_USER", payload: user });
+    console.log(user)
+
+    put({ type: "SUCCESS_GET_USER", payload: user });
   } catch (error) {
-    yield put({ type: "ERRORS", payload: error });
+    put({ type: "ERRORS", payload: error });
   }
 
 };
@@ -243,15 +245,6 @@ function* fetchAddNewComment(payload) {
     requestOptions
   ).then((response) => response.json())
   .then((result) => console.log(result))
-
-  // const getRequestOptions = {
-  //   method: "GET",
-  //   headers: {
-  //     Authorization: `Bearer ${bearerToken}`,
-  //     "Content-Type": "application/json",
-  //   },
-  //   redirect: "follow",
-  // };
 
   yield put({ type: "GET_CURRENT_POST", id: thisPostId })
 }

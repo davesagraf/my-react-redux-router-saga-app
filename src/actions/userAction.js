@@ -33,9 +33,8 @@ export const authError = (userData) => {
   }
 }
 
-export const getUserData = (currentUser) => {
+export const getUserData = () => {
   return {
-    type: GET_USER_DATA,
-    currentUser
+    type: GET_USER_DATA
   };
 };

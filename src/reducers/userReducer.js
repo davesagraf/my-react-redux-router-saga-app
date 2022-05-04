@@ -1,4 +1,10 @@
-const initialState =  [];
+const initialState =  {
+  currentUser: {
+    first_name: "",
+    last_name: "",
+    email: ""
+  }
+};
 
 export const userReducer = (state = initialState, action) => {
   switch (action.type) {

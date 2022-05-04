@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Box, Button, Typography } from "@mui/material";
 import { Paper } from "@mui/material";
@@ -17,22 +17,23 @@ export const ProfilePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { currentUser } = useSelector((store) => store.user);
+  
   useEffect(() => {
     dispatch(getUserData());
   }, [dispatch]);
+  
 
-  // const { currentUser } = useSelector((store) => store.user);
+  currentUser ? console.log (currentUser) : console.log("loading...")
 
-  // currentUser ? console.log (currentUser) : console.log("loading...")
+  const thisUserEmail = currentUser.email
+  const thisUserFirstName = currentUser.first_name
+  const thisUserLastName = currentUser.last_name
 
-  // const thisUserEmail = currentUser.email
-  // const thisUserFirstName = currentUser.first_name
-  // const thisUserLastName = currentUser.last_name
+  const userFirstNameFirstLetter = thisUserFirstName.charAt(0)
+  const userLastNameFirstLetter = thisUserLastName.charAt(0)
 
-  // const userFirstNameFirstLetter = thisUserFirstName.charAt(0)
-  // const userLastNameFirstLetter = thisUserLastName.charAt(0)
-
-  // const userInitials = userFirstNameFirstLetter + userLastNameFirstLetter;
+  const userInitials = userFirstNameFirstLetter + userLastNameFirstLetter;
 
   const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
@@ -72,34 +73,29 @@ export const ProfilePage = () => {
         </Button>
       </Tooltip>
 
-      {"" ? (
+      {currentUser ? (
         <>
-      <Avatar>User Initials 
-        {/* {userInitials}  */}
-        </Avatar>
+      <Avatar>{userInitials}</Avatar>
       <Typography
         sx={{ fontSize: 18 }}
         color="text.secondary"
         gutterBottom
       >
-      First Name: 
-      {/* {currentUser.first_name} */}
+      First Name: {currentUser.first_name}
       </Typography>
       <Typography
         sx={{ fontSize: 18 }}
         color="text.secondary"
         gutterBottom
       >
-      Last Name: 
-      {/* {currentUser.last_name} */}
+      Last Name: {currentUser.last_name}
       </Typography>
       <Typography
         sx={{ fontSize: 16 }}
         color="text.secondary"
         gutterBottom
       >
-      email: 
-      {/* {currentUser.email} */}
+      email: {currentUser.email}
       </Typography>
     </>
       ) : (
@@ -131,4 +127,3 @@ export const ProfilePage = () => {
   </> 
   )
 };
- 
