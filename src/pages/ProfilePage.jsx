@@ -13,17 +13,28 @@ import Avatar from "@mui/material/Avatar";
 import HomeIcon from "@mui/icons-material/Home";
 import Tooltip from "@mui/material/Tooltip";
 
+import { getAllPosts } from "../actions/postAction";
+
 export const ProfilePage = () => {
  
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { currentUser } = useSelector((store) => store.user);
+  const { posts } = useSelector((store) => store.posts);
   
   useEffect(() => {
     dispatch(getUserData());
+    dispatch(getAllPosts());
   }, [dispatch]);
-  
+
+  const userId = currentUser.id
+
+  const userPosts = posts.filter(user => user.userId === userId)
+  console.log(userPosts)
+
+
+
   const thisUserEmail = currentUser.email
   const thisUserFirstName = currentUser.first_name
   const thisUserLastName = currentUser.last_name
@@ -142,6 +153,42 @@ export const ProfilePage = () => {
                 </Typography>
               </Grid>
             </Item>
+
+            <Grid
+              item
+              sx={{
+                width: "50em",
+                display: "flex",
+                flexDirection: "column",
+                cursor: "pointer",
+              }}
+            >
+              {userPosts.map((post, index) => (
+                <Tooltip key={index} title="click to see the post">
+                  <Item
+                    elevation={5}
+                    id={post.id}
+                    onClick={() => {
+                      navigate(`/post/${post.id}`);
+                    }}
+                  >
+                    <Typography
+                      sx={{ fontSize: 18 }}
+                      color="text.secondary"
+                      gutterBottom
+                    >
+                      {post.title}
+                    </Typography>
+                    <Typography
+                      sx={{ mb: 1.5, fontSize: 14, boxSizing: "border-box" }}
+                      color="text.secondary"
+                    >
+                      {post.description}
+                    </Typography>
+                  </Item>
+                </Tooltip>
+              ))}
+            </Grid>
           </>
         ) : (
           <>
