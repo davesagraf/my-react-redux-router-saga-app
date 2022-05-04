@@ -77,7 +77,7 @@ export default function PostPage() {
 
   const handleDeleteComment = (event) => {
     const thisCommentId = event.target.id;
-    const postId = id;
+    const postId = id
     try {
       dispatch(deleteComment(thisCommentId, postId));
       dispatch(getCurrentPost(id));
@@ -215,7 +215,7 @@ export default function PostPage() {
             >
               {comments ? (
                 comments.map((comment, index) => (
-                  <Box key={index}>
+                  <Box key={index} id={comment.id}>
                     <Item elevation={5} id={comment.id}>
                       <Tooltip title="Edit Comment">
                         <IconButton
@@ -243,7 +243,7 @@ export default function PostPage() {
                           variant="contained"
                           id={comment.id}
                         >
-                          <DeleteForeverRoundedIcon></DeleteForeverRoundedIcon>
+                          <DeleteForeverRoundedIcon id={comment.id}></DeleteForeverRoundedIcon>
                         </IconButton>
                       </Tooltip>
                       {!changeComment ? (

@@ -254,10 +254,12 @@ export function* deleteComment() {
 }
 
 function* fetchDeleteComment (payload) {
-
-  const thisPostId = payload.postId
   
   const commentId = payload.thisCommentId
+  console.log(commentId)
+
+  const postId = payload.postId
+  console.log(postId)
 
   let bearerToken = localStorage.getItem("Authorization").valueOf();
 
@@ -276,7 +278,7 @@ function* fetchDeleteComment (payload) {
   ).then((response) => response.json())
   .then((result) => console.log(result))
 
-  yield put({ type: "GET_CURRENT_POST", id: thisPostId })
+  yield put({ type: "GET_CURRENT_POST", id: postId })
 }
 
 export function* editPost() {

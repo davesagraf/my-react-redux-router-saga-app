@@ -29,6 +29,8 @@ export const postReducer = (state = initialState, action) => {
       return { ...state };
     case "EDIT_COMMENT":
       return { ...state, loading: false}
+    case "DELETE_COMMENT":
+        return { ...state };
     default:
       return { ...state };
   }

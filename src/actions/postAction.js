@@ -48,7 +48,7 @@ export const addNewComment = (newComment) => {
   }
 }
 
-export const deleteComment = (thisCommentId, postId) => {
+export const deleteComment = (thisCommentId, postId ) => {
   return {
     type: DELETE_COMMENT,
     thisCommentId, postId
