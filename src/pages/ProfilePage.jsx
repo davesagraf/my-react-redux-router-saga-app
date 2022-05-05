@@ -32,9 +32,6 @@ export const ProfilePage = () => {
   const userId = currentUser.id
 
   const userPosts = posts.filter(post => post.user_id === userId)
-  console.log(userPosts)
-
-
 
   const thisUserEmail = currentUser.email
   const thisUserFirstName = currentUser.first_name

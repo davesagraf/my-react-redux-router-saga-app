@@ -3,10 +3,9 @@ import { InputOutlined } from "../components/Input";
 import React, { useState } from "react";
 import { blue } from "@mui/material/colors";
 import { useDispatch } from "react-redux";
-import { logIn } from "../actions/userAction";
+import { logIn, authSuccess } from "../actions/userAction";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-
 
 export const SignIn = () => {
   const dispatch = useDispatch();
@@ -28,7 +27,10 @@ export const SignIn = () => {
 
   const handleLogin = () => {
     dispatch(logIn(userData));
-    navigate('/main')
+    dispatch(authSuccess(userData));
+    setTimeout(() => {
+      navigate('/main')
+    }, 1000)
   };
 
   const handleRedirectToSignUp = () => {

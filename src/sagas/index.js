@@ -70,7 +70,6 @@ export function* getUser() {
 }
 
 function* fetchGetUser () {
-  yield put({ type: "LOADING" });
 
   let bearerToken = localStorage.getItem("Authorization").valueOf();
 
@@ -99,8 +98,6 @@ export function* getPosts() {
 
 function* postsAsync() {
   let bearerToken = localStorage.getItem("Authorization").valueOf();
-
-  yield put({ type: "LOADING" });
 
   try {
     const requestOptions = {
@@ -297,8 +294,6 @@ function* fetchEditPost(payload) {
 
   yield put({ type: "GET_CURRENT_POST", id: payload.updatedPost.id })
 }
-
-///
 
 export function* editComment() {
   yield takeEvery(EDIT_COMMENT,fetchEditComment);

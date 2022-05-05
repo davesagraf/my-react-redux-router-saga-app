@@ -70,9 +70,9 @@ export const App = () => {
           <Link className={classes.links} to={auth ? "/main" : "/"}>
             Home
           </Link>
-          <Link onClick={handleLogOut} className={classes.links} to="/">
+          {auth ? <Link onClick={handleLogOut} className={classes.links} to="/">
             Log Out
-          </Link>
+          </Link> : null }
         </Box>
 
         <Routes>
