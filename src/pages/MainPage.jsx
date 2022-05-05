@@ -158,28 +158,28 @@ export default function MainPage() {
                       color="white"
                       gutterBottom
                     >
-                      Title:
+                      Post Title:
                       {" " + " " + " " +  post.title}
                     </Typography>
                     <Typography
                       sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box" }}
                       color="text.secondary"
                     >
-                      Description:
+                      Post Description:
                       {" " + " " + " " +  post.description}
                     </Typography>
                     <Typography
-                      sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box", transform: "translate(0em, 6em)" }}
+                      sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box", transform: "translate(0em, 5em)" }}
                       color="text.secondary"
                     >
-                      AuthorID:
+                      Post AuthorID:
                       {" " + " " + " " + post.user_id}
                     </Typography>
                     <Typography
-                      sx={{ mb: 1.5, fontSize: 13, boxSizing: "border-box", transform: "translate(0em, 7em)"}}
+                      sx={{ mb: 1.5, fontSize: 13, boxSizing: "border-box", transform: "translate(0em, 6em)"}}
                       color="text.secondary"
                     >
-                      Created:
+                      Created at:
                       {" " + " " + " " +  post.createdAt }
                     </Typography>
                   </Item>

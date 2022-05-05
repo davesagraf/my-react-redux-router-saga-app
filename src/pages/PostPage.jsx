@@ -195,14 +195,14 @@ export default function PostPage() {
                     color="white"
                     gutterBottom
                   >
-                    Title:
+                    Post Title:
                     {" " + " " + " " + currentPost.title}
                   </Typography>
                   <Typography
                     sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box" }}
                     color="text.secondary"
                   >
-                    Description:
+                    Post Description:
                     {" " + " " + " " + currentPost.description}
                   </Typography>
                   <Typography
@@ -214,7 +214,7 @@ export default function PostPage() {
                     }}
                     color="text.secondary"
                   >
-                    AuthorID:
+                    Post AuthorID:
                     {" " + " " + " " + currentPost.user_id}
                   </Typography>
                   <Typography
@@ -226,7 +226,7 @@ export default function PostPage() {
                     }}
                     color="text.secondary"
                   >
-                    Created:
+                    Created at:
                     {" " + " " + " " + currentPost.createdAt}
                   </Typography>
                 </>
@@ -293,13 +293,27 @@ export default function PostPage() {
                             }}
                             color="white"
                             gutterBottom
-                          >comment #{comment.id}</Typography>
+                          >Comment # {" " + comment.id}</Typography>
                           <Typography
-                            sx={{ fontSize: 18 }}
+                            sx={{ fontSize: 18, transform: "translate(0em, -3em)" }}
                             color="text.secondary"
                             gutterBottom
                           >
                             {comment.title}
+                          </Typography>
+                          <Typography
+                            sx={{ fontSize: 13, transform: "translate(0em, -2.7em)" }}
+                            color="text.secondary"
+                            gutterBottom
+                          >
+                           Comment AuthorID: {" " + " " + " " + comment.user_id}
+                          </Typography>
+                          <Typography
+                            sx={{ fontSize: 13, transform: "translate(0em, -2em)" }}
+                            color="text.secondary"
+                            gutterBottom
+                          >
+                           Created at: {" " + " " + " " + comment.createdAt}
                           </Typography>
                         </>
                       ) : (
