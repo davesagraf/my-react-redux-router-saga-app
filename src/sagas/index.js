@@ -51,22 +51,18 @@ const fetchLogIn = async (payload) => {
     redirect: "follow",
   };
 
-  await fetch(
+  const response = await fetch(
     "https://test-api-post.herokuapp.com/auth/sign_in",
     requestOptions
   )
-    .then((response) => {
       if (response.status === 401) {
         throw new Error(response);
       }
-      return response.headers.get("Authorization");
-    })
-    .then((result) => {
-      localStorage.setItem("Authorization", result.slice(7));
-    })
-    .catch((error) => {
-      throw new Error(error);
-    });
+      else {
+        let token = response.headers.get("Authorization");
+        localStorage.setItem("Authorization", token.slice(7));
+      }
+    
 };
 
 export function* getUser() {
@@ -74,10 +70,9 @@ export function* getUser() {
 }
 
 function* fetchGetUser () {
+  yield put({ type: "LOADING" });
 
   let bearerToken = localStorage.getItem("Authorization").valueOf();
-
-  yield put({ type: "LOADING" });
 
   try{
   const requestOptions = {
