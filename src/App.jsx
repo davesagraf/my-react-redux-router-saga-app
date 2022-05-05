@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -25,8 +25,14 @@ export const App = () => {
   const classes = useStyles();
   const auth = localStorage.getItem("Authorization");
 
+  const [user, setUserLogOut] = useState({
+    email: "",
+    password: ""
+  })
+
   const handleLogOut = () => {
     localStorage.clear();
+    user = setUserLogOut()
   }
 
   const ProtectedRoute = () => {

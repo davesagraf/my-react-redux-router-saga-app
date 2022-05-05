@@ -5,6 +5,7 @@ import { Paper } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import { blue } from "@mui/material/colors";
 
 
 import { getUserData } from "../actions/userAction";
@@ -30,7 +31,7 @@ export const ProfilePage = () => {
 
   const userId = currentUser.id
 
-  const userPosts = posts.filter(user => user.userId === userId)
+  const userPosts = posts.filter(post => post.user_id === userId)
   console.log(userPosts)
 
 
@@ -155,14 +156,13 @@ export const ProfilePage = () => {
             </Item>
 
             <Grid
-              item
-              sx={{
-                width: "50em",
-                display: "flex",
-                flexDirection: "column",
-                cursor: "pointer",
-              }}
-            >
+        container
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          width: "100%",
+        }}
+      >
               {userPosts.map((post, index) => (
                 <Tooltip key={index} title="click to see the post">
                   <Item
@@ -172,18 +172,34 @@ export const ProfilePage = () => {
                       navigate(`/post/${post.id}`);
                     }}
                   >
-                    <Typography
-                      sx={{ fontSize: 18 }}
-                      color="text.secondary"
+                                      <Typography
+                      sx={{ fontSize: 20, backgroundColor: blue[600], transform: "translate(0em, -1.5em)" }}
+                      color="white"
                       gutterBottom
                     >
-                      {post.title}
+                      Title:
+                      {" " + " " + " " +  post.title}
                     </Typography>
                     <Typography
-                      sx={{ mb: 1.5, fontSize: 14, boxSizing: "border-box" }}
+                      sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box" }}
                       color="text.secondary"
                     >
-                      {post.description}
+                      Description:
+                      {" " + " " + " " +  post.description}
+                    </Typography>
+                    <Typography
+                      sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box", transform: "translate(0em, 6em)" }}
+                      color="text.secondary"
+                    >
+                      AuthorID:
+                      {" " + " " + " " + post.user_id}
+                    </Typography>
+                    <Typography
+                      sx={{ mb: 1.5, fontSize: 13, boxSizing: "border-box", transform: "translate(0em, 7em)"}}
+                      color="text.secondary"
+                    >
+                      Created:
+                      {" " + " " + " " +  post.createdAt }
                     </Typography>
                   </Item>
                 </Tooltip>

@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import Tooltip from "@mui/material/Tooltip";
+import { blue } from "@mui/material/colors";
 
 export default function MainPage() {
   const dispatch = useDispatch();
@@ -49,7 +50,8 @@ export default function MainPage() {
     lineHeight: "60px",
     marginBottom: "5em",
     marginTop: "5em",
-    marginLeft: "30vw"
+    marginLeft: "30vw",
+    borderRadius: "0.5em"
   }));
 
   const theme = createTheme({ palette: { mode: "light" } });
@@ -152,17 +154,33 @@ export default function MainPage() {
                     }}
                   >
                     <Typography
-                      sx={{ fontSize: 18 }}
-                      color="text.secondary"
+                      sx={{ fontSize: 20, backgroundColor: blue[600], transform: "translate(0em, -1.5em)" }}
+                      color="white"
                       gutterBottom
                     >
-                      {post.title}
+                      Title:
+                      {" " + " " + " " +  post.title}
                     </Typography>
                     <Typography
-                      sx={{ mb: 1.5, fontSize: 14, boxSizing: "border-box" }}
+                      sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box" }}
                       color="text.secondary"
                     >
-                      {post.description}
+                      Description:
+                      {" " + " " + " " +  post.description}
+                    </Typography>
+                    <Typography
+                      sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box", transform: "translate(0em, 6em)" }}
+                      color="text.secondary"
+                    >
+                      AuthorID:
+                      {" " + " " + " " + post.user_id}
+                    </Typography>
+                    <Typography
+                      sx={{ mb: 1.5, fontSize: 13, boxSizing: "border-box", transform: "translate(0em, 7em)"}}
+                      color="text.secondary"
+                    >
+                      Created:
+                      {" " + " " + " " +  post.createdAt }
                     </Typography>
                   </Item>
                 </Tooltip>

@@ -24,6 +24,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import { getUserData } from "../actions/userAction";
+import { blue, grey } from "@mui/material/colors";
 
 export default function PostPage() {
   const dispatch = useDispatch();
@@ -77,7 +78,7 @@ export default function PostPage() {
 
   const handleDeleteComment = (event) => {
     const thisCommentId = event.target.id;
-    const postId = id
+    const postId = id;
     try {
       dispatch(deleteComment(thisCommentId, postId));
       dispatch(getCurrentPost(id));
@@ -186,17 +187,47 @@ export default function PostPage() {
               {!changePost ? (
                 <>
                   <Typography
-                    sx={{ fontSize: 18 }}
-                    color="text.secondary"
+                    sx={{
+                      fontSize: 20,
+                      backgroundColor: blue[600],
+                      transform: "translate(0em, -3em)",
+                    }}
+                    color="white"
                     gutterBottom
                   >
-                    {currentPost.title}
+                    Title:
+                    {" " + " " + " " + currentPost.title}
                   </Typography>
                   <Typography
-                    sx={{ mb: 1.5, fontSize: 14, boxSizing: "border-box" }}
+                    sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box" }}
                     color="text.secondary"
                   >
-                    {currentPost.description}
+                    Description:
+                    {" " + " " + " " + currentPost.description}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      mb: 1.5,
+                      fontSize: 16,
+                      boxSizing: "border-box",
+                      transform: "translate(0em, 3em)",
+                    }}
+                    color="text.secondary"
+                  >
+                    AuthorID:
+                    {" " + " " + " " + currentPost.user_id}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      mb: 1.5,
+                      fontSize: 13,
+                      boxSizing: "border-box",
+                      transform: "translate(0em, 4em)",
+                    }}
+                    color="text.secondary"
+                  >
+                    Created:
+                    {" " + " " + " " + currentPost.createdAt}
                   </Typography>
                 </>
               ) : (
@@ -216,7 +247,11 @@ export default function PostPage() {
               {comments ? (
                 comments.map((comment, index) => (
                   <Box key={index} id={comment.id}>
-                    <Item elevation={5} id={comment.id} sx={{width: "45em", height: "10.6em"}}>
+                    <Item
+                      elevation={5}
+                      id={comment.id}
+                      sx={{ width: "45em", height: "10.6em" }}
+                    >
                       <Tooltip title="Edit Comment">
                         <IconButton
                           sx={{
@@ -243,11 +278,22 @@ export default function PostPage() {
                           variant="contained"
                           id={comment.id}
                         >
-                          <DeleteForeverRoundedIcon id={comment.id}></DeleteForeverRoundedIcon>
+                          <DeleteForeverRoundedIcon
+                            id={comment.id}
+                          ></DeleteForeverRoundedIcon>
                         </IconButton>
                       </Tooltip>
                       {!changeComment ? (
                         <>
+                          <Typography
+                            sx={{
+                              fontSize: 20,
+                              backgroundColor: grey[400],
+                              transform: "translate(0em, -4em)",
+                            }}
+                            color="white"
+                            gutterBottom
+                          >comment #{comment.id}</Typography>
                           <Typography
                             sx={{ fontSize: 18 }}
                             color="text.secondary"
@@ -299,7 +345,11 @@ export default function PostPage() {
         ></NewCommentInput>
 
         <Tooltip title="add comment">
-          <Button onClick={handleAddNewComment} variant="contained" sx={{width: "15em"}}>
+          <Button
+            onClick={handleAddNewComment}
+            variant="contained"
+            sx={{ width: "15em" }}
+          >
             Add New Comment
           </Button>
         </Tooltip>
