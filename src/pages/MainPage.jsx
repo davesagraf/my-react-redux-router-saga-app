@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewPost, getAllPosts } from "../actions/postAction";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Collapse, Typography } from "@mui/material";
 import { Paper } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
@@ -21,6 +21,23 @@ export default function MainPage() {
     title: "",
     description: "",
   });
+
+  const [open, setOpen] = useState(true);
+
+  const [btnId, setBtnId] = useState();
+
+  const handleShowComments = (event) => {
+    event.preventDefault()
+    const targetPostId = event.target.id
+    setBtnId(targetPostId)
+    setOpen(!open);
+  };
+
+  // const thisCommentButtonId = document.querySelectorAll(".show-comments-btn")
+  // thisCommentButtonId.forEach((btnId) => {
+  //   const thisCommentId = btnId.getAttribute('id')
+  //   return thisCommentId
+  // })
 
   const handleNewPostTitle = (event) => {
     event.preventDefault();
@@ -51,7 +68,7 @@ export default function MainPage() {
     marginBottom: "5em",
     marginTop: "5em",
     marginLeft: "30vw",
-    borderRadius: "0.5em"
+    borderRadius: "0.5em",
   }));
 
   const theme = createTheme({ palette: { mode: "light" } });
@@ -129,7 +146,11 @@ export default function MainPage() {
               ></NewPostInput>
 
               <Tooltip title="add post">
-                <Button onClick={handleAddNewPost} variant="contained" sx={{width: "13em"}}>
+                <Button
+                  onClick={handleAddNewPost}
+                  variant="contained"
+                  sx={{ width: "13em" }}
+                >
                   Add New Post
                 </Button>
               </Tooltip>
@@ -144,46 +165,101 @@ export default function MainPage() {
                 cursor: "pointer",
               }}
             >
-              {posts.map((post, index) => (
-                <Tooltip key={index} title="click to see the post">
-                  <Item
-                    elevation={5}
-                    id={post.id}
-                    onClick={() => {
-                      navigate(`/post/${post.id}`);
-                    }}
-                  >
-                    <Typography
-                      sx={{ fontSize: 20, backgroundColor: blue[600], transform: "translate(0em, -1.5em)" }}
-                      color="white"
-                      gutterBottom
+              {posts.map((post, index, comments) => (
+                <>
+                  <Tooltip key={index} title="click to see the post">
+                    <Item
+                      elevation={5}
+                      id={post.id}
+                      onClick={() => {
+                        navigate(`/post/${post.id}`);
+                      }}
                     >
-                      Post Title:
-                      {" " + " " + " " +  post.title}
-                    </Typography>
-                    <Typography
-                      sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box" }}
-                      color="text.secondary"
+                      <Typography
+                        sx={{
+                          fontSize: 20,
+                          backgroundColor: blue[600],
+                          transform: "translate(0em, -1.5em)",
+                        }}
+                        color="white"
+                        gutterBottom
+                      >
+                        Post Title:
+                        {" " + " " + " " + post.title}
+                      </Typography>
+                      <Typography
+                        sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box" }}
+                        color="text.secondary"
+                      >
+                        Post Description:
+                        {" " + " " + " " + post.description}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          mb: 1.5,
+                          fontSize: 16,
+                          boxSizing: "border-box",
+                          transform: "translate(0em, 5em)",
+                        }}
+                        color="text.secondary"
+                      >
+                        Post AuthorID:
+                        {" " + " " + " " + post.user_id}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          mb: 1.5,
+                          fontSize: 13,
+                          boxSizing: "border-box",
+                          transform: "translate(0em, 6em)",
+                        }}
+                        color="text.secondary"
+                      >
+                        Created at:
+                        {" " + " " + " " + post.createdAt}
+                      </Typography>
+
+                      { comments ?
+
+                  comments.filter((comment) => comment.post_id === btnId).map(thisPostComment => (
+                          
+                            <Collapse in={open} timeout="auto" unmountOnExit>
+                              <Item
+                              sx={{width: "35em", height: "15em"}}
+                              elevation={5}
+                              id={thisPostComment.id}  
+                              >
+                              <Typography
+                                sx={{
+                                  mb: 1.5,
+                                  fontSize: 13,
+                                  boxSizing: "border-box",
+                                  transform: "translate(0em, 6em)",
+                                }}
+                                color="text.secondary"
+                              >
+                                Comment {thisPostComment.title}
+                              </Typography>
+                              </Item>
+                            </Collapse>
+                              
+                        )) : (
+                        <></>
+                      )}
+                    </Item>
+                  </Tooltip>
+                  <Tooltip title="click to show comments">
+                    <Button
+                    className="show-comments-btn"
+                      onClick={handleShowComments}
+                      variant="contained"
+                      sx={{ width: "13em" }}
+                      id={post.id}
                     >
-                      Post Description:
-                      {" " + " " + " " +  post.description}
-                    </Typography>
-                    <Typography
-                      sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box", transform: "translate(0em, 5em)" }}
-                      color="text.secondary"
-                    >
-                      Post AuthorID:
-                      {" " + " " + " " + post.user_id}
-                    </Typography>
-                    <Typography
-                      sx={{ mb: 1.5, fontSize: 13, boxSizing: "border-box", transform: "translate(0em, 6em)"}}
-                      color="text.secondary"
-                    >
-                      Created at:
-                      {" " + " " + " " +  post.createdAt }
-                    </Typography>
-                  </Item>
-                </Tooltip>
+                      Show Comments
+                    </Button>
+                  </Tooltip>
+                </>
               ))}
             </Grid>
           </Box>
