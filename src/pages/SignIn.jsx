@@ -30,6 +30,7 @@ export const SignIn = () => {
     dispatch(authSuccess(userData));
     setTimeout(() => {
       navigate('/main')
+      window.location.reload()
     }, 1000)
   };
 
