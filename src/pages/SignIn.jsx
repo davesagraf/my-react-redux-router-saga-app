@@ -26,11 +26,11 @@ export const SignIn = () => {
   };
 
   const handleLogin = () => {
-    dispatch(logIn(userData));
-    dispatch(authSuccess(userData));
     setTimeout(() => {
       navigate('/main')
     }, 1000)
+    dispatch(logIn(userData));
+    dispatch(authSuccess(userData));
   };
 
   const handleRedirectToSignUp = () => {
