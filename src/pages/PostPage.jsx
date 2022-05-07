@@ -59,12 +59,12 @@ export default function PostPage() {
     ...theme.typography.body2,
     textAlign: "center",
     color: theme.palette.text.secondary,
-    height: 250,
-    width: 750,
+    height: "250px",
+    width: "50%",
     lineHeight: "60px",
     marginBottom: "5em",
-    marginTop: "5em",
-    marginLeft: "30vw",
+    marginLeft: "25%",
+    transform: "translate(0em, -7em)"
   }));
 
   const handleDeletePost = () => {
@@ -157,7 +157,7 @@ export default function PostPage() {
               <Tooltip title="Edit Post">
                 <IconButton
                   sx={{
-                    transform: "translate(17.1em, -1em)",
+                    transform: "translate(22em, -0.9em)",
                     alignSelf: "flex-start",
                   }}
                   onClick={() => {
@@ -173,7 +173,7 @@ export default function PostPage() {
               <Tooltip title="Delete Post">
                 <IconButton
                   sx={{
-                    transform: "translate(15.4em, 1em)",
+                    transform: "translate(20.3em, 1em)",
                     alignSelf: "flex-start",
                   }}
                   onClick={handleDeletePost}
@@ -238,7 +238,6 @@ export default function PostPage() {
             <Grid
               item
               sx={{
-                width: "540px",
                 display: "flex",
                 flexDirection: "column",
                 cursor: "pointer",
@@ -250,7 +249,7 @@ export default function PostPage() {
                     <Item
                       elevation={5}
                       id={comment.id}
-                      sx={{ width: "45em", height: "10.6em" }}
+                      sx={{ width: "30%", height: "10.6em", marginLeft: "35%" }}
                     >
                       <Tooltip title="Edit Comment">
                         <IconButton
@@ -342,10 +341,10 @@ export default function PostPage() {
       <Grid
         item
         sx={{
-          width: "540px",
+          width: "44%",
           display: "flex",
           flexDirection: "column",
-          marginLeft: "30vw",
+          marginLeft: "33%",
         }}
       >
         <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>

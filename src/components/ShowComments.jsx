@@ -7,7 +7,6 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Grid, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { blue } from "@mui/material/colors";
 import { getCurrentPost } from "../actions/postAction";
 
 export function ShowComments(props) {
@@ -15,7 +14,6 @@ export function ShowComments(props) {
 
   const dispatch = useDispatch();
 
-  const { posts } = useSelector((store) => store.posts);
   const { currentPost } = useSelector((store) => store.posts);
   const { comments } = currentPost;
 
@@ -27,7 +25,6 @@ export function ShowComments(props) {
     setOpen(!open);
     commentEl.current.focus();
     const showCommentsButtonId = event.target.id;
-    console.log(showCommentsButtonId);
     dispatch(getCurrentPost(showCommentsButtonId))
   };
 
