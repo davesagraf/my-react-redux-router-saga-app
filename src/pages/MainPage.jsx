@@ -214,7 +214,7 @@ export default function MainPage() {
                     }}
                   >
                     <Tooltip title="click to show comments">
-                      <ShowComments />
+                      <ShowComments id={post.id} />
                     </Tooltip>
                   </Grid>
                 </>
