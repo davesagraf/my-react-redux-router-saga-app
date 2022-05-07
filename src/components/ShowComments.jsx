@@ -8,6 +8,8 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Grid, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentPost } from "../actions/postAction";
+import { grey } from "@mui/material/colors";
+
 
 export function ShowComments(props) {
   const commentEl = useRef(null);
@@ -76,6 +78,8 @@ export function ShowComments(props) {
             display: "flex",
             flexDirection: "column",
             cursor: "pointer",
+            marginTop: "1em",
+            marginBottom: "1em"
             }}>
               { newComments.map((thisPostComment) => (
                   <Grid
@@ -85,20 +89,42 @@ export function ShowComments(props) {
                       display: "flex",
                       flexDirection: "column",
                       cursor: "pointer",
+                      marginTop: "3em",
+                      marginBottom: "3em"
                     }}
                   >
-                    <Typography
-                      sx={{
-                        fontSize: 20,
-                        display: "flex",
-                        flexDirection: "column"
-                      }}
-                      color="black"
-                      gutterBottom
-                    >
-                      Comment Title:
-                      {" " + " " + " " + thisPostComment.title}
-                    </Typography>
+                        <>
+                          <Typography
+                            sx={{
+                              fontSize: 20,
+                              backgroundColor: grey[400],
+                              transform: "translate(0em, -4em)",
+                            }}
+                            color="white"
+                            gutterBottom
+                          >Comment # {" " + thisPostComment.id}</Typography>
+                          <Typography
+                            sx={{ fontSize: 18, transform: "translate(0em, -3em)" }}
+                            color="text.secondary"
+                            gutterBottom
+                          >
+                            {thisPostComment.title}
+                          </Typography>
+                          <Typography
+                            sx={{ fontSize: 13, transform: "translate(0em, -2.7em)" }}
+                            color="text.secondary"
+                            gutterBottom
+                          >
+                           Comment AuthorID: {" " + " " + " " + thisPostComment.user_id}
+                          </Typography>
+                          <Typography
+                            sx={{ fontSize: 13, transform: "translate(0em, -2em)" }}
+                            color="text.secondary"
+                            gutterBottom
+                          >
+                           Created at: {" " + " " + " " + thisPostComment.createdAt}
+                          </Typography>
+                        </>
                   </Grid>
                 ))}
               <ListItemText primary="Comments" />
