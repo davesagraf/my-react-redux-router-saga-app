@@ -7,6 +7,7 @@ import Grid from "@mui/material/Grid";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 import { NewPostInput } from "../components/NewPostInput";
 import { useNavigate } from "react-router-dom";
+import { ShowComments } from "../components/ShowComments";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
@@ -21,23 +22,6 @@ export default function MainPage() {
     title: "",
     description: "",
   });
-
-  const [open, setOpen] = useState(true);
-
-  const [btnId, setBtnId] = useState();
-
-  const handleShowComments = (event) => {
-    event.preventDefault()
-    const targetPostId = event.target.id
-    setBtnId(targetPostId)
-    setOpen(!open);
-  };
-
-  // const thisCommentButtonId = document.querySelectorAll(".show-comments-btn")
-  // thisCommentButtonId.forEach((btnId) => {
-  //   const thisCommentId = btnId.getAttribute('id')
-  //   return thisCommentId
-  // })
 
   const handleNewPostTitle = (event) => {
     event.preventDefault();
@@ -165,7 +149,7 @@ export default function MainPage() {
                 cursor: "pointer",
               }}
             >
-              {posts.map((post, index, comments) => (
+              {posts.map((post, index) => (
                 <>
                   <Tooltip key={index} title="click to see the post">
                     <Item
@@ -218,47 +202,21 @@ export default function MainPage() {
                         Created at:
                         {" " + " " + " " + post.createdAt}
                       </Typography>
-
-                      { comments ?
-
-                  comments.filter((comment) => comment.post_id === btnId).map(thisPostComment => (
-                          
-                            <Collapse in={open} timeout="auto" unmountOnExit>
-                              <Item
-                              sx={{width: "35em", height: "15em"}}
-                              elevation={5}
-                              id={thisPostComment.id}  
-                              >
-                              <Typography
-                                sx={{
-                                  mb: 1.5,
-                                  fontSize: 13,
-                                  boxSizing: "border-box",
-                                  transform: "translate(0em, 6em)",
-                                }}
-                                color="text.secondary"
-                              >
-                                Comment {thisPostComment.title}
-                              </Typography>
-                              </Item>
-                            </Collapse>
-                              
-                        )) : (
-                        <></>
-                      )}
                     </Item>
                   </Tooltip>
-                  <Tooltip title="click to show comments">
-                    <Button
-                    className="show-comments-btn"
-                      onClick={handleShowComments}
-                      variant="contained"
-                      sx={{ width: "13em" }}
-                      id={post.id}
-                    >
-                      Show Comments
-                    </Button>
-                  </Tooltip>
+                  <Grid
+                    item
+                    sx={{
+                      width: "540px",
+                      display: "flex",
+                      flexDirection: "column",
+                      marginLeft: "30vw",
+                    }}
+                  >
+                    <Tooltip title="click to show comments">
+                      <ShowComments />
+                    </Tooltip>
+                  </Grid>
                 </>
               ))}
             </Grid>

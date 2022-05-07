@@ -26,12 +26,12 @@ export const SignIn = () => {
   };
 
   const handleLogin = () => {
-    dispatch(logIn(userData));
-    dispatch(authSuccess(userData));
     setTimeout(() => {
       navigate('/main')
       window.location.reload()
     }, 1000)
+    dispatch(logIn(userData));
+    dispatch(authSuccess(userData));
   };
 
   const handleRedirectToSignUp = () => {
