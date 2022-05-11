@@ -4,8 +4,7 @@ import {
   Routes,
   Route,
   Link,
-  Navigate,
-  Outlet,
+  Navigate
 } from "react-router-dom";
 import { SignIn } from "./pages/SignIn";
 import { ProfilePage } from "./pages/ProfilePage";
@@ -35,7 +34,7 @@ export const App = () => {
     user = setUserLogOut()
   }
 
-  const ProtectedRoute = () => {
+  const ProtectedRoute = ({children}) => {
           <>
         <Collapse timeout={5000}>
           <Alert
@@ -50,8 +49,8 @@ export const App = () => {
             </strong>
           </Alert>
         </Collapse>
-      </>
-    return auth ? <Outlet /> : <Navigate to="/" replace/>;
+      </> 
+    return auth ? children  : <Navigate to="/" replace/>;
   };
 
   return (
@@ -79,11 +78,11 @@ export const App = () => {
           <Route path="/" element={<HomePage />}></Route>
           <Route path="/signin" element={<SignIn />}></Route>
           <Route path="/signup" element={<SignUp />}></Route>
-          <Route element={<ProtectedRoute />}>
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/main" element={<MainPage />} />
-            <Route path="/post/:id" element={<PostPage />} />
-          </Route>
+          
+            <Route path="/profile" element={<ProtectedRoute><ProfilePage/></ProtectedRoute>} />
+            <Route path="/main" element={<ProtectedRoute><MainPage/></ProtectedRoute>} />
+            <Route path="/post/:id" element={<ProtectedRoute><PostPage/></ProtectedRoute>} />
+          
         </Routes>
       </BrowserRouter>
     </>

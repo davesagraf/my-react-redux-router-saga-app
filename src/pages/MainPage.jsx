@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewPost, getAllPosts } from "../actions/postAction";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Collapse, Typography } from "@mui/material";
 import { Paper } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 import { NewPostInput } from "../components/NewPostInput";
 import { useNavigate } from "react-router-dom";
+import { ShowComments } from "../components/ShowComments";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
@@ -51,7 +52,7 @@ export default function MainPage() {
     marginBottom: "5em",
     marginTop: "5em",
     marginLeft: "30vw",
-    borderRadius: "0.5em"
+    borderRadius: "0.5em",
   }));
 
   const theme = createTheme({ palette: { mode: "light" } });
@@ -129,7 +130,11 @@ export default function MainPage() {
               ></NewPostInput>
 
               <Tooltip title="add post">
-                <Button onClick={handleAddNewPost} variant="contained" sx={{width: "13em"}}>
+                <Button
+                  onClick={handleAddNewPost}
+                  variant="contained"
+                  sx={{ width: "13em" }}
+                >
                   Add New Post
                 </Button>
               </Tooltip>
@@ -145,45 +150,74 @@ export default function MainPage() {
               }}
             >
               {posts.map((post, index) => (
-                <Tooltip key={index} title="click to see the post">
-                  <Item
-                    elevation={5}
-                    id={post.id}
-                    onClick={() => {
-                      navigate(`/post/${post.id}`);
+                <>
+                  <Tooltip key={index} title="click to see the post">
+                    <Item
+                      elevation={5}
+                      id={post.id}
+                      onClick={() => {
+                        navigate(`/post/${post.id}`);
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: 20,
+                          backgroundColor: blue[600],
+                          transform: "translate(0em, -1.5em)",
+                        }}
+                        color="white"
+                        gutterBottom
+                      >
+                        Post Title:
+                        {" " + " " + " " + post.title}
+                      </Typography>
+                      <Typography
+                        sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box" }}
+                        color="text.secondary"
+                      >
+                        Post Description:
+                        {" " + " " + " " + post.description}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          mb: 1.5,
+                          fontSize: 16,
+                          boxSizing: "border-box",
+                          transform: "translate(0em, 5em)",
+                        }}
+                        color="text.secondary"
+                      >
+                        Post AuthorID:
+                        {" " + " " + " " + post.user_id}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          mb: 1.5,
+                          fontSize: 13,
+                          boxSizing: "border-box",
+                          transform: "translate(0em, 6em)",
+                        }}
+                        color="text.secondary"
+                      >
+                        Created at:
+                        {" " + " " + " " + post.createdAt}
+                      </Typography>
+                    </Item>
+                  </Tooltip>
+                  <Grid
+                    item
+                    sx={{
+                      width: "540px",
+                      display: "flex",
+                      flexDirection: "column",
+                      marginLeft: "30vw",
                     }}
                   >
-                    <Typography
-                      sx={{ fontSize: 20, backgroundColor: blue[600], transform: "translate(0em, -1.5em)" }}
-                      color="white"
-                      gutterBottom
-                    >
-                      Post Title:
-                      {" " + " " + " " +  post.title}
-                    </Typography>
-                    <Typography
-                      sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box" }}
-                      color="text.secondary"
-                    >
-                      Post Description:
-                      {" " + " " + " " +  post.description}
-                    </Typography>
-                    <Typography
-                      sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box", transform: "translate(0em, 5em)" }}
-                      color="text.secondary"
-                    >
-                      Post AuthorID:
-                      {" " + " " + " " + post.user_id}
-                    </Typography>
-                    <Typography
-                      sx={{ mb: 1.5, fontSize: 13, boxSizing: "border-box", transform: "translate(0em, 6em)"}}
-                      color="text.secondary"
-                    >
-                      Created at:
-                      {" " + " " + " " +  post.createdAt }
-                    </Typography>
-                  </Item>
-                </Tooltip>
+                    <Tooltip title="click to show comments">
+                      <ShowComments id={post.id} />
+                    </Tooltip>
+                  </Grid>
+                </>
               ))}
             </Grid>
           </Box>

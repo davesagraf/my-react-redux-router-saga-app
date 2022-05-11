@@ -11,7 +11,7 @@ export const NewCommentInput = ({ label, handleEnter, value}) => {
       color="primary"
       multiline
       rows={5}
-      sx={{ marginBottom: "8px", width: "45em"}}
+      sx={{ marginBottom: "8px", width: "40.9em"}}
     />
   );
 };
