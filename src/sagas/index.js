@@ -11,6 +11,8 @@ import {
   EDIT_COMMENT,
 } from "../actions/postAction";
 
+const baseUrl = "http://localhost:8000"
+
 export function* signUp() {
   yield takeEvery(SIGNUP, fetchSignUp);
 }
@@ -52,7 +54,7 @@ const fetchLogIn = async (payload) => {
   };
 
   const response = await fetch(
-    "https://test-api-post.herokuapp.com/auth/sign_in",
+    `${baseUrl}/auth/sign_in`,
     requestOptions
   )
       if (response.status === 401) {
@@ -60,7 +62,7 @@ const fetchLogIn = async (payload) => {
       }
       else {
         let token = response.headers.get("Authorization");
-        localStorage.setItem("Authorization", token.slice(7));
+        localStorage.setItem("Authorization", token);
       }
     
 };
