@@ -163,9 +163,7 @@ function* fetchDeletePost(payload) {
     redirect: "follow",
   };
 
-  yield fetch(`${baseUrl}/posts/post/${postId}`, requestOptions).then(
-    (response) => response.json()
-  );
+  yield fetch(`${baseUrl}/posts/post/${postId}`, requestOptions);
 
   yield put({ type: "GET_ALL_POSTS" });
 }
@@ -244,9 +242,7 @@ function* fetchDeleteComment(payload) {
     redirect: "follow",
   };
 
-  yield fetch(`${baseUrl}/comments/comment/${commentId}`, requestOptions).then(
-    (response) => response.json()
-  );
+  yield fetch(`${baseUrl}/comments/comment/${commentId}`, requestOptions);
 
   yield put({ type: "GET_CURRENT_POST", id: postId });
 }
