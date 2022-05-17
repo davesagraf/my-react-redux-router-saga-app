@@ -27,8 +27,8 @@ export const SignIn = () => {
 
   const handleLogin = () => {
     setTimeout(() => {
-      // navigate('/main')
-      // window.location.reload()
+      navigate('/main')
+      window.location.reload()
     }, 1000)
     dispatch(logIn(userData));
     dispatch(authSuccess(userData));
