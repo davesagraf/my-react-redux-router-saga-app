@@ -6,6 +6,8 @@ export const EDIT_POST = "EDIT_POST"
 export const SET_COMMENT = "SET_COMMENT"
 export const DELETE_COMMENT = "DELETE_COMMENT"
 export const EDIT_COMMENT = "EDIT_COMMENT"
+export const UPDATE_LIKES = "UPDATE_LIKES"
+
 
 export const getAllPosts = () => {
     return {
@@ -62,3 +64,20 @@ export const editComment = (updatedComment) => {
   }
 }
 
+//add like
+export const addLike = (postId) => {
+  console.log(postId)
+  return {
+    type: UPDATE_LIKES,
+    postId
+  }
+}
+
+//remove like
+export const removeLike = (postId) => {
+  console.log(postId)
+  return {
+    type: UPDATE_LIKES,
+    postId
+  }
+}

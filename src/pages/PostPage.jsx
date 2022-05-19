@@ -5,6 +5,8 @@ import {
   getCurrentPost,
   addNewComment,
   deleteComment,
+  addLike,
+  removeLike
 } from "../actions/postAction";
 import { Box, Button, Typography } from "@mui/material";
 import { Paper } from "@mui/material";
@@ -16,6 +18,8 @@ import { NewCommentInput } from "../components/NewCommentInput";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import { EditForm } from "../components/EditForm";
 import { EditCommentForm } from "../components/EditCommentForm";
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
@@ -35,6 +39,9 @@ export default function PostPage() {
   const { id } = useParams();
   const { currentPost } = useSelector((store) => store.posts);
   const { comments } = currentPost;
+  const { likes } = currentPost;
+  let  postId  = currentPost.id
+  console.log(postId)
 
   useEffect(() => {
     dispatch(getCurrentPost(id));
@@ -86,6 +93,22 @@ export default function PostPage() {
       throw new Error(error);
     }
   };
+
+  const handleAddLike = () => {
+    try {
+      dispatch(addLike(postId));
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  const handleRemoveLike = () => {
+    try {
+      dispatch(removeLike(postId));
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 
   const handleNavigateBack = () => {
     try {
@@ -154,6 +177,32 @@ export default function PostPage() {
             }}
           >
             <Item elevation={5} id={currentPost.id}>
+            <Tooltip title="Like Post">
+                <IconButton
+                  sx={{
+                    transform: "translate(-17.5em, -0.5em)",
+                    alignSelf: "flex-start",
+                  }}
+                  onClick={handleAddLike}
+                  variant="contained"
+                  id={currentPost.id}
+                >
+                  <ThumbUpIcon></ThumbUpIcon>
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Unlike Post">
+                <IconButton
+                  sx={{
+                    transform: "translate(-19.3em, 2em)",
+                    alignSelf: "flex-start",
+                  }}
+                  onClick={handleRemoveLike}
+                  variant="contained"
+                  id={currentPost.id}
+                >
+                  <ThumbDownIcon></ThumbDownIcon>
+                </IconButton>
+              </Tooltip>
               <Tooltip title="Edit Post">
                 <IconButton
                   sx={{

@@ -9,6 +9,7 @@ import {
   SET_COMMENT,
   DELETE_COMMENT,
   EDIT_COMMENT,
+  UPDATE_LIKES
 } from "../actions/postAction";
 
 const baseUrl = "http://localhost:8000";
@@ -306,6 +307,59 @@ function* fetchEditComment(payload) {
   yield put({ type: "GET_CURRENT_POST", id: payload.updatedComment.post_id });
 }
 
+export function* addLikeSaga() {
+  yield takeEvery(UPDATE_LIKES, fetchAddLike);
+}
+
+function* fetchAddLike(payload) {
+  const postId = payload.postId;
+
+  let bearerToken = localStorage.getItem("Authorization").valueOf();
+
+  const requestOptions = {
+    method: "PUT",
+    headers: {
+      Authorization: `${bearerToken}`,
+      "Content-Type": "application/json",
+    },
+    redirect: "follow",
+  };
+
+  yield fetch(`${baseUrl}/posts/like/${postId}`, requestOptions).then((response) =>
+    response.json()
+  );
+
+  yield put({ type: "GET_CURRENT_POST", id: payload.postId });
+}
+
+export function* removeLikeSaga() {
+  yield takeEvery(UPDATE_LIKES, fetchRemoveLike);
+}
+
+function* fetchRemoveLike(payload) {
+  const postId = payload.postId;
+  console.log(postId)
+
+  let bearerToken = localStorage.getItem("Authorization").valueOf();
+
+  const requestOptions = {
+    method: "PUT",
+    headers: {
+      Authorization: `${bearerToken}`,
+      "Content-Type": "application/json",
+    },
+    redirect: "follow",
+  };
+
+  yield fetch(`${baseUrl}/posts/unlike/${postId}`, requestOptions).then((response) =>
+    response.json()
+  );
+
+  yield put({ type: "GET_CURRENT_POST", id: payload.postId });
+}
+
+
+
 export function* rootSaga() {
   yield all([
     signUp(),
@@ -319,5 +373,7 @@ export function* rootSaga() {
     addNewComment(),
     deleteComment(),
     editComment(),
+    addLikeSaga(),
+    removeLikeSaga()
   ]);
 }

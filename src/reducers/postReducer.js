@@ -3,7 +3,8 @@ const initialState = {
   currentPost: {
     title: "",
     description: "",
-    comments: []
+    comments: [],
+    likes: []
   },
   errors: "",
   loading: false,
@@ -31,6 +32,8 @@ export const postReducer = (state = initialState, action) => {
       return { ...state, loading: false}
     case "DELETE_COMMENT":
         return { ...state };
+    case "UPDATE_LIKES":
+      return {...state };
     default:
       return { ...state };
   }
