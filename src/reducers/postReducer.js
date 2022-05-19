@@ -32,8 +32,10 @@ export const postReducer = (state = initialState, action) => {
       return { ...state, loading: false}
     case "DELETE_COMMENT":
         return { ...state };
-    case "UPDATE_LIKES":
+    case "ADD_LIKE":
       return {...state };
+    case "REMOVE_LIKE":
+      return {...state } ; 
     default:
       return { ...state };
   }

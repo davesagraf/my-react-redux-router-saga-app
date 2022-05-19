@@ -19,7 +19,7 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import { EditForm } from "../components/EditForm";
 import { EditCommentForm } from "../components/EditCommentForm";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
@@ -35,13 +35,22 @@ export default function PostPage() {
   const navigate = useNavigate();
   const [changePost, setChangePost] = useState(false);
   const [changeComment, setChangeComment] = useState(false);
+  const [liked, setLiked] = useState(false);
 
   const { id } = useParams();
   const { currentPost } = useSelector((store) => store.posts);
   const { comments } = currentPost;
   const { likes } = currentPost;
-  let  postId  = currentPost.id
-  console.log(postId)
+
+  useEffect(() => {
+    const isLiked = localStorage.getItem('liked');
+    if (isLiked !== null ) setLiked(JSON.parse(isLiked));
+  }, []);
+
+  useEffect(() => {
+    if (likes.length > 0)
+    localStorage.setItem('liked', JSON.stringify(liked));
+  }, [liked])
 
   useEffect(() => {
     dispatch(getCurrentPost(id));
@@ -94,20 +103,28 @@ export default function PostPage() {
     }
   };
 
-  const handleAddLike = () => {
+  const handleLike = (event) => {
+    event.preventDefault()
+    const postId = event.target.id
     try {
-      dispatch(addLike(postId));
+      dispatch(addLike(postId));  
     } catch (error) {
       throw new Error(error);
     }
+    setLiked(prevLiked => !prevLiked);
   }
 
-  const handleRemoveLike = () => {
+
+  const handleUnlike = (event) => {
+    event.preventDefault()
+    const postId = event.target.id
+
     try {
       dispatch(removeLike(postId));
     } catch (error) {
       throw new Error(error);
     }
+    setLiked(prevLiked => !prevLiked);
   }
 
   const handleNavigateBack = () => {
@@ -177,32 +194,33 @@ export default function PostPage() {
             }}
           >
             <Item elevation={5} id={currentPost.id}>
-            <Tooltip title="Like Post">
+            {!liked ? <Tooltip title="Like Post">
                 <IconButton
                   sx={{
-                    transform: "translate(-17.5em, -0.5em)",
+                    transform: "translate(-19.3em, -0.5em)",
                     alignSelf: "flex-start",
                   }}
-                  onClick={handleAddLike}
+                  onClick={handleLike}
+                  variant="contained"
+                  id={currentPost.id}
+                >
+                  <ThumbUpOutlinedIcon></ThumbUpOutlinedIcon>
+                </IconButton>
+              </Tooltip> : <Tooltip title="Unlike Post">
+                <IconButton
+                  sx={{
+                    transform: "translate(-19.3em, -0.5em)",
+                    alignSelf: "flex-start",
+                  }}
+                  onClick={handleUnlike}
                   variant="contained"
                   id={currentPost.id}
                 >
                   <ThumbUpIcon></ThumbUpIcon>
                 </IconButton>
-              </Tooltip>
-              <Tooltip title="Unlike Post">
-                <IconButton
-                  sx={{
-                    transform: "translate(-19.3em, 2em)",
-                    alignSelf: "flex-start",
-                  }}
-                  onClick={handleRemoveLike}
-                  variant="contained"
-                  id={currentPost.id}
-                >
-                  <ThumbDownIcon></ThumbDownIcon>
-                </IconButton>
-              </Tooltip>
+              </Tooltip>}  
+           
+           
               <Tooltip title="Edit Post">
                 <IconButton
                   sx={{

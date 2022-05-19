@@ -9,7 +9,8 @@ import {
   SET_COMMENT,
   DELETE_COMMENT,
   EDIT_COMMENT,
-  UPDATE_LIKES
+  ADD_LIKE,
+  REMOVE_LIKE
 } from "../actions/postAction";
 
 const baseUrl = "http://localhost:8000";
@@ -308,7 +309,7 @@ function* fetchEditComment(payload) {
 }
 
 export function* addLikeSaga() {
-  yield takeEvery(UPDATE_LIKES, fetchAddLike);
+  yield takeEvery(ADD_LIKE, fetchAddLike);
 }
 
 function* fetchAddLike(payload) {
@@ -333,7 +334,7 @@ function* fetchAddLike(payload) {
 }
 
 export function* removeLikeSaga() {
-  yield takeEvery(UPDATE_LIKES, fetchRemoveLike);
+  yield takeEvery(REMOVE_LIKE, fetchRemoveLike);
 }
 
 function* fetchRemoveLike(payload) {
