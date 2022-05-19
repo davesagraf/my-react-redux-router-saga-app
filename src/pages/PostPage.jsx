@@ -43,18 +43,8 @@ export default function PostPage() {
   const { likes } = currentPost;
 
   useEffect(() => {
-    const isLiked = localStorage.getItem('liked');
-    if (isLiked !== null ) setLiked(JSON.parse(isLiked));
-  }, []);
-
-  useEffect(() => {
-    if (likes.length > 0)
-    localStorage.setItem('liked', JSON.stringify(liked));
-  }, [liked])
-
-  useEffect(() => {
     dispatch(getCurrentPost(id));
-  }, [dispatch, id]);
+  }, [liked, dispatch, id]);
 
   const [newComment, setNewComment] = useState({
     title: "",
@@ -111,7 +101,7 @@ export default function PostPage() {
     } catch (error) {
       throw new Error(error);
     }
-    setLiked(prevLiked => !prevLiked);
+    setLiked(true);
   }
 
 
@@ -124,7 +114,7 @@ export default function PostPage() {
     } catch (error) {
       throw new Error(error);
     }
-    setLiked(prevLiked => !prevLiked);
+    setLiked(false);
   }
 
   const handleNavigateBack = () => {
@@ -194,7 +184,7 @@ export default function PostPage() {
             }}
           >
             <Item elevation={5} id={currentPost.id}>
-            {!liked ? <Tooltip title="Like Post">
+            {likes.length === 0 ? <Tooltip title="Like Post">
                 <IconButton
                   sx={{
                     transform: "translate(-19.3em, -0.5em)",
