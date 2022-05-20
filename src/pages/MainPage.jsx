@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewPost, getAllPosts } from "../actions/postAction";
-import { Box, Button, Collapse, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { Paper } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 import { NewPostInput } from "../components/NewPostInput";
 import { useNavigate } from "react-router-dom";
 import { ShowComments } from "../components/ShowComments";
+import moment from "moment";
 
 import {
   Card,
@@ -19,8 +20,6 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import Tooltip from "@mui/material/Tooltip";
 import { lightBlue } from "@mui/material/colors";
-import { blueGrey } from "@mui/material/colors";
-import { PostCard } from "../components/PostCard";
 
 export default function MainPage() {
   const dispatch = useDispatch();
@@ -50,20 +49,7 @@ export default function MainPage() {
     dispatch(getAllPosts());
   }, [dispatch]);
 
-  const Item = styled(Paper)(({ theme }) => ({
-    ...theme.typography.body2,
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-    height: 250,
-    width: 850,
-    lineHeight: "60px",
-    marginBottom: "5em",
-    marginTop: "5em",
-    marginLeft: "30vw",
-    borderRadius: "0.5em",
-  }));
-
-  const theme = createTheme({ palette: { mode: "light" } });
+  const theme = createTheme({ palette: { mode: "light", background: lightBlue[300]} });
 
   const navigate = useNavigate();
 
@@ -191,7 +177,7 @@ export default function MainPage() {
             {"Author: " + post.user_id}
           </Typography>
           <Typography sx={{ mb: 1.5, fontSize: 14 }} color="text.secondary">
-            {"Created At: " + post.createdAt}
+            {"Created At: " + moment(post.createdAt).format('MMMM Do YYYY, h:mm:ss a') }
           </Typography>
         </CardContent>
         <CardActions>

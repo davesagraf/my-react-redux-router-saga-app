@@ -29,6 +29,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import { getUserData } from "../actions/userAction";
 import { blue, grey } from "@mui/material/colors";
+import moment from "moment";
 
 export default function PostPage() {
   const dispatch = useDispatch();
@@ -252,15 +253,13 @@ export default function PostPage() {
                     color="white"
                     gutterBottom
                   >
-                    Post Title:
-                    {" " + " " + " " + currentPost.title}
+                    {"Post Title: " + currentPost.title}
                   </Typography>
                   <Typography
                     sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box" }}
                     color="text.secondary"
                   >
-                    Post Description:
-                    {" " + " " + " " + currentPost.description}
+                  {"Post Description: " + currentPost.description}
                   </Typography>
                   <Typography
                     sx={{
@@ -271,8 +270,7 @@ export default function PostPage() {
                     }}
                     color="text.secondary"
                   >
-                    Post AuthorID:
-                    {" " + " " + " " + currentPost.user_id}
+                    {"Post AuthorID: " + currentPost.user_id}
                   </Typography>
                   <Typography
                     sx={{
@@ -283,8 +281,7 @@ export default function PostPage() {
                     }}
                     color="text.secondary"
                   >
-                    Created at:
-                    {" " + " " + " " + currentPost.createdAt}
+                    {"Created At: " + moment(currentPost.createdAt).format('MMMM Do YYYY, h:mm:ss a') }
                   </Typography>
                 </>
               ) : (
@@ -349,7 +346,7 @@ export default function PostPage() {
                             }}
                             color="white"
                             gutterBottom
-                          >Comment # {" " + comment.id}</Typography>
+                          >{"Comment #: " + comment.id}</Typography>
                           <Typography
                             sx={{ fontSize: 18, transform: "translate(0em, -3em)" }}
                             color="text.secondary"
@@ -362,14 +359,14 @@ export default function PostPage() {
                             color="text.secondary"
                             gutterBottom
                           >
-                           Comment AuthorID: {" " + " " + " " + comment.user_id}
+                           {"AuthorID: " + comment.user_id}
                           </Typography>
                           <Typography
                             sx={{ fontSize: 13, transform: "translate(0em, -2em)" }}
                             color="text.secondary"
                             gutterBottom
                           >
-                           Created at: {" " + " " + " " + comment.createdAt}
+                          {"Created At: " + moment(comment.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
                           </Typography>
                         </>
                       ) : (
