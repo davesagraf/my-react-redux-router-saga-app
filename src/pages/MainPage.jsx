@@ -11,6 +11,8 @@ import moment from "moment";
 
 import { Card, CardContent, CardActions } from "@mui/material";
 
+import { Container } from "@mui/material";
+
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import Tooltip from "@mui/material/Tooltip";
@@ -60,7 +62,8 @@ export default function MainPage() {
 
   return (
     <>
-      <Tooltip title="Go to Profile">
+    <Container>
+    <Tooltip title="Go to Profile">
         <Button
           sx={{
             width: "5em",
@@ -97,8 +100,7 @@ export default function MainPage() {
               sx={{
                 width: "540px",
                 display: "flex",
-                flexDirection: "column",
-                marginLeft: "30vw",
+                flexDirection: "column"
               }}
             >
               <Typography
@@ -159,7 +161,6 @@ export default function MainPage() {
                         lineHeight: "60px",
                         marginBottom: "5em",
                         marginTop: "5em",
-                        marginLeft: "30vw",
                         borderRadius: "0.5em",
                       }}
                     >
@@ -203,8 +204,7 @@ export default function MainPage() {
                     sx={{
                       width: "540px",
                       display: "flex",
-                      flexDirection: "column",
-                      marginLeft: "30vw",
+                      flexDirection: "column"
                     }}
                   >
                     <Tooltip title="click to show comments">
@@ -217,6 +217,7 @@ export default function MainPage() {
           </Box>
         </ThemeProvider>
       </Grid>
+    </Container>
     </>
   );
 }
