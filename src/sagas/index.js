@@ -58,7 +58,6 @@ const fetchLogIn = async (payload) => {
     throw new Error(response);
   } else {
     let token = response.headers.get("Authorization")
-    console.log('token', token)
     localStorage.setItem("Authorization", token);
   }
 };
@@ -339,7 +338,6 @@ export function* removeLikeSaga() {
 
 function* fetchRemoveLike(payload) {
   const postId = payload.postId;
-  console.log(postId)
 
   let bearerToken = localStorage.getItem("Authorization").valueOf();
 

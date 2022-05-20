@@ -14,7 +14,7 @@ import MainPage from "./pages/MainPage";
 import PostPage from "./pages/PostPage";
 import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/material";
-import { blue } from "@mui/material/colors";
+import { blue, lightBlue } from "@mui/material/colors";
 
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -57,7 +57,9 @@ export const App = () => {
     <>
 
 
-      <BrowserRouter>
+      <BrowserRouter sx={{
+        bgcolor: `${lightBlue[500]}`
+      }}  >
         <Box
           sx={{
             display: "flex",

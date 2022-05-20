@@ -9,10 +9,18 @@ import { NewPostInput } from "../components/NewPostInput";
 import { useNavigate } from "react-router-dom";
 import { ShowComments } from "../components/ShowComments";
 
+import {
+  Card,
+  CardContent,
+  CardActions,
+} from "@mui/material";
+
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import Tooltip from "@mui/material/Tooltip";
-import { blue } from "@mui/material/colors";
+import { lightBlue } from "@mui/material/colors";
+import { blueGrey } from "@mui/material/colors";
+import { PostCard } from "../components/PostCard";
 
 export default function MainPage() {
   const dispatch = useDispatch();
@@ -152,7 +160,46 @@ export default function MainPage() {
               {posts.map((post, index) => (
                 <>
                   <Tooltip key={index} title="click to see the post">
-                    <Item
+                  <Card
+                  elevation={5}
+                  id={post.id}
+                  onClick={() => {
+                    navigate(`/post/${post.id}`);
+                  }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          background: lightBlue[50],
+          height: 250,
+          width: 500,
+          lineHeight: "60px",
+          marginBottom: "5em",
+          marginTop: "5em",
+          marginLeft: "30vw",
+          borderRadius: "0.5em",
+        }}
+      >
+        <CardContent sx={{ marginBottom: "auto" }}>
+          <Typography sx={{ fontSize: 24 }} color="text.secondary" gutterBottom>
+            {"Title: " + post.title}
+          </Typography>
+          <Typography sx={{ mb: 1.5, fontSize: 14 }} color="text.secondary">
+            {"Description: " + post.description}
+          </Typography>
+          <Typography sx={{ mb: 1.5, fontSize: 14 }} color="text.secondary">
+            {"Author: " + post.user_id}
+          </Typography>
+          <Typography sx={{ mb: 1.5, fontSize: 14 }} color="text.secondary">
+            {"Created At: " + post.createdAt}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button size="small">Expand Post</Button>
+        </CardActions>
+      </Card>
+                    
+                    {/* <Item
                       elevation={5}
                       id={post.id}
                       onClick={() => {
@@ -202,7 +249,10 @@ export default function MainPage() {
                         Created at:
                         {" " + " " + " " + post.createdAt}
                       </Typography>
-                    </Item>
+                    </Item> */}
+
+
+
                   </Tooltip>
                   <Grid
                     item

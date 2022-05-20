@@ -67,7 +67,6 @@ export const editComment = (updatedComment) => {
 
 //add like
 export const addLike = (postId) => {
-  console.log(postId)
   return {
     type: ADD_LIKE,
     postId
@@ -76,7 +75,6 @@ export const addLike = (postId) => {
 
 //remove like
 export const removeLike = (postId) => {
-  console.log(postId)
   return {
     type: REMOVE_LIKE,
     postId

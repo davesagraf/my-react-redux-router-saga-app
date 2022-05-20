@@ -24,10 +24,16 @@ export const PostCard = ({ post }) => {
       >
         <CardContent sx={{ marginBottom: "auto" }}>
           <Typography sx={{ fontSize: 24 }} color="text.secondary" gutterBottom>
-            {post.title}
+            {"Title: " + post.title}
           </Typography>
           <Typography sx={{ mb: 1.5, fontSize: 14 }} color="text.secondary">
-            {post.body}
+            {"Description: " + post.description}
+          </Typography>
+          <Typography sx={{ mb: 1.5, fontSize: 14 }} color="text.secondary">
+            {"Author: " + post.user_id}
+          </Typography>
+          <Typography sx={{ mb: 1.5, fontSize: 14 }} color="text.secondary">
+            {"Created At: " + post.createdAt}
           </Typography>
         </CardContent>
         <CardActions>
