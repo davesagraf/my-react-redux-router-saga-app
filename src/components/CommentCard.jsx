@@ -7,37 +7,44 @@ import {
   Button,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
+import CommentIcon from "@mui/icons-material/Comment";
+import { IconButton } from "@mui/material";
+import moment from "moment";
 
-export const PostCard = ({ post }) => {
+export const CommentCard = ({ comment }) => {
   return (
     <>
-      {" "}
       <Card
+        elevation={5}
+        id={comment.id}
         sx={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
-          maxWidth: 275,
           background: grey[50],
+          height: 250,
+          width: 500,
+          lineHeight: "60px",
+          marginBottom: "5em",
+          marginTop: "5em",
+          borderRadius: "0.5em",
         }}
       >
         <CardContent sx={{ marginBottom: "auto" }}>
+          <Typography sx={{ mb: 1.5, fontSize: 14 }} color="text.secondary">
+            {"Comment #: " + comment.id}
+          </Typography>
+
           <Typography sx={{ fontSize: 24 }} color="text.secondary" gutterBottom>
-            {"Title: " + post.title}
+            {"Title: " + comment.title}
           </Typography>
 
           <Typography sx={{ mb: 1.5, fontSize: 14 }} color="text.secondary">
-            {"Description: " + post.description}
+            {"Author: " + comment.user_id}
           </Typography>
-
           <Typography sx={{ mb: 1.5, fontSize: 14 }} color="text.secondary">
-            {"Author: " + post.user_id}
+            {"Created At: " + moment(comment.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
           </Typography>
-
-          <Typography sx={{ mb: 1.5, fontSize: 14 }} color="text.secondary">
-            {"Created At: " + post.createdAt}
-          </Typography>
-          
         </CardContent>
         <CardActions>
           <Button size="small">Expand Post</Button>

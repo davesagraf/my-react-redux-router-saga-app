@@ -8,6 +8,7 @@ import { NewPostInput } from "../components/NewPostInput";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 
+
 import { Card, CardContent, CardActions } from "@mui/material";
 
 import { Container } from "@mui/material";
@@ -17,16 +18,15 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Tooltip from "@mui/material/Tooltip";
 import { lightBlue } from "@mui/material/colors";
 import Input from '@mui/material/Input';
+
 import CommentIcon from '@mui/icons-material/Comment';
 import { IconButton } from '@mui/material';
 import { grey } from "@mui/material/colors";
+import { CommentCard } from "../components/CommentCard";
 
 export default function MainPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const { currentPost } = useSelector((store) => store.posts);
-  const { comments } = currentPost;
   
   useEffect(() => {
     dispatch(getAllPosts());
@@ -42,6 +42,10 @@ export default function MainPage() {
   const [showComments, setShowComments] = useState(false);
 
   const { posts } = useSelector((store) => store.posts);
+
+  const { currentPost } = useSelector((store) => store.posts);
+
+  const { comments } = currentPost;
 
   const handleCreatePost = () => {
     setCreatePost(!createPost)
@@ -81,12 +85,6 @@ export default function MainPage() {
     setShowComments(!showComments);
   };
 
-  let thisCommentPostId = ""
-
-  let newComments = comments.filter(
-    (comment) => comment.post_id === thisCommentPostId
-  );
-
   return (
     <>
     <Container>
@@ -123,7 +121,8 @@ export default function MainPage() {
             }}
           >
           <Input placeholder="What's up?" onClick={handleCreatePost} /> 
-          {createPost ?  <Grid
+          {createPost ?  
+          <Grid
               item
               sx={{
                 width: "540px",
@@ -243,62 +242,10 @@ export default function MainPage() {
                 marginBottom: "1em",
               }}
             >
-              {showComments ?  comments.map((thisPostComment) => (
-                <Card
-                  elevation={5}
-                  id={post.id}
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "flex-end",
-                    background: grey[50],
-                    height: 250,
-                    width: 500,
-                    lineHeight: "60px",
-                    marginBottom: "5em",
-                    marginTop: "5em",
-                    borderRadius: "0.5em",
-                  }}
-                >
-                  <CardContent sx={{ marginBottom: "auto" }}>
-                    <Typography
-                      sx={{ mb: 1.5, fontSize: 14 }}
-                      color="text.secondary"
-                    >
-                      {"Comment #: " + thisPostComment.id}
-                    </Typography>
-
-                    <Typography
-                      sx={{ fontSize: 24 }}
-                      color="text.secondary"
-                      gutterBottom
-                    >
-                      {"Title: " + thisPostComment.title}
-                    </Typography>
-
-                    <Typography
-                      sx={{ mb: 1.5, fontSize: 14 }}
-                      color="text.secondary"
-                    >
-                      {"Author: " + thisPostComment.user_id}
-                    </Typography>
-                    <Typography
-                      sx={{ mb: 1.5, fontSize: 14 }}
-                      color="text.secondary"
-                    >
-                      {"Created At: " +
-                        moment(thisPostComment.createdAt).format(
-                          "MMMM Do YYYY, h:mm:ss a"
-                        )}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small">Expand Post</Button>
-                  </CardActions>
-                </Card> 
-              )) : null }
+              {showComments ? comments.map((comment) => {
+                <CommentCard key={index}></CommentCard>
+              }) : null}
             </Grid>
-                  
                 </>
               ))}
             </Grid>
