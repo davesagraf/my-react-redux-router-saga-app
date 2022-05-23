@@ -17,15 +17,28 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import Tooltip from "@mui/material/Tooltip";
 import { lightBlue } from "@mui/material/colors";
+import Input from '@mui/material/Input';
 
 export default function MainPage() {
   const dispatch = useDispatch();
-  const { posts } = useSelector((store) => store.posts);
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    dispatch(getAllPosts());
+  }, [dispatch]);
 
   const [newPost, setNewPost] = useState({
     title: "",
     description: "",
   });
+
+  const [createPost, setCreatePost] = useState(false);
+
+  const { posts } = useSelector((store) => store.posts);
+
+  const handleCreatePost = () => {
+    setCreatePost(!createPost)
+  }
 
   const handleNewPostTitle = (event) => {
     event.preventDefault();
@@ -42,15 +55,9 @@ export default function MainPage() {
     setNewPost({ title: "", description: "" });
   };
 
-  useEffect(() => {
-    dispatch(getAllPosts());
-  }, [dispatch]);
-
   const theme = createTheme({
     palette: { mode: "light", background: lightBlue[300] },
   });
-
-  const navigate = useNavigate();
 
   const handleNavigateToProfile = () => {
     try {
@@ -95,7 +102,8 @@ export default function MainPage() {
               width: "100%",
             }}
           >
-            <Grid
+          <Input placeholder="What's up?" onClick={handleCreatePost} /> 
+          {createPost ?  <Grid
               item
               sx={{
                 width: "540px",
@@ -131,7 +139,7 @@ export default function MainPage() {
                   Add New Post
                 </Button>
               </Tooltip>
-            </Grid>
+            </Grid> : null} 
 
             <Grid
               item
