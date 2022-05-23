@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewPost, getAllPosts } from "../actions/postAction";
+import { addNewPost, getAllPosts, getCurrentPost } from "../actions/postAction";
 import { Box, Button, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 import { NewPostInput } from "../components/NewPostInput";
 import { useNavigate } from "react-router-dom";
-import { ShowComments } from "../components/ShowComments";
 import moment from "moment";
 
 import { Card, CardContent, CardActions } from "@mui/material";
@@ -18,10 +17,16 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Tooltip from "@mui/material/Tooltip";
 import { lightBlue } from "@mui/material/colors";
 import Input from '@mui/material/Input';
+import CommentIcon from '@mui/icons-material/Comment';
+import { IconButton } from '@mui/material';
+import { grey } from "@mui/material/colors";
 
 export default function MainPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { currentPost } = useSelector((store) => store.posts);
+  const { comments } = currentPost;
   
   useEffect(() => {
     dispatch(getAllPosts());
@@ -33,6 +38,8 @@ export default function MainPage() {
   });
 
   const [createPost, setCreatePost] = useState(false);
+
+  const [showComments, setShowComments] = useState(false);
 
   const { posts } = useSelector((store) => store.posts);
 
@@ -65,6 +72,13 @@ export default function MainPage() {
     } catch (error) {
       throw new Error(error);
     }
+  };
+
+  const handleShowComments = (event) => {
+    const showCommentsButtonId = JSON.parse(event.target.id);
+    console.log(showCommentsButtonId)
+    dispatch(getCurrentPost(showCommentsButtonId));
+    setShowComments(!showComments);
   };
 
   return (
@@ -156,9 +170,9 @@ export default function MainPage() {
                     <Card
                       elevation={5}
                       id={post.id}
-                      onClick={() => {
-                        navigate(`/post/${post.id}`);
-                      }}
+                      // onClick={() => {
+                      //   navigate(`/post/${post.id}`);
+                      // }}
                       sx={{
                         display: "flex",
                         flexDirection: "column",
@@ -203,22 +217,82 @@ export default function MainPage() {
                         </Typography>
                       </CardContent>
                       <CardActions>
-                        <Button size="small">Expand Post</Button>
+                        <Tooltip key={index} title="click to see comments" >
+                          <IconButton onClick={handleShowComments} key={index} id={post.id}>
+                            <CommentIcon></CommentIcon>
+                          </IconButton>
+                        </Tooltip>
                       </CardActions>
                     </Card>
                   </Tooltip>
+
                   <Grid
-                    item
-                    sx={{
-                      width: "540px",
-                      display: "flex",
-                      flexDirection: "column"
-                    }}
-                  >
-                    <Tooltip title="click to show comments">
-                      <ShowComments id={post.id} />
-                    </Tooltip>
-                  </Grid>
+              sx={{
+                width: "50em",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                cursor: "pointer",
+                marginTop: "1em",
+                marginBottom: "1em",
+              }}
+            >
+              {showComments ?  comments.map((thisPostComment) => (
+                <Card
+                  elevation={5}
+                  id={thisPostComment.id}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-end",
+                    background: grey[50],
+                    height: 250,
+                    width: 500,
+                    lineHeight: "60px",
+                    marginBottom: "5em",
+                    marginTop: "5em",
+                    borderRadius: "0.5em",
+                  }}
+                >
+                  <CardContent sx={{ marginBottom: "auto" }}>
+                    <Typography
+                      sx={{ mb: 1.5, fontSize: 14 }}
+                      color="text.secondary"
+                    >
+                      {"Comment #: " + thisPostComment.id}
+                    </Typography>
+
+                    <Typography
+                      sx={{ fontSize: 24 }}
+                      color="text.secondary"
+                      gutterBottom
+                    >
+                      {"Title: " + thisPostComment.title}
+                    </Typography>
+
+                    <Typography
+                      sx={{ mb: 1.5, fontSize: 14 }}
+                      color="text.secondary"
+                    >
+                      {"Author: " + thisPostComment.user_id}
+                    </Typography>
+                    <Typography
+                      sx={{ mb: 1.5, fontSize: 14 }}
+                      color="text.secondary"
+                    >
+                      {"Created At: " +
+                        moment(thisPostComment.createdAt).format(
+                          "MMMM Do YYYY, h:mm:ss a"
+                        )}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button size="small">Expand Post</Button>
+                  </CardActions>
+                </Card> 
+              )) : null }
+            </Grid>
+                  
                 </>
               ))}
             </Grid>
