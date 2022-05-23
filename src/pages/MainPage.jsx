@@ -81,6 +81,12 @@ export default function MainPage() {
     setShowComments(!showComments);
   };
 
+  let thisCommentPostId = ""
+
+  let newComments = comments.filter(
+    (comment) => comment.post_id === thisCommentPostId
+  );
+
   return (
     <>
     <Container>
@@ -240,7 +246,7 @@ export default function MainPage() {
               {showComments ?  comments.map((thisPostComment) => (
                 <Card
                   elevation={5}
-                  id={thisPostComment.id}
+                  id={post.id}
                   sx={{
                     display: "flex",
                     flexDirection: "column",
