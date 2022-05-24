@@ -7,8 +7,6 @@ import {
   Button,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import CommentIcon from "@mui/icons-material/Comment";
-import { IconButton } from "@mui/material";
 import moment from "moment";
 
 export const CommentCard = ({ comment }) => {

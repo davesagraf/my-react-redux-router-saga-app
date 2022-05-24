@@ -10,7 +10,8 @@ import {
   DELETE_COMMENT,
   EDIT_COMMENT,
   ADD_LIKE,
-  REMOVE_LIKE
+  REMOVE_LIKE,
+  GET_POST_COMMENTS
 } from "../actions/postAction";
 
 const baseUrl = "http://localhost:8000";
@@ -357,6 +358,36 @@ function* fetchRemoveLike(payload) {
   yield put({ type: "GET_CURRENT_POST", id: payload.postId });
 }
 
+export function* getPostCommentsSaga() {
+  yield takeEvery(GET_POST_COMMENTS, fetchGetPostComments);
+}
+
+function* fetchGetPostComments(payload) {
+  const postId = payload.postId;
+
+  let bearerToken = localStorage.getItem("Authorization").valueOf();
+
+  try {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `${bearerToken}`,
+        "Content-Type": "application/json",
+      },
+      redirect: "follow",
+    };
+
+    const postComments = yield fetch(
+      `${baseUrl}/posts/post/comments/${postId}`,
+      requestOptions
+    ).then((response) => response.json());
+
+    yield put({ type: "SUCCESS_GET_POST_COMMENTS", payload: postComments });
+  } catch (error) {
+    yield put({ type: "ERRORS", payload: error });
+  }
+}
+
 
 
 export function* rootSaga() {
@@ -373,6 +404,7 @@ export function* rootSaga() {
     deleteComment(),
     editComment(),
     addLikeSaga(),
-    removeLikeSaga()
+    removeLikeSaga(),
+    getPostCommentsSaga()
   ]);
 }

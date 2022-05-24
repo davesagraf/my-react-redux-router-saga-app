@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewPost, getAllPosts, getCurrentPost } from "../actions/postAction";
+import { addNewPost, getAllPosts, getPostComments } from "../actions/postAction";
 import { Box, Button, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
@@ -21,8 +21,6 @@ import Input from '@mui/material/Input';
 
 import CommentIcon from '@mui/icons-material/Comment';
 import { IconButton } from '@mui/material';
-import { grey } from "@mui/material/colors";
-import { CommentCard } from "../components/CommentCard";
 
 export default function MainPage() {
   const dispatch = useDispatch();
@@ -37,15 +35,15 @@ export default function MainPage() {
     description: "",
   });
 
+  const commentsIcon = useRef(null);
+
   const [createPost, setCreatePost] = useState(false);
 
   const [showComments, setShowComments] = useState(false);
 
   const { posts } = useSelector((store) => store.posts);
 
-  const { currentPost } = useSelector((store) => store.posts);
-
-  const { comments } = currentPost;
+  const { currentPostComments } = useSelector((store) => store.posts);
 
   const handleCreatePost = () => {
     setCreatePost(!createPost)
@@ -79,10 +77,13 @@ export default function MainPage() {
   };
 
   const handleShowComments = (event) => {
+    event.preventDefault()
+    commentsIcon.current.focus();
     const showCommentsButtonId = JSON.parse(event.target.id);
-    console.log(showCommentsButtonId)
-    dispatch(getCurrentPost(showCommentsButtonId));
-    setShowComments(!showComments);
+    dispatch(getPostComments(showCommentsButtonId));
+    if (commentsIcon.id === showCommentsButtonId) {
+      setShowComments(!showComments);
+    }
   };
 
   return (
@@ -223,32 +224,37 @@ export default function MainPage() {
                       </CardContent>
                       <CardActions>
                         <Tooltip key={index} title="click to see comments" >
-                          <IconButton onClick={handleShowComments} key={index} id={post.id}>
+                          <IconButton onClick={handleShowComments} key={index} id={post.id} ref={commentsIcon} >
                             <CommentIcon></CommentIcon>
                           </IconButton>
                         </Tooltip>
                       </CardActions>
                     </Card>
+               
                   </Tooltip>
-
-                  <Grid
-              sx={{
-                width: "50em",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                cursor: "pointer",
-                marginTop: "1em",
-                marginBottom: "1em",
-              }}
-            >
-              {showComments ? comments.map((comment) => {
-                <CommentCard key={index}></CommentCard>
-              }) : null}
-            </Grid>
                 </>
               ))}
-            </Grid>
+                 <>
+                {showComments ? 
+                  <Grid
+                       item
+                       sx={{
+                         width: "50em",
+                         display: "flex",
+                         flexDirection: "column",
+                         cursor: "pointer",
+                       }}
+                  >
+                    <Typography
+                                sx={{ mb: 1.5, fontSize: 14 }}
+                                color="text.secondary"
+                              >
+                              COMMENTS
+                              </Typography>
+                  </Grid>
+                  : null}
+              </>
+            </Grid>            
           </Box>
         </ThemeProvider>
       </Grid>
