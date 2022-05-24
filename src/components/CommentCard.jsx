@@ -13,34 +13,34 @@ export const CommentCard = (props) => {
   return (
     <>
       <Card
-        elevation={5}
+        elevation={3}
         id={props.id}
         sx={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "flex-end",
+          justifyContent: "space-around",
           background: grey[50],
-          height: 250,
-          width: 500,
-          lineHeight: "60px",
-          marginBottom: "5em",
-          marginTop: "5em",
+          height: 180,
+          width: 700,
+          lineHeight: "34px",
+          marginBottom: "1em",
+          marginTop: "1em",
           borderRadius: "0.5em",
         }}
       >
         <CardContent sx={{ marginBottom: "auto" }}>
-          <Typography sx={{ mb: 1.5, fontSize: 14 }} color="text.secondary">
+          <Typography sx={{ mb: 1.5, fontSize: 13 }} color="text.secondary">
             {"Comment #: " + props.id}
           </Typography>
 
-          <Typography sx={{ fontSize: 24 }} color="text.secondary" gutterBottom>
+          <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
             {"Title: " + props.title}
           </Typography>
 
-          <Typography sx={{ mb: 1.5, fontSize: 14 }} color="text.secondary">
+          <Typography sx={{ mb: 1.5, fontSize: 13 }} color="text.secondary">
             {"Author: " + props.user_id}
           </Typography>
-          <Typography sx={{ mb: 1.5, fontSize: 14 }} color="text.secondary">
+          <Typography sx={{ mb: 1.5, fontSize: 13 }} color="text.secondary">
             {"Created At: " + moment(props.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
           </Typography>
         </CardContent>
