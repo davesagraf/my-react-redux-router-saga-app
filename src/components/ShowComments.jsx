@@ -18,52 +18,15 @@ export function ShowComments(props) {
 
   const dispatch = useDispatch();
 
-  const { currentPost } = useSelector((store) => store.posts);
-  const { comments } = currentPost;
+  const { currentPostComments } = useSelector((store) => store.posts);
 
   const [open, setOpen] = useState(false);
 
   let thisCommentPostId = props.id;
 
-  const handleClick = (event) => {
-    setOpen(!open);
-    commentEl.current.focus();
-    const showCommentsButtonId = event.target.id;
-    dispatch(getCurrentPost(showCommentsButtonId));
-  };
-
-  let newComments = comments.filter(
-    (comment) => comment.post_id === thisCommentPostId
-  );
-
   return (
     <>
-      <List
-        id={thisCommentPostId}
-        sx={{
-          width: "100%",
-          maxWidth: 360,
-          backgroundColor: "transparent",
-          transform: "translate(0em, -5em)",
-        }}
-      >
-        <ListItemButton
-          ref={commentEl}
-          key={"index"}
-          id={thisCommentPostId}
-          onClick={handleClick}
-        >
-          <Typography
-            id={thisCommentPostId}
-            sx={{
-              fontSize: 16,
-              backgroundColor: "transparent",
-            }}
-            color="black"
-            gutterBottom
-          >
-            Show Comments
-          </Typography>
+     
           <Grid
             item
             sx={{
@@ -72,29 +35,8 @@ export function ShowComments(props) {
               flexDirection: "column",
               cursor: "pointer",
             }}
-          ></Grid>
-          {open ? (
-            <ExpandLess id={thisCommentPostId} />
-          ) : (
-            <ExpandMore id={thisCommentPostId} />
-          )}
-        </ListItemButton>
-
-        <Collapse id={thisCommentPostId} in={open} timeout="auto" unmountOnExit>
-          <List id={thisCommentPostId} component="div" disablePadding>
-            <ListItemButton
-              id={thisCommentPostId}
-              sx={{
-                width: "50em",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                cursor: "pointer",
-                marginTop: "1em",
-                marginBottom: "1em",
-              }}
-            >
-              {newComments.map((thisPostComment) => (
+          >
+              {currentPostComments.map((thisPostComment) => (
                 <Card
                   elevation={5}
                   id={thisPostComment.id}
@@ -148,11 +90,7 @@ export function ShowComments(props) {
                   </CardActions>
                 </Card>
               ))}
-              <ListItemText primary="Comments" />
-            </ListItemButton>
-          </List>
-        </Collapse>
-      </List>
+      </Grid>
     </>
   );
 }

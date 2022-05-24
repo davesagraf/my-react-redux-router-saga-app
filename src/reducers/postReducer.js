@@ -4,7 +4,8 @@ const initialState = {
     title: "",
     description: "",
     comments: [],
-    likes: []
+    likes: [],
+    showComments: false
   },
   currentPostComments: [],
   errors: "",

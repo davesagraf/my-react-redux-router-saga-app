@@ -9,12 +9,12 @@ import {
 import { grey } from "@mui/material/colors";
 import moment from "moment";
 
-export const CommentCard = ({ comment }) => {
+export const CommentCard = (props) => {
   return (
     <>
       <Card
         elevation={5}
-        id={comment.id}
+        id={props.id}
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -30,18 +30,18 @@ export const CommentCard = ({ comment }) => {
       >
         <CardContent sx={{ marginBottom: "auto" }}>
           <Typography sx={{ mb: 1.5, fontSize: 14 }} color="text.secondary">
-            {"Comment #: " + comment.id}
+            {"Comment #: " + props.id}
           </Typography>
 
           <Typography sx={{ fontSize: 24 }} color="text.secondary" gutterBottom>
-            {"Title: " + comment.title}
+            {"Title: " + props.title}
           </Typography>
 
           <Typography sx={{ mb: 1.5, fontSize: 14 }} color="text.secondary">
-            {"Author: " + comment.user_id}
+            {"Author: " + props.user_id}
           </Typography>
           <Typography sx={{ mb: 1.5, fontSize: 14 }} color="text.secondary">
-            {"Created At: " + moment(comment.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
+            {"Created At: " + moment(props.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
           </Typography>
         </CardContent>
         <CardActions>
