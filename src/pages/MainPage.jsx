@@ -19,7 +19,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Tooltip from "@mui/material/Tooltip";
 import { lightBlue } from "@mui/material/colors";
 import Input from '@mui/material/Input';
-
+import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import CommentIcon from '@mui/icons-material/Comment';
 import { IconButton } from '@mui/material';
 import { CommentCard } from "../components/CommentCard"
@@ -167,13 +167,10 @@ export default function MainPage() {
               >
                 {posts.map((post, index) => (
                   <>
-                    <Tooltip key={index} title="click to see the post">
+                    
                       <Card
                         elevation={5}
                         id={post.id}
-                        // onClick={() => {
-                        //   navigate(`/post/${post.id}`);
-                        // }}
                         sx={{
                           display: "flex",
                           flexDirection: "column",
@@ -218,6 +215,15 @@ export default function MainPage() {
                           </Typography>
                         </CardContent>
                         <CardActions>
+                        <Tooltip key={index} title="click to read more">
+                            <IconButton
+                              onClick={() => {navigate(`/post/${post.id}`)}}
+                              key={post.id}
+                              id={post.id}
+                            >
+                              <ReadMoreIcon></ReadMoreIcon>
+                            </IconButton>
+                          </Tooltip>
                           <Tooltip key={index} title="click to see comments">
                             <IconButton
                               onClick={() => {
@@ -232,7 +238,7 @@ export default function MainPage() {
                           </Tooltip>
                         </CardActions>
                       </Card>
-                    </Tooltip>
+                 
                     { showComments ? 
                       currentPostComments.filter((comment) => comment.post_id === post.id).map((newComment) => (
                       <Grid
