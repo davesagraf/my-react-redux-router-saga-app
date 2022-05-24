@@ -388,8 +388,6 @@ function* fetchGetPostComments(payload) {
   }
 }
 
-
-
 export function* rootSaga() {
   yield all([
     signUp(),

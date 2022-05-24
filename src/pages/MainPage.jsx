@@ -82,7 +82,7 @@ export default function MainPage() {
   return (
     <>
       <Container
-        
+        maxWidth="lg"
         sx={{
           width: "100%",
         }}
