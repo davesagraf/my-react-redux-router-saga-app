@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNewPost,
@@ -82,19 +82,19 @@ export default function MainPage() {
   return (
     <>
       <Container
-        key={"container"}
+        
         sx={{
           width: "100%",
         }}
       >
         <Box
-          key={"box"}
+          
           sx={{
             bgcolor: "background.default",
             width: "100%",
           }}
         >
-          <Tooltip key={"tooltip"} title="Go to Profile">
+          <Tooltip title="Go to Profile">
             <Button
               key={"button"}
               sx={{
@@ -168,6 +168,7 @@ export default function MainPage() {
                 <Card
                   elevation={3}
                   id={post.id}
+                  key={index}
                   sx={{
                     display: "flex",
                     flexDirection: "column",
@@ -212,20 +213,18 @@ export default function MainPage() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Tooltip key={index} title="click to read more">
+                    <Tooltip title="click to read more">
                       <IconButton
                         onClick={() => {
                           navigate(`/post/${post.id}`);
                         }}
-                        key={post.id}
                         id={post.id}
                       >
                         <ReadMoreIcon></ReadMoreIcon>
                       </IconButton>
                     </Tooltip>
-                    <Tooltip key={index} title="click to see comments">
+                    <Tooltip title="click to see comments">
                       <IconButton onClick={() => { handleShowComments(); dispatch(getPostComments(post.id));}}
-                        key={post.id}
                         id={post.id}
                       >
                         <CommentIcon></CommentIcon>
@@ -234,7 +233,7 @@ export default function MainPage() {
                   </CardActions>
                 </Card>
 
-                {showComments ? currentPostComments.filter((comment) => comment.post_id === post.id).map((newComment) => (
+                {showComments ? currentPostComments.filter((comment) => comment.post_id === post.id).map((newComment, index) => (
                 <Grid
                   item
                   sx={{
