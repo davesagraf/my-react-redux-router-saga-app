@@ -67,14 +67,6 @@ export default function MainPage() {
     setNewPost({ title: "", description: "" });
   };
 
-  const handleNavigateToProfile = () => {
-    try {
-      navigate("/profile");
-    } catch (error) {
-      throw new Error(error);
-    }
-  };
-
   const handleShowComments = () => {
     setShowComments(!showComments);
   };
@@ -88,27 +80,11 @@ export default function MainPage() {
         }}
       >
         <Box
-          
           sx={{
-            bgcolor: "background.default",
+            bgcolor: "transparent",
             width: "100%",
           }}
         >
-          <Tooltip title="Go to Profile">
-            <Button
-              key={"button"}
-              sx={{
-                width: "5em",
-                height: "5em",
-                display: "flex",
-                flexDirection: "column",
-              }}
-              onClick={handleNavigateToProfile}
-            >
-              <AccountCircleIcon></AccountCircleIcon>
-            </Button>
-          </Tooltip>
-
           <Input
             sx={{ width: 500 }}
             placeholder="What's up?"
@@ -224,7 +200,11 @@ export default function MainPage() {
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="click to see comments">
-                      <IconButton onClick={() => { handleShowComments(); dispatch(getPostComments(post.id));}}
+                      <IconButton
+                        onClick={() => {
+                          handleShowComments();
+                          dispatch(getPostComments(post.id));
+                        }}
                         id={post.id}
                       >
                         <CommentIcon></CommentIcon>
@@ -243,16 +223,16 @@ export default function MainPage() {
                     cursor: "pointer",
                   }}
                 >
-                <CommentCard
-                  key={index}
-                  id={newComment.id}
-                  post_id={newComment.post_id}
-                  title={newComment.title}
-                  user_id={newComment.user_id}
-                  createdAt={newComment.createdAt}
-                ></CommentCard>
+                  <CommentCard
+                    key={index}
+                    id={newComment.id}
+                    post_id={newComment.post_id}
+                    title={newComment.title}
+                    user_id={newComment.user_id}
+                    createdAt={newComment.createdAt}
+                  ></CommentCard>
                 </Grid>
-              )) : null}
+                )) : null}
               </>
             ))}
           </Grid>
