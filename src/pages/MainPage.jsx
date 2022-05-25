@@ -21,11 +21,11 @@ import {
 import { NewPostInput } from "../components/NewPostInput";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { lightBlue } from "@mui/material/colors";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import CommentIcon from "@mui/icons-material/Comment";
 import { CommentCard } from "../components/CommentCard";
+import { getUserData } from "../actions/userAction";
 
 export default function MainPage() {
   const dispatch = useDispatch();
@@ -33,6 +33,7 @@ export default function MainPage() {
 
   useEffect(() => {
     dispatch(getAllPosts());
+    dispatch(getUserData());
   }, [dispatch]);
 
   const [newPost, setNewPost] = useState({
@@ -47,6 +48,10 @@ export default function MainPage() {
   const { posts } = useSelector((store) => store.posts);
 
   const { currentPostComments } = useSelector((store) => store.posts);
+
+  const { currentUser } = useSelector((store) => store.user);
+
+  const thisUserFirstName = currentUser.first_name;
 
   const handleCreatePost = () => {
     setCreatePost(!createPost);
@@ -164,28 +169,25 @@ export default function MainPage() {
                       color="text.secondary"
                       gutterBottom
                     >
-                      {"Title: " + post.title}
+                      {`Title: ${post.title}`}
                     </Typography>
                     <Typography
                       sx={{ mb: 1.5, fontSize: 14 }}
                       color="text.secondary"
                     >
-                      {"Description: " + post.description}
+                      {`Description: ${post.description}`}
                     </Typography>
                     <Typography
                       sx={{ mb: 1.5, fontSize: 14 }}
                       color="text.secondary"
                     >
-                      {"Author: " + post.user_id}
+                      {`Author: ${post.user_name}`}
                     </Typography>
                     <Typography
                       sx={{ mb: 1.5, fontSize: 14 }}
                       color="text.secondary"
                     >
-                      {"Created At: " +
-                        moment(post.createdAt).format(
-                          "MMMM Do YYYY, h:mm:ss a"
-                        )}
+                      {`Created at: ${moment(post.createdAt).format("MMMM Do YYYY, h:mm:ss a")}`}
                     </Typography>
                   </CardContent>
                   <CardActions>

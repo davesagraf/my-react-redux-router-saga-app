@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  Button,
+  Avatar,
   Typography,
+  Tooltip,
   Container,
   Box,
   Card,
@@ -12,19 +13,22 @@ import {
   IconButton
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { lightBlue } from "@mui/material/colors";
+import { lightBlue, grey } from "@mui/material/colors";
 
 import { getUserData } from "../actions/userAction";
-import Avatar from "@mui/material/Avatar";
 
-import HomeIcon from "@mui/icons-material/Home";
-import Tooltip from "@mui/material/Tooltip";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import CommentIcon from "@mui/icons-material/Comment";
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import moment from "moment";
 
 import { getAllPosts, getPostComments } from "../actions/postAction";
 
 export const ProfilePage = () => {
+  const auth = localStorage.getItem("Authorization");
+
+  const [showInfo, setShowInfo] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -54,14 +58,6 @@ export const ProfilePage = () => {
 
   const userInitials = userFirstNameFirstLetter + userLastNameFirstLetter;
 
-  const handleNavigateToMain = () => {
-    try {
-      navigate("/main");
-    } catch (error) {
-      throw new Error(error);
-    }
-  };
-
   const handleShowComments = () => {
     setShowComments(!showComments);
   };
@@ -76,104 +72,65 @@ export const ProfilePage = () => {
       >
         <Box
           sx={{
-            bgcolor: "background.default",
+            bgcolor: "transparent",
             width: "100%",
           }}
         >
-          <Tooltip title="Go to Home page">
-            <Button
-              sx={{
-                width: "5em",
-                height: "5em",
-                display: "flex",
-                flexDirection: "column",
-              }}
-              onClick={handleNavigateToMain}
-            >
-              <HomeIcon></HomeIcon>
-            </Button>
-          </Tooltip>
-
-          <Grid
-            container
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              width: "100%",
-            }}
-          >
+          
             {currentUser ? (
               <>
-                <Card elevation={3}>
-                  <Grid
-                    item
-                    sx={{
-                      width: "540px",
-                      display: "flex",
-                      flexDirection: "column",
-                      marginLeft: "3em",
-                      marginTop: "3em",
-                    }}
-                  >
-                    <Avatar> {userInitials} </Avatar>
-                  </Grid>
-                  <Grid
-                    item
-                    sx={{
-                      width: "540px",
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
+                <Card elevation={3}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                    background: grey[50],
+                    height: 250,
+                    width: 700,
+                    lineHeight: "60px",
+                    marginBottom: "2.5em",
+                    marginTop: "2.5em",
+                    borderRadius: "0.5em",
+                  }} >
+                  <CardContent sx={{ marginBottom: "auto" }}>
+                  <Avatar> {userInitials} </Avatar>
+                  <Typography
+                      sx={{ fontSize: 18 }}
+                      color="text.secondary"
+                      gutterBottom
+                    >
+                    {`First Name: ${thisUserFirstName}`}
+                    </Typography>
+
                     <Typography
                       sx={{ fontSize: 18 }}
                       color="text.secondary"
                       gutterBottom
                     >
-                      First Name: {thisUserFirstName}
+                    {`Last Name: ${thisUserLastName}`}
                     </Typography>
-                  </Grid>
-                  <Grid
-                    item
-                    sx={{
-                      width: "540px",
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <Typography
-                      sx={{ fontSize: 18 }}
-                      color="text.secondary"
-                      gutterBottom
-                    >
-                      Last Name: {thisUserLastName}
-                    </Typography>
-                  </Grid>
-                  <Grid
-                    item
-                    sx={{
-                      width: "540px",
-                      display: "flex",
-                      flexDirection: "column",
-                      marginLeft: "2.1em",
-                    }}
-                  >
+                  
+                    <AlternateEmailIcon sx={{
+                      color: "text.secondary"
+                    }} />
                     <Typography
                       sx={{ fontSize: 16 }}
                       color="text.secondary"
                       gutterBottom
                     >
-                      email: {thisUserEmail}
+                    {`email: ${thisUserEmail}`}
                     </Typography>
-                  </Grid>
+                  </CardContent>
                 </Card>
 
                 <Grid
-                  container
+                  item
                   sx={{
                     display: "flex",
+                    flexDirection: "column",
                     justifyContent: "center",
-                    width: "100%",
+                    width: "50em",
+                    cursor: "pointer"
                   }}
                 >
                   {userPosts.map((post, index) => (
@@ -199,12 +156,11 @@ export const ProfilePage = () => {
                           sx={{
                             fontSize: 20,
                             backgroundColor: lightBlue[50],
-                            transform: "translate(0em, -1.5em)",
                           }}
-                          color="white"
+                          color="text.secondary"
                           gutterBottom
                         >
-                          {"Post Title: " + post.title}
+                          {`Title: ${post.title}`}
                         </Typography>
                         <Typography
                           sx={{
@@ -214,29 +170,27 @@ export const ProfilePage = () => {
                           }}
                           color="text.secondary"
                         >
-                          {"Post Description: " + post.description}
+                          {`Description: ${post.description}`}
                         </Typography>
                         <Typography
                           sx={{
                             mb: 1.5,
                             fontSize: 16,
                             boxSizing: "border-box",
-                            transform: "translate(0em, 6em)",
                           }}
                           color="text.secondary"
                         >
-                          {"Post AuthorID: " + post.user_id}
+                          {`Author: ${post.user_name}`}
                         </Typography>
                         <Typography
                           sx={{
                             mb: 1.5,
                             fontSize: 13,
                             boxSizing: "border-box",
-                            transform: "translate(0em, 7em)",
                           }}
                           color="text.secondary"
                         >
-                          {"Created At: " + post.createdAt}
+                          {`Created At: ${ moment(post.createdAt).format("MMMM Do YYYY, h:mm:ss a")}`}
                         </Typography>
                       </CardContent>
                       <CardActions>
@@ -262,7 +216,6 @@ export const ProfilePage = () => {
                 </Grid>
               </>
             ) : null}
-          </Grid>
         </Box>
       </Container>
     </>
