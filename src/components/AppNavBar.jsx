@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import HomeIcon from "@mui/icons-material/Home";
@@ -17,7 +17,6 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { getUserData } from "../actions/userAction";
 
 import Logout from "@mui/icons-material/Logout";
 
@@ -32,15 +31,10 @@ export default function AppNavBar() {
   const auth = localStorage.getItem("Authorization");
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const { currentUser } = useSelector((store) => store.user);
   const thisUserFirstName = currentUser.first_name;
   const userFirstNameFirstLetter = thisUserFirstName.charAt(0);
-
-  useEffect(() => {
-    dispatch(getUserData());
-  }, [dispatch]);
 
   const [user, setUserLogOut] = useState({
     email: "",
@@ -106,7 +100,7 @@ export default function AppNavBar() {
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar>
-            {auth && (
+            {auth ? (
               <>
                 <IconButton
                   size="large"
@@ -217,7 +211,7 @@ export default function AppNavBar() {
                   </Menu>
                 </div>
               </>
-            )}
+            ) : null }
           </Toolbar>
         </AppBar>
       </Box>
