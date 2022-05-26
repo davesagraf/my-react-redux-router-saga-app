@@ -18,7 +18,6 @@ import {
   Grid,
   Tooltip,
 } from "@mui/material";
-import { NewPostInput } from "../components/NewPostInput";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { lightBlue } from "@mui/material/colors";
@@ -26,6 +25,9 @@ import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import CommentIcon from "@mui/icons-material/Comment";
 import { CommentCard } from "../components/CommentCard";
 import { getUserData } from "../actions/userAction";
+
+import { ClickAwayListener as PostTitleClickAway } from '@mui/base';
+import { ClickAwayListener as PostDescClickAway } from '@mui/base';
 
 export default function MainPage() {
   const dispatch = useDispatch();
@@ -41,21 +43,43 @@ export default function MainPage() {
     description: "",
   });
 
-  const [createPost, setCreatePost] = useState(false);
-
   const [showComments, setShowComments] = useState(false);
+
+  const [showPostInput, setShowPostInput] = useState(true)
+
+  const [showPostButton, setShowPostButton] = useState(false);
+
+  const [postTitleEl, setPostTitleEl] = useState(null);
+
+  const [postDescEl, setPostDescEl] = useState(null);
+
+  const [postButtonEl, setPostButtonEl] = useState(null);
 
   const { posts } = useSelector((store) => store.posts);
 
   const { currentPostComments } = useSelector((store) => store.posts);
 
-  const { currentUser } = useSelector((store) => store.user);
+  const handlePostTitleInput = (event) => {
+    setPostTitleEl(event.currentTarget);
+  }
 
-  const thisUserFirstName = currentUser.first_name;
+  const handleClearPostTitleInput = () => {
+    const postTitleInput = document.getElementById("new-post-title")
+    postTitleInput.value = ""
+  }
 
-  const handleCreatePost = () => {
-    setCreatePost(!createPost);
-  };
+  const handleClearPostDescInput = () => {
+    const postDescInput = document.getElementById("new-post-description")
+    postDescInput.value = ""
+  }
+
+  const handlePostDescInput = (event) => {
+    if(event.key === 'Enter'){
+      setPostDescEl(event.currentTarget);
+      setShowPostInput(false);    
+      setPostTitleEl(null);
+    }
+  }
 
   const handleNewPostTitle = (event) => {
     event.preventDefault();
@@ -67,10 +91,24 @@ export default function MainPage() {
     setNewPost({ ...newPost, description: event.target.value });
   };
 
+  const handleNewPostButton = (event) => {
+    if(event.key === 'Enter'){
+    setShowPostButton(true);
+    setPostDescEl(null);
+    setPostButtonEl(event.currentTarget);
+    }
+  }
+
   const handleAddNewPost = () => {
     dispatch(addNewPost(newPost));
     setNewPost({ title: "", description: "" });
+    setShowPostButton(false);
   };
+
+  const handleCancelPost = () => {
+    setNewPost({ title: "", description: "" });
+    setShowPostButton(false);  
+  }
 
   const handleShowComments = () => {
     setShowComments(!showComments);
@@ -90,50 +128,64 @@ export default function MainPage() {
             width: "100%",
           }}
         >
-          <Input
+
+          {showPostInput ?
+          <PostTitleClickAway onClickAway={handleClearPostTitleInput}>
+            <Input
+          sx={{ width: 500 }}
+          placeholder="What's up?"
+          onClick={(e) => handlePostTitleInput(e)}
+          onChange={(e) => handleNewPostTitle(e)}
+          id={"new-post-title"}
+          value={newPost.title}
+          onKeyPress={(e) => handlePostDescInput(e)}
+          inputRef={postTitleEl}/>
+          </PostTitleClickAway>           
+           : null}
+
+          {postDescEl ? 
+
+          <PostDescClickAway onClickAway={handleClearPostDescInput}>
+            <Input
             sx={{ width: 500 }}
-            placeholder="What's up?"
-            onClick={handleCreatePost}
+            placeholder="Add description to your post..."
+            autoFocus
+            onChange={(e) => handleNewPostDescription(e)}
+            id={"new-post-description"}
+            value={newPost.description}
+            onKeyPress={(e) => handleNewPostButton(e)}
+            inputRef={postDescEl} 
           />
-          {createPost ? (
-            <Grid
-              item
-              sx={{
-                width: 500,
-                display: "flex",
-                flexDirection: "column",
-              }}
+          </PostDescClickAway>
+          
+           : null}
+
+          {showPostButton  ? 
+          <> 
+          <Tooltip title="add post">
+           <Button
+            onClick={handleAddNewPost}
+            variant="contained"
+            sx={{ width: "13em" }}
+            ref={postButtonEl}
             >
-              <Typography
-                sx={{ fontSize: 18 }}
-                color="text.secondary"
-                gutterBottom
-              >
-                Enter new post
-              </Typography>
+            Add New Post
+            </Button>
+          </Tooltip>
 
-              <NewPostInput
-                value={newPost.title}
-                handleEnter={handleNewPostTitle}
-                label={"new post title"}
-              ></NewPostInput>
-              <NewPostInput
-                value={newPost.description}
-                handleEnter={handleNewPostDescription}
-                label={"new post description"}
-              ></NewPostInput>
-
-              <Tooltip title="add post">
-                <Button
-                  onClick={handleAddNewPost}
-                  variant="contained"
-                  sx={{ width: "13em" }}
-                >
-                  Add New Post
-                </Button>
-              </Tooltip>
-            </Grid>
-          ) : null}
+          <Tooltip title="cancel post">
+          <Button
+          onClick={handleCancelPost}
+          variant="contained"
+          sx={{ width: "13em" }}
+          ref={postButtonEl}
+          >
+          Cancel
+          </Button>
+        </Tooltip>
+        </>
+          
+          : null  }
 
           <Grid
             item
