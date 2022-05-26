@@ -377,7 +377,7 @@ export default function MainPage() {
                             id={newComment.id}
                             post_id={newComment.post_id}
                             title={newComment.title}
-                            user_id={newComment.user_id}
+                            user_name={newComment.user_name}
                             createdAt={newComment.createdAt}
                           ></CommentCard>
                         </Grid>

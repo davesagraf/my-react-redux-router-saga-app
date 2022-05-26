@@ -3,13 +3,12 @@ import {
   Card,
   CardContent,
   Typography,
-  CardActions,
-  Button,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import moment from "moment";
 
 export const CommentCard = (props) => {
+
   return (
     <>
       <Card
@@ -38,15 +37,12 @@ export const CommentCard = (props) => {
           </Typography>
 
           <Typography sx={{ mb: 1.5, fontSize: 13 }} color="text.secondary">
-            {"Author: " + props.user_id}
+            {"Author: " + props.user_name}
           </Typography>
           <Typography sx={{ mb: 1.5, fontSize: 13 }} color="text.secondary">
             {"Created At: " + moment(props.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
           </Typography>
         </CardContent>
-        <CardActions>
-          <Button size="small">Expand Post</Button>
-        </CardActions>
       </Card>
     </>
   );

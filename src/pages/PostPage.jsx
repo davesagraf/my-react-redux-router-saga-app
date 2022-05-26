@@ -6,30 +6,37 @@ import {
   addNewComment,
   deleteComment,
   addLike,
-  removeLike
+  removeLike,
 } from "../actions/postAction";
-import { Box, Button, Typography } from "@mui/material";
-import { Paper } from "@mui/material";
-import Grid from "@mui/material/Grid";
-import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
-import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
+import { getUserData } from "../actions/userAction";
+import {
+  Box,
+  Button,
+  Container,
+  Card,
+  CardContent,
+  CardActions,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { NewCommentInput } from "../components/NewCommentInput";
-import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import { EditForm } from "../components/EditForm";
 import { EditCommentForm } from "../components/EditCommentForm";
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-
+import CommentIcon from "@mui/icons-material/Comment";
+import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import EditIcon from "@mui/icons-material/Edit";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import { getUserData } from "../actions/userAction";
-import { blue, grey } from "@mui/material/colors";
+import { grey, lightBlue } from "@mui/material/colors";
 import moment from "moment";
+import { CommentCard } from "../components/CommentCard";
 
 export default function PostPage() {
   const dispatch = useDispatch();
@@ -37,6 +44,7 @@ export default function PostPage() {
   const [changePost, setChangePost] = useState(false);
   const [changeComment, setChangeComment] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [showComments, setShowComments] = useState(false);
 
   const { id } = useParams();
   const { currentPost } = useSelector((store) => store.posts);
@@ -45,12 +53,17 @@ export default function PostPage() {
 
   useEffect(() => {
     dispatch(getCurrentPost(id));
+    dispatch(getUserData());
   }, [liked, dispatch, id]);
 
   const [newComment, setNewComment] = useState({
     title: "",
     post_id: id,
   });
+
+  const handleShowComments = () => {
+    setShowComments(!showComments);
+  };
 
   const handleNewCommentTitle = (event) => {
     event.preventDefault();
@@ -61,18 +74,6 @@ export default function PostPage() {
     dispatch(addNewComment(newComment));
     setNewComment({ title: "", post_id: id });
   };
-
-  const Item = styled(Paper)(({ theme }) => ({
-    ...theme.typography.body2,
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-    height: "250px",
-    width: "50%",
-    lineHeight: "60px",
-    marginBottom: "5em",
-    marginLeft: "25%",
-    transform: "translate(0em, -7em)"
-  }));
 
   const handleDeletePost = () => {
     try {
@@ -95,20 +96,19 @@ export default function PostPage() {
   };
 
   const handleLike = (event) => {
-    event.preventDefault()
-    const postId = event.target.id
+    event.preventDefault();
+    const postId = event.target.id;
     try {
-      dispatch(addLike(postId));  
+      dispatch(addLike(postId));
     } catch (error) {
       throw new Error(error);
     }
     setLiked(true);
-  }
-
+  };
 
   const handleUnlike = (event) => {
-    event.preventDefault()
-    const postId = event.target.id
+    event.preventDefault();
+    const postId = event.target.id;
 
     try {
       dispatch(removeLike(postId));
@@ -116,7 +116,7 @@ export default function PostPage() {
       throw new Error(error);
     }
     setLiked(false);
-  }
+  };
 
   const handleNavigateBack = () => {
     try {
@@ -135,92 +135,109 @@ export default function PostPage() {
     }
   };
 
-  const theme = createTheme({ palette: { mode: "light" } });
-
   return (
     <>
-      <Tooltip title="Go to Profile">
-        <Button
-          sx={{
-            width: "5em",
-            height: "5em",
-            display: "flex",
-            flexDirection: "column",
-          }}
-          onClick={handleNavigateToProfile}
-        >
-          <AccountCircleIcon></AccountCircleIcon>
-        </Button>
-      </Tooltip>
-
-      <Tooltip title="go back">
-        <Button
-          sx={{
-            width: "5em",
-            height: "5em",
-            display: "flex",
-            flexDirection: "column",
-          }}
-          onClick={handleNavigateBack}
-        >
-          <NavigateBeforeIcon></NavigateBeforeIcon>
-        </Button>
-      </Tooltip>
-
-      <Grid
-        container
+      <Container
+        maxWidth="lg"
         sx={{
-          display: "flex",
-          justifyContent: "center",
+          width: "100%",
         }}
       >
-        <ThemeProvider theme={theme}>
-          <Box
+        <Box
+          sx={{
+            bgcolor: "transparent",
+            width: "100%",
+          }}
+        >
+          <Tooltip title="Go to Profile">
+            <Button
+              sx={{
+                width: "5em",
+                height: "5em",
+                display: "flex",
+                flexDirection: "column",
+              }}
+              onClick={handleNavigateToProfile}
+            >
+              <AccountCircleIcon></AccountCircleIcon>
+            </Button>
+          </Tooltip>
+
+          <Tooltip title="go back">
+            <Button
+              sx={{
+                width: "5em",
+                height: "5em",
+                display: "flex",
+                flexDirection: "column",
+              }}
+              onClick={handleNavigateBack}
+            >
+              <NavigateBeforeIcon></NavigateBeforeIcon>
+            </Button>
+          </Tooltip>
+
+          <Card
+            elevation={3}
+            id={currentPost.id}
             sx={{
-              bgcolor: "background.default",
-              display: "grid",
-              gridTemplateColumns: { md: "1fr" },
-              gap: 2,
-              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-around",
+              background: lightBlue[50],
+              height: 250,
+              width: 500,
+              lineHeight: "60px",
+              marginBottom: "2.5em",
+              marginTop: "2.5em",
+              borderRadius: "0.5em",
             }}
           >
-            <Item elevation={5} id={currentPost.id}>
-            {likes.length === 0 ? <Tooltip title="Like Post">
+            <CardContent sx={{ marginBottom: "auto" }}>
+              {!changePost ? (
+                <>
+                  <Typography
+                    sx={{ fontSize: 24 }}
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    {`Title: ${currentPost.title}`}
+                  </Typography>
+                  <Typography
+                    sx={{ mb: 1.5, fontSize: 14 }}
+                    color="text.secondary"
+                  >
+                    {`Description: ${currentPost.description}`}
+                  </Typography>
+                  <Typography
+                    sx={{ mb: 1.5, fontSize: 14 }}
+                    color="text.secondary"
+                  >
+                    {`Author: ${currentPost.user_name}`}
+                  </Typography>
+                  <Typography
+                    sx={{ mb: 1.5, fontSize: 14 }}
+                    color="text.secondary"
+                  >
+                  {`Created at: ${moment(currentPost.createdAt).format("MMMM Do YYYY, h:mm:ss a")}`}
+                  </Typography>
+                </>
+              ) : (
+                <EditForm entiny={currentPost} setChange={setChangePost} />
+              )}
+            </CardContent>
+            <CardActions>
+              <Tooltip title="click to see comments">
                 <IconButton
-                  sx={{
-                    transform: "translate(-19.3em, -0.5em)",
-                    alignSelf: "flex-start",
-                  }}
-                  onClick={handleLike}
-                  variant="contained"
+                  onClick={handleShowComments}
                   id={currentPost.id}
                 >
-                  <ThumbUpOutlinedIcon></ThumbUpOutlinedIcon>
+                  <CommentIcon></CommentIcon>
                 </IconButton>
-              </Tooltip> : <Tooltip title="Unlike Post">
-                <IconButton
-                  sx={{
-                    transform: "translate(-19.3em, -0.5em)",
-                    alignSelf: "flex-start",
-                  }}
-                  onClick={handleUnlike}
-                  variant="contained"
-                  id={currentPost.id}
-                >
-                  <ThumbUpIcon></ThumbUpIcon>
-                </IconButton>
-              </Tooltip>}  
-           
-           
+              </Tooltip>
               <Tooltip title="Edit Post">
                 <IconButton
-                  sx={{
-                    transform: "translate(22em, -0.9em)",
-                    alignSelf: "flex-start",
-                  }}
-                  onClick={() => {
-                    setChangePost(!changePost);
-                  }}
+                  onClick={() => {setChangePost(!changePost);}}
                   variant="contained"
                   id={currentPost.id}
                 >
@@ -230,10 +247,6 @@ export default function PostPage() {
 
               <Tooltip title="Delete Post">
                 <IconButton
-                  sx={{
-                    transform: "translate(20.3em, 1em)",
-                    alignSelf: "flex-start",
-                  }}
                   onClick={handleDeletePost}
                   variant="contained"
                   id={currentPost.id}
@@ -241,186 +254,120 @@ export default function PostPage() {
                   <DeleteForeverRoundedIcon></DeleteForeverRoundedIcon>
                 </IconButton>
               </Tooltip>
-
-              {!changePost ? (
-                <>
-                  <Typography
-                    sx={{
-                      fontSize: 20,
-                      backgroundColor: blue[600],
-                      transform: "translate(0em, -3em)",
-                    }}
-                    color="white"
-                    gutterBottom
+              {likes.length === 0 ? (
+                <Tooltip title="Like Post">
+                  <IconButton
+                    onClick={handleLike}
+                    variant="contained"
+                    id={currentPost.id}
                   >
-                    {"Post Title: " + currentPost.title}
-                  </Typography>
-                  <Typography
-                    sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box" }}
-                    color="text.secondary"
-                  >
-                  {"Post Description: " + currentPost.description}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      mb: 1.5,
-                      fontSize: 16,
-                      boxSizing: "border-box",
-                      transform: "translate(0em, 3em)",
-                    }}
-                    color="text.secondary"
-                  >
-                    {"Post AuthorID: " + currentPost.user_id}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      mb: 1.5,
-                      fontSize: 13,
-                      boxSizing: "border-box",
-                      transform: "translate(0em, 4em)",
-                    }}
-                    color="text.secondary"
-                  >
-                    {"Created At: " + moment(currentPost.createdAt).format('MMMM Do YYYY, h:mm:ss a') }
-                  </Typography>
-                </>
+                    <ThumbUpOutlinedIcon></ThumbUpOutlinedIcon>
+                  </IconButton>
+                </Tooltip>
               ) : (
-                <EditForm entiny={currentPost} setChange={setChangePost} />
+                <Tooltip title="Unlike Post">
+                  <IconButton
+                    onClick={handleUnlike}
+                    variant="contained"
+                    id={currentPost.id}
+                  >
+                    <ThumbUpIcon></ThumbUpIcon>
+                  </IconButton>
+                </Tooltip>
               )}
-            </Item>
+            </CardActions>
+          </Card>
 
-            <Grid
-              item
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                cursor: "pointer",
-              }}
-            >
-              {comments ? (
-                comments.map((comment, index) => (
-                  <Box key={index} id={comment.id}>
-                    <Item
-                      elevation={5}
+          {comments ? (
+            comments.map((comment, index) => (
+              <>
+                {!changeComment ? (
+                  <>
+                    <CommentCard
+                      key={index}
                       id={comment.id}
-                      sx={{ width: "30%", height: "10.6em", marginLeft: "35%" }}
-                    >
+                      post_id={comment.post_id}
+                      title={comment.title}
+                      user_name={comment.user_name}
+                      createdAt={newComment.createdAt}
+                    ></CommentCard>
+                    <CardActions>
                       <Tooltip title="Edit Comment">
                         <IconButton
-                          sx={{
-                            transform: "translate(15.1em, -1em)",
-                            alignSelf: "flex-start",
-                          }}
-                          onClick={() => {
-                            setChangeComment(!changeComment);
-                          }}
+                          onClick={() => {setChangeComment(!changeComment);}}
                           variant="contained"
-                          id={comment.id}
+                          id={currentPost.id}
                         >
-                          <EditIcon id={comment.id}></EditIcon>
+                          <EditIcon id={currentPost.id}></EditIcon>
                         </IconButton>
                       </Tooltip>
 
                       <Tooltip title="Delete Comment">
                         <IconButton
-                          sx={{
-                            transform: "translate(13.3em, 1em)",
-                            alignSelf: "flex-start",
-                          }}
                           onClick={handleDeleteComment}
                           variant="contained"
-                          id={comment.id}
+                          id={currentPost.id}
                         >
                           <DeleteForeverRoundedIcon
-                            id={comment.id}
+                            id={currentPost.id}
                           ></DeleteForeverRoundedIcon>
                         </IconButton>
                       </Tooltip>
-                      {!changeComment ? (
-                        <>
-                          <Typography
-                            sx={{
-                              fontSize: 20,
-                              backgroundColor: grey[400],
-                              transform: "translate(0em, -4em)",
-                            }}
-                            color="white"
-                            gutterBottom
-                          >{"Comment #: " + comment.id}</Typography>
-                          <Typography
-                            sx={{ fontSize: 18, transform: "translate(0em, -3em)" }}
-                            color="text.secondary"
-                            gutterBottom
-                          >
-                            {comment.title}
-                          </Typography>
-                          <Typography
-                            sx={{ fontSize: 13, transform: "translate(0em, -2.7em)" }}
-                            color="text.secondary"
-                            gutterBottom
-                          >
-                           {"AuthorID: " + comment.user_id}
-                          </Typography>
-                          <Typography
-                            sx={{ fontSize: 13, transform: "translate(0em, -2em)" }}
-                            color="text.secondary"
-                            gutterBottom
-                          >
-                          {"Created At: " + moment(comment.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
-                          </Typography>
-                        </>
-                      ) : (
-                        <EditCommentForm
-                          entiny={comment}
-                          setChange={setChangeComment}
-                        />
-                      )}
-                    </Item>
-                  </Box>
-                ))
-              ) : (
-                <Typography
-                  sx={{ fontSize: 18 }}
-                  color="text.secondary"
-                  gutterBottom
-                >
-                  No comments here yet.
-                </Typography>
-              )}
-            </Grid>
-          </Box>
-        </ThemeProvider>
-      </Grid>
+                    </CardActions>
+                  </>
+                ) : (
+                  <EditCommentForm
+                    entiny={comment}
+                    setChange={setChangeComment}
+                  />
+                )}
+              </>
+            ))
+          ) : (
+            <Typography
+              sx={{ fontSize: 18 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              No comments here yet.
+            </Typography>
+          )}
 
-      <Grid
-        item
-        sx={{
-          width: "44%",
-          display: "flex",
-          flexDirection: "column",
-          marginLeft: "33%",
-        }}
-      >
-        <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
-          Enter new comment
-        </Typography>
-
-        <NewCommentInput
-          value={newComment.title}
-          handleEnter={handleNewCommentTitle}
-          label={"new comment title"}
-        ></NewCommentInput>
-
-        <Tooltip title="add comment">
-          <Button
-            onClick={handleAddNewComment}
-            variant="contained"
-            sx={{ width: "15em" }}
+          <Grid
+            item
+            sx={{
+              width: "44%",
+              display: "flex",
+              flexDirection: "column",
+              marginLeft: "33%",
+            }}
           >
-            Add New Comment
-          </Button>
-        </Tooltip>
-      </Grid>
+            <Typography
+              sx={{ fontSize: 18 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              Enter new comment
+            </Typography>
+
+            <NewCommentInput
+              value={newComment.title}
+              handleEnter={handleNewCommentTitle}
+              label={"new comment title"}
+            ></NewCommentInput>
+
+            <Tooltip title="add comment">
+              <Button
+                onClick={handleAddNewComment}
+                variant="contained"
+                sx={{ width: "15em" }}
+              >
+                Add New Comment
+              </Button>
+            </Tooltip>
+          </Grid>
+        </Box>
+      </Container>
     </>
   );
 }

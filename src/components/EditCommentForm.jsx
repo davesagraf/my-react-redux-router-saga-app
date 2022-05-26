@@ -1,10 +1,18 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Button, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid";
+
 import Tooltip from "@mui/material/Tooltip";
 import { NewCommentInput } from "../components/NewCommentInput";
 import { editComment } from "../actions/postAction";
+import Modal from '@mui/material/Modal';
+import Backdrop from '@mui/material/Backdrop';
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+} from "@mui/material";
+import { grey } from "@mui/material/colors";
 
 export const EditCommentForm = ({ entiny, setChange }) => {
   const dispatch = useDispatch();
@@ -12,10 +20,21 @@ export const EditCommentForm = ({ entiny, setChange }) => {
     title: entiny.title,
   });
 
+  const [openModal, setOpenModal] = useState(true);
+  const [openBackdrop, setOpenBackdrop] = useState(true);
+
   const handleEditCommentTitle = (event) => {
     event.preventDefault();
     setEditedComment({ ...editedComment, title: event.target.value });
   };
+
+  const handleCloseBackdrop = () => {
+    setOpenBackdrop(false);
+  }
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  }
 
   const handleEditComment = () => {
     try {
@@ -34,15 +53,34 @@ export const EditCommentForm = ({ entiny, setChange }) => {
 
   return (
     <>
-      <Grid
-        item
+    <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={openBackdrop}
+        onClick={handleCloseBackdrop}
+      >
+          <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Card
+        elevation={3}
         sx={{
-          height: "10.6em",
           display: "flex",
           flexDirection: "column",
-          transform: "translate(0em, -6.6em)"
+          justifyContent: "space-around",
+          background: grey[50],
+          height: 180,
+          width: 700,
+          lineHeight: "34px",
+          marginBottom: "1em",
+          marginTop: "1em",
+          borderRadius: "0.5em",
+          position: "absolute"
         }}
       >
+        <CardContent sx={{ marginBottom: "auto" }}>
         <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
           Edit comment
         </Typography>
@@ -62,7 +100,10 @@ export const EditCommentForm = ({ entiny, setChange }) => {
             Save comment
           </Button>
         </Tooltip>
-      </Grid>
+        </CardContent>
+        </Card>
+        </Modal>
+      </Backdrop>
     </>
   );
 };
