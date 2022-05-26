@@ -124,6 +124,7 @@ export default function MainPage() {
   const handleAddNewPost = () => {
     dispatch(addNewPost(newPost));
     setNewPost({ title: "", description: "" });
+    setShowPostInput(true);
     setShowPostButton(false);
   };
 
@@ -271,19 +272,18 @@ export default function MainPage() {
                 <Button
                   onClick={handleAddNewPost}
                   variant="contained"
-                  sx={{ width: "13em" }}
+                  sx={{ width: "13em", marginTop: "1em", marginRight: "1em" }}
                   ref={postButtonEl}
                 >
                   Add New Post
                 </Button>
               </Tooltip>
-
+          
               <Tooltip title="cancel post">
                 <Button
                   onClick={handleCancelPost}
                   variant="contained"
-                  sx={{ width: "13em" }}
-                  ref={postButtonEl}
+                  sx={{ width: "13em", marginTop: "1em", marginLeft: "1em" }}
                 >
                   Cancel
                 </Button>
