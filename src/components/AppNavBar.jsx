@@ -86,7 +86,7 @@ export default function AppNavBar() {
   const handleOpenSideBar = (event) => {
     setSideBarAnchorEl(event.currentTarget);
     try {
-      setShowSideBar(!showSideBar);
+      setShowSideBar(true);
     } catch (error) {
       throw new Error(error);
     }
@@ -94,6 +94,7 @@ export default function AppNavBar() {
 
   const handleCloseSideBar = () => {
     setSideBarAnchorEl(null);
+    setShowSideBar(false)
   };
 
   const handleTabChange = (event, newTabValue) => {
