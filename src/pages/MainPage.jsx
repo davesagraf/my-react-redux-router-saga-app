@@ -66,11 +66,13 @@ export default function MainPage() {
   const handleClearPostTitleInput = () => {
     const postTitleInput = document.getElementById("new-post-title")
     postTitleInput.value = ""
+    setNewPost({ ...newPost, title: "" });
   }
 
   const handleClearPostDescInput = () => {
     const postDescInput = document.getElementById("new-post-description")
     postDescInput.value = ""
+    setNewPost({ ...newPost, description: "" });
   }
 
   const handlePostDescInput = (event) => {
@@ -107,6 +109,7 @@ export default function MainPage() {
 
   const handleCancelPost = () => {
     setNewPost({ title: "", description: "" });
+    setShowPostInput(true);
     setShowPostButton(false);  
   }
 
