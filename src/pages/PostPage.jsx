@@ -5,6 +5,8 @@ import {
   getCurrentPost,
   addNewComment,
   deleteComment,
+  addLike,
+  removeLike
 } from "../actions/postAction";
 import { Box, Button, Typography } from "@mui/material";
 import { Paper } from "@mui/material";
@@ -16,6 +18,8 @@ import { NewCommentInput } from "../components/NewCommentInput";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import { EditForm } from "../components/EditForm";
 import { EditCommentForm } from "../components/EditCommentForm";
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
@@ -25,20 +29,23 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import { getUserData } from "../actions/userAction";
 import { blue, grey } from "@mui/material/colors";
+import moment from "moment";
 
 export default function PostPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [changePost, setChangePost] = useState(false);
   const [changeComment, setChangeComment] = useState(false);
+  const [liked, setLiked] = useState(false);
 
   const { id } = useParams();
   const { currentPost } = useSelector((store) => store.posts);
   const { comments } = currentPost;
+  const { likes } = currentPost;
 
   useEffect(() => {
     dispatch(getCurrentPost(id));
-  }, [dispatch, id]);
+  }, [liked, dispatch, id]);
 
   const [newComment, setNewComment] = useState({
     title: "",
@@ -86,6 +93,30 @@ export default function PostPage() {
       throw new Error(error);
     }
   };
+
+  const handleLike = (event) => {
+    event.preventDefault()
+    const postId = event.target.id
+    try {
+      dispatch(addLike(postId));  
+    } catch (error) {
+      throw new Error(error);
+    }
+    setLiked(true);
+  }
+
+
+  const handleUnlike = (event) => {
+    event.preventDefault()
+    const postId = event.target.id
+
+    try {
+      dispatch(removeLike(postId));
+    } catch (error) {
+      throw new Error(error);
+    }
+    setLiked(false);
+  }
 
   const handleNavigateBack = () => {
     try {
@@ -154,6 +185,33 @@ export default function PostPage() {
             }}
           >
             <Item elevation={5} id={currentPost.id}>
+            {likes.length === 0 ? <Tooltip title="Like Post">
+                <IconButton
+                  sx={{
+                    transform: "translate(-19.3em, -0.5em)",
+                    alignSelf: "flex-start",
+                  }}
+                  onClick={handleLike}
+                  variant="contained"
+                  id={currentPost.id}
+                >
+                  <ThumbUpOutlinedIcon></ThumbUpOutlinedIcon>
+                </IconButton>
+              </Tooltip> : <Tooltip title="Unlike Post">
+                <IconButton
+                  sx={{
+                    transform: "translate(-19.3em, -0.5em)",
+                    alignSelf: "flex-start",
+                  }}
+                  onClick={handleUnlike}
+                  variant="contained"
+                  id={currentPost.id}
+                >
+                  <ThumbUpIcon></ThumbUpIcon>
+                </IconButton>
+              </Tooltip>}  
+           
+           
               <Tooltip title="Edit Post">
                 <IconButton
                   sx={{
@@ -195,15 +253,13 @@ export default function PostPage() {
                     color="white"
                     gutterBottom
                   >
-                    Post Title:
-                    {" " + " " + " " + currentPost.title}
+                    {"Post Title: " + currentPost.title}
                   </Typography>
                   <Typography
                     sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box" }}
                     color="text.secondary"
                   >
-                    Post Description:
-                    {" " + " " + " " + currentPost.description}
+                  {"Post Description: " + currentPost.description}
                   </Typography>
                   <Typography
                     sx={{
@@ -214,8 +270,7 @@ export default function PostPage() {
                     }}
                     color="text.secondary"
                   >
-                    Post AuthorID:
-                    {" " + " " + " " + currentPost.user_id}
+                    {"Post AuthorID: " + currentPost.user_id}
                   </Typography>
                   <Typography
                     sx={{
@@ -226,8 +281,7 @@ export default function PostPage() {
                     }}
                     color="text.secondary"
                   >
-                    Created at:
-                    {" " + " " + " " + currentPost.createdAt}
+                    {"Created At: " + moment(currentPost.createdAt).format('MMMM Do YYYY, h:mm:ss a') }
                   </Typography>
                 </>
               ) : (
@@ -292,7 +346,7 @@ export default function PostPage() {
                             }}
                             color="white"
                             gutterBottom
-                          >Comment # {" " + comment.id}</Typography>
+                          >{"Comment #: " + comment.id}</Typography>
                           <Typography
                             sx={{ fontSize: 18, transform: "translate(0em, -3em)" }}
                             color="text.secondary"
@@ -305,14 +359,14 @@ export default function PostPage() {
                             color="text.secondary"
                             gutterBottom
                           >
-                           Comment AuthorID: {" " + " " + " " + comment.user_id}
+                           {"AuthorID: " + comment.user_id}
                           </Typography>
                           <Typography
                             sx={{ fontSize: 13, transform: "translate(0em, -2em)" }}
                             color="text.secondary"
                             gutterBottom
                           >
-                           Created at: {" " + " " + " " + comment.createdAt}
+                          {"Created At: " + moment(comment.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
                           </Typography>
                         </>
                       ) : (

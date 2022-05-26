@@ -6,6 +6,10 @@ export const EDIT_POST = "EDIT_POST"
 export const SET_COMMENT = "SET_COMMENT"
 export const DELETE_COMMENT = "DELETE_COMMENT"
 export const EDIT_COMMENT = "EDIT_COMMENT"
+export const GET_POST_COMMENTS = "GET_POST_COMMENTS"
+export const ADD_LIKE = "ADD_LIKE"
+export const REMOVE_LIKE = "REMOVE_LIKE"
+
 
 export const getAllPosts = () => {
     return {
@@ -62,3 +66,27 @@ export const editComment = (updatedComment) => {
   }
 }
 
+//
+export const getPostComments = (postId) => {
+  return {
+    type: GET_POST_COMMENTS,
+    postId
+  }
+}
+
+
+//add like
+export const addLike = (postId) => {
+  return {
+    type: ADD_LIKE,
+    postId
+  }
+}
+
+//remove like
+export const removeLike = (postId) => {
+  return {
+    type: REMOVE_LIKE,
+    postId
+  }
+}

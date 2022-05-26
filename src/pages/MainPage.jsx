@@ -1,27 +1,107 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewPost, getAllPosts } from "../actions/postAction";
-import { Box, Button, Collapse, Typography } from "@mui/material";
-import { Paper } from "@mui/material";
-import Grid from "@mui/material/Grid";
-import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
-import { NewPostInput } from "../components/NewPostInput";
+import {
+  addNewPost,
+  getAllPosts,
+  getPostComments,
+} from "../actions/postAction";
+import {
+  Box,
+  Button,
+  Typography,
+  IconButton,
+  Input,
+  Container,
+  Card,
+  CardContent,
+  CardActions,
+  Grid,
+  Tooltip,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { ShowComments } from "../components/ShowComments";
+import moment from "moment";
+import { lightBlue } from "@mui/material/colors";
+import ReadMoreIcon from "@mui/icons-material/ReadMore";
+import CommentIcon from "@mui/icons-material/Comment";
+import { CommentCard } from "../components/CommentCard";
+import { getUserData } from "../actions/userAction";
 
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { ClickAwayListener as PostTitleClickAway } from "@mui/base";
+import { ClickAwayListener as PostDescClickAway } from "@mui/base";
 
-import Tooltip from "@mui/material/Tooltip";
-import { blue } from "@mui/material/colors";
+import { Snackbar as PostTitleSnackbar } from "@mui/material";
+import { Snackbar as PostDescSnackbar } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function MainPage() {
   const dispatch = useDispatch();
-  const { posts } = useSelector((store) => store.posts);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(getAllPosts());
+    dispatch(getUserData());
+  }, [dispatch]);
 
   const [newPost, setNewPost] = useState({
     title: "",
     description: "",
   });
+
+  const [showComments, setShowComments] = useState(false);
+
+  const [showPostInput, setShowPostInput] = useState(true);
+
+  const [showPostButton, setShowPostButton] = useState(false);
+
+  const [postTitleEl, setPostTitleEl] = useState(null);
+
+  const [postDescEl, setPostDescEl] = useState(null);
+
+  const [postButtonEl, setPostButtonEl] = useState(null);
+
+  const [showPostTitleSnackbar, setShowPostTitleSnackbar] = useState(false);
+
+  const [showPostDescSnackbar, setShowPostDescSnackbar] = useState(false);
+
+  const { posts } = useSelector((store) => store.posts);
+
+  const { currentPostComments } = useSelector((store) => store.posts);
+
+  const handlePostTitleInput = (event) => {
+    setPostTitleEl(event.currentTarget);
+  };
+
+  const handlePostDescInput = (event) => {
+    if (event.key === "Enter") {
+      setPostDescEl(event.currentTarget);
+      setShowPostInput(false);
+      setPostTitleEl(null);
+    }
+  };
+
+  const handleClearPostTitleInput = () => {
+    const postTitleInput = document.getElementById("new-post-title");
+    postTitleInput.value = "";
+    setNewPost({ ...newPost, title: "" });
+  };
+
+  const handleClearPostDescInput = () => {
+    const postDescInput = document.getElementById("new-post-description");
+    postDescInput.value = "";
+    setNewPost({ ...newPost, description: "" });
+  };
+
+  const handleShowPostTitleSnackbar = () => {
+    setTimeout(() => {
+      setShowPostTitleSnackbar(true);
+    }, 3000);
+  };
+
+  const handleShowPostDescSnackbar = () => {
+    setTimeout(() => {
+      setShowPostDescSnackbar(true);
+    }, 3000);
+  };
 
   const handleNewPostTitle = (event) => {
     event.preventDefault();
@@ -33,196 +113,281 @@ export default function MainPage() {
     setNewPost({ ...newPost, description: event.target.value });
   };
 
-  const handleAddNewPost = () => {
-    dispatch(addNewPost(newPost));
-    setNewPost({ title: "", description: "" });
-  };
-
-  useEffect(() => {
-    dispatch(getAllPosts());
-  }, [dispatch]);
-
-  const Item = styled(Paper)(({ theme }) => ({
-    ...theme.typography.body2,
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-    height: 250,
-    width: 850,
-    lineHeight: "60px",
-    marginBottom: "5em",
-    marginTop: "5em",
-    marginLeft: "30vw",
-    borderRadius: "0.5em",
-  }));
-
-  const theme = createTheme({ palette: { mode: "light" } });
-
-  const navigate = useNavigate();
-
-  const handleNavigateToProfile = () => {
-    try {
-      navigate("/profile");
-    } catch (error) {
-      throw new Error(error);
+  const handleNewPostButton = (event) => {
+    if (event.key === "Enter") {
+      setShowPostButton(true);
+      setPostDescEl(null);
+      setPostButtonEl(event.currentTarget);
     }
   };
 
+  const handleAddNewPost = () => {
+    dispatch(addNewPost(newPost));
+    setNewPost({ title: "", description: "" });
+    setShowPostInput(true);
+    setShowPostButton(false);
+  };
+
+  const handleCancelPost = () => {
+    setNewPost({ title: "", description: "" });
+    setShowPostInput(true);
+    setShowPostButton(false);
+  };
+
+  const handleShowComments = () => {
+    setShowComments(!showComments);
+  };
+
+  const handlePostTitleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowPostTitleSnackbar(false);
+  };
+
+  const handlePostDescSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowPostDescSnackbar(false);
+  };
+
+  const postTitleSnackbarAction = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handlePostTitleSnackbarClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
+  const postDescSnackbarAction = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handlePostDescSnackbarClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
   return (
     <>
-      <Tooltip title="Go to Profile">
-        <Button
-          sx={{
-            width: "5em",
-            height: "5em",
-            display: "flex",
-            flexDirection: "column",
-          }}
-          onClick={handleNavigateToProfile}
-        >
-          <AccountCircleIcon></AccountCircleIcon>
-        </Button>
-      </Tooltip>
-
-      <Grid
-        container
+      <Container
+        maxWidth="lg"
         sx={{
-          display: "flex",
-          justifyContent: "center",
           width: "100%",
         }}
       >
-        <ThemeProvider theme={theme}>
-          <Box
-            sx={{
-              bgcolor: "background.default",
-              display: "grid",
-              gridTemplateColumns: { md: "1fr" },
-              gap: 2,
-              width: "100%",
-            }}
-          >
-            <Grid
-              item
-              sx={{
-                width: "540px",
-                display: "flex",
-                flexDirection: "column",
-                marginLeft: "30vw",
-              }}
-            >
-              <Typography
-                sx={{ fontSize: 18 }}
-                color="text.secondary"
-                gutterBottom
-              >
-                Enter new post
-              </Typography>
+        <Box
+          sx={{
+            bgcolor: "transparent",
+            width: "100%",
+          }}
+        >
+          {showPostTitleSnackbar ? (
+            <div>
+              <PostTitleSnackbar
+                open={showPostTitleSnackbar}
+                autoHideDuration={4000}
+                onClose={handlePostTitleSnackbarClose}
+                message={`🙂 like the post title? 👉 press Enter to continue`}
+                action={postTitleSnackbarAction}
+              />
+            </div>
+          ) : null}
 
-              <NewPostInput
+          {showPostDescSnackbar ? (
+            <div>
+              <PostDescSnackbar
+                open={showPostDescSnackbar}
+                autoHideDuration={4000}
+                onClose={handlePostDescSnackbarClose}
+                message={`🙂 like the post description? 👉 press Enter to continue`}
+                action={postDescSnackbarAction}
+              />
+            </div>
+          ) : null}
+
+          {showPostInput ? (
+            <PostTitleClickAway onClickAway={handleClearPostTitleInput}>
+              <Input
+                sx={{ width: 500 }}
+                placeholder="What's up?"
+                onClick={(e) => handlePostTitleInput(e)}
+                onChange={(e) => {
+                  handleNewPostTitle(e);
+                  handleShowPostTitleSnackbar();
+                }}
+                id={"new-post-title"}
                 value={newPost.title}
-                handleEnter={handleNewPostTitle}
-                label={"new post title"}
-              ></NewPostInput>
-              <NewPostInput
-                value={newPost.description}
-                handleEnter={handleNewPostDescription}
-                label={"new post description"}
-              ></NewPostInput>
+                onKeyPress={(e) => handlePostDescInput(e)}
+                inputRef={postTitleEl}
+              />
+            </PostTitleClickAway>
+          ) : null}
 
+          {postDescEl ? (
+            <PostDescClickAway onClickAway={handleClearPostDescInput}>
+              <Input
+                sx={{ width: 500 }}
+                placeholder="Add description to your post..."
+                autoFocus
+                onChange={(e) => {
+                  handleNewPostDescription(e);
+                  handleShowPostDescSnackbar();
+                }}
+                id={"new-post-description"}
+                value={newPost.description}
+                onKeyPress={(e) => handleNewPostButton(e)}
+                inputRef={postDescEl}
+              />
+            </PostDescClickAway>
+          ) : null}
+
+          {showPostButton ? (
+            <>
               <Tooltip title="add post">
                 <Button
                   onClick={handleAddNewPost}
                   variant="contained"
-                  sx={{ width: "13em" }}
+                  sx={{ width: "13em", marginTop: "1em", marginRight: "1em" }}
+                  ref={postButtonEl}
                 >
                   Add New Post
                 </Button>
               </Tooltip>
-            </Grid>
+          
+              <Tooltip title="cancel post">
+                <Button
+                  onClick={handleCancelPost}
+                  variant="contained"
+                  sx={{ width: "13em", marginTop: "1em", marginLeft: "1em" }}
+                >
+                  Cancel
+                </Button>
+              </Tooltip>
+            </>
+          ) : null}
 
-            <Grid
-              item
-              sx={{
-                width: "50em",
-                display: "flex",
-                flexDirection: "column",
-                cursor: "pointer",
-              }}
-            >
-              {posts.map((post, index) => (
-                <>
-                  <Tooltip key={index} title="click to see the post">
-                    <Item
-                      elevation={5}
-                      id={post.id}
-                      onClick={() => {
-                        navigate(`/post/${post.id}`);
-                      }}
+          <Grid
+            item
+            sx={{
+              width: "50em",
+              display: "flex",
+              flexDirection: "column",
+              cursor: "pointer",
+            }}
+          >
+            {posts.map((post, index) => (
+              <>
+                <Card
+                  elevation={3}
+                  id={post.id}
+                  key={index}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                    background: lightBlue[50],
+                    height: 250,
+                    width: 500,
+                    lineHeight: "60px",
+                    marginBottom: "2.5em",
+                    marginTop: "2.5em",
+                    borderRadius: "0.5em",
+                  }}
+                >
+                  <CardContent sx={{ marginBottom: "auto" }}>
+                    <Typography
+                      sx={{ fontSize: 24 }}
+                      color="text.secondary"
+                      gutterBottom
                     >
-                      <Typography
-                        sx={{
-                          fontSize: 20,
-                          backgroundColor: blue[600],
-                          transform: "translate(0em, -1.5em)",
+                      {`Title: ${post.title}`}
+                    </Typography>
+                    <Typography
+                      sx={{ mb: 1.5, fontSize: 14 }}
+                      color="text.secondary"
+                    >
+                      {`Description: ${post.description}`}
+                    </Typography>
+                    <Typography
+                      sx={{ mb: 1.5, fontSize: 14 }}
+                      color="text.secondary"
+                    >
+                      {`Author: ${post.user_name}`}
+                    </Typography>
+                    <Typography
+                      sx={{ mb: 1.5, fontSize: 14 }}
+                      color="text.secondary"
+                    >
+                      {`Created at: ${moment(post.createdAt).format(
+                        "MMMM Do YYYY, h:mm:ss a"
+                      )}`}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Tooltip title="click to read more">
+                      <IconButton
+                        onClick={() => {
+                          navigate(`/post/${post.id}`);
                         }}
-                        color="white"
-                        gutterBottom
+                        id={post.id}
                       >
-                        Post Title:
-                        {" " + " " + " " + post.title}
-                      </Typography>
-                      <Typography
-                        sx={{ mb: 1.5, fontSize: 16, boxSizing: "border-box" }}
-                        color="text.secondary"
-                      >
-                        Post Description:
-                        {" " + " " + " " + post.description}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          mb: 1.5,
-                          fontSize: 16,
-                          boxSizing: "border-box",
-                          transform: "translate(0em, 5em)",
-                        }}
-                        color="text.secondary"
-                      >
-                        Post AuthorID:
-                        {" " + " " + " " + post.user_id}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          mb: 1.5,
-                          fontSize: 13,
-                          boxSizing: "border-box",
-                          transform: "translate(0em, 6em)",
-                        }}
-                        color="text.secondary"
-                      >
-                        Created at:
-                        {" " + " " + " " + post.createdAt}
-                      </Typography>
-                    </Item>
-                  </Tooltip>
-                  <Grid
-                    item
-                    sx={{
-                      width: "540px",
-                      display: "flex",
-                      flexDirection: "column",
-                      marginLeft: "30vw",
-                    }}
-                  >
-                    <Tooltip title="click to show comments">
-                      <ShowComments id={post.id} />
+                        <ReadMoreIcon></ReadMoreIcon>
+                      </IconButton>
                     </Tooltip>
-                  </Grid>
-                </>
-              ))}
-            </Grid>
-          </Box>
-        </ThemeProvider>
-      </Grid>
+                    <Tooltip title="click to see comments">
+                      <IconButton
+                        onClick={() => {
+                          handleShowComments();
+                          dispatch(getPostComments(post.id));
+                        }}
+                        id={post.id}
+                      >
+                        <CommentIcon></CommentIcon>
+                      </IconButton>
+                    </Tooltip>
+                  </CardActions>
+                </Card>
+
+                {showComments
+                  ? currentPostComments
+                      .filter((comment) => comment.post_id === post.id)
+                      .map((newComment, index) => (
+                        <Grid
+                          item
+                          sx={{
+                            width: "50em",
+                            display: "flex",
+                            flexDirection: "column",
+                            cursor: "pointer",
+                          }}
+                        >
+                          <CommentCard
+                            key={index}
+                            id={newComment.id}
+                            post_id={newComment.post_id}
+                            title={newComment.title}
+                            user_id={newComment.user_id}
+                            createdAt={newComment.createdAt}
+                          ></CommentCard>
+                        </Grid>
+                      ))
+                  : null}
+              </>
+            ))}
+          </Grid>
+        </Box>
+      </Container>
     </>
   );
 }
