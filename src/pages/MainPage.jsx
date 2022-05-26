@@ -154,13 +154,6 @@ export default function MainPage() {
 
   const postTitleSnackbarAction = (
     <React.Fragment>
-      <Button
-        color="inherit"
-        size="small"
-        onClick={handlePostTitleSnackbarClose}
-      >
-        like the post title? press Enter to continue
-      </Button>
       <IconButton
         size="small"
         aria-label="close"
@@ -174,13 +167,6 @@ export default function MainPage() {
 
   const postDescSnackbarAction = (
     <React.Fragment>
-      <Button
-        color="inherit"
-        size="small"
-        onClick={handlePostDescSnackbarClose}
-      >
-        like the post description? press Enter to continue
-      </Button>
       <IconButton
         size="small"
         aria-label="close"
@@ -212,7 +198,7 @@ export default function MainPage() {
                 open={showPostTitleSnackbar}
                 autoHideDuration={4000}
                 onClose={handlePostTitleSnackbarClose}
-                message="Post title ready"
+                message={`🙂 like the post title? 👉 press Enter to continue`}
                 action={postTitleSnackbarAction}
               />
             </div>
@@ -224,7 +210,7 @@ export default function MainPage() {
                 open={showPostDescSnackbar}
                 autoHideDuration={4000}
                 onClose={handlePostDescSnackbarClose}
-                message="Post description ready"
+                message={`🙂 like the post description? 👉 press Enter to continue`}
                 action={postDescSnackbarAction}
               />
             </div>
