@@ -76,6 +76,7 @@ export default function MainPage() {
       setPostDescEl(event.currentTarget);
       setShowPostInput(false);
       setPostTitleEl(null);
+      if(showPostTitleSnackbar) {setShowPostTitleSnackbar(false);}
     }
   };
 
@@ -83,12 +84,14 @@ export default function MainPage() {
     const postTitleInput = document.getElementById("new-post-title");
     postTitleInput.value = "";
     setNewPost({ ...newPost, title: "" });
+    if(showPostTitleSnackbar) {setShowPostTitleSnackbar(false);}
   };
 
   const handleClearPostDescInput = () => {
     const postDescInput = document.getElementById("new-post-description");
     postDescInput.value = "";
     setNewPost({ ...newPost, description: "" });
+    if(showPostDescSnackbar) {setShowPostDescSnackbar(false);}
   };
 
   const handleShowPostTitleSnackbar = () => {
@@ -118,6 +121,7 @@ export default function MainPage() {
       setShowPostButton(true);
       setPostDescEl(null);
       setPostButtonEl(event.currentTarget);
+      if(showPostDescSnackbar) {setShowPostDescSnackbar(false);}
     }
   };
 
