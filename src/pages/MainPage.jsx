@@ -379,6 +379,7 @@ export default function MainPage() {
                             title={newComment.title}
                             user_name={newComment.user_name}
                             createdAt={newComment.createdAt}
+                            updatedAt={newComment.updatedAt}
                           ></CommentCard>
                         </Grid>
                       ))

@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
-export const EditCommentForm = ({ entiny, setChange }) => {
+export const EditCommentForm = ({id, entiny, setChange }) => {
   const dispatch = useDispatch();
   const [editedComment, setEditedComment] = useState({
     title: entiny.title,
@@ -40,7 +40,7 @@ export const EditCommentForm = ({ entiny, setChange }) => {
     try {
       dispatch(
         editComment({
-          id: entiny.id,
+          id: id,
           title: editedComment.title,
           post_id: entiny.post_id,
         })
@@ -58,7 +58,7 @@ export const EditCommentForm = ({ entiny, setChange }) => {
         open={openBackdrop}
         onClick={handleCloseBackdrop}
       >
-          <Modal
+      <Modal
         open={openModal}
         onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"

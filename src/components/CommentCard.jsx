@@ -42,6 +42,9 @@ export const CommentCard = (props) => {
           <Typography sx={{ mb: 1.5, fontSize: 13 }} color="text.secondary">
             {"Created At: " + moment(props.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
           </Typography>
+          <Typography sx={{ mb: 1.5, fontSize: 13 }} color="text.secondary">
+            {"Updated At: " + moment(props.updatedAt).format("MMMM Do YYYY, h:mm:ss a")}
+          </Typography>
         </CardContent>
       </Card>
     </>

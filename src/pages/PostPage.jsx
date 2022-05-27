@@ -289,16 +289,17 @@ export default function PostPage() {
                       post_id={comment.post_id}
                       title={comment.title}
                       user_name={comment.user_name}
-                      createdAt={newComment.createdAt}
+                      createdAt={comment.createdAt}
+                      updateAt={comment.updatedAt}
                     ></CommentCard>
                     <CardActions>
                       <Tooltip title="Edit Comment">
                         <IconButton
                           onClick={() => {setChangeComment(!changeComment);}}
                           variant="contained"
-                          id={currentPost.id}
+                          id={comment.id}
                         >
-                          <EditIcon id={currentPost.id}></EditIcon>
+                          <EditIcon id={comment.id}></EditIcon>
                         </IconButton>
                       </Tooltip>
 
@@ -306,10 +307,10 @@ export default function PostPage() {
                         <IconButton
                           onClick={handleDeleteComment}
                           variant="contained"
-                          id={currentPost.id}
+                          id={comment.id}
                         >
                           <DeleteForeverRoundedIcon
-                            id={currentPost.id}
+                            id={comment.id}
                           ></DeleteForeverRoundedIcon>
                         </IconButton>
                       </Tooltip>
@@ -317,6 +318,7 @@ export default function PostPage() {
                   </>
                 ) : (
                   <EditCommentForm
+                    id={comment.id}
                     entiny={comment}
                     setChange={setChangeComment}
                   />
