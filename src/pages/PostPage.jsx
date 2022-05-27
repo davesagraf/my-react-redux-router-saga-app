@@ -23,7 +23,6 @@ import {
 } from "@mui/material";
 import { EditForm } from "../components/EditForm";
 
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CloseIcon from "@mui/icons-material/Close";
 import CommentIcon from "@mui/icons-material/Comment";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
@@ -56,8 +55,6 @@ export default function PostPage() {
     useState(false);
 
   const [commentTitleEl, setCommentTitleEl] = useState(null);
-
-  const [commentButtonEl, setCommentButtonEl] = useState(null);
 
   const { id } = useParams();
   const { currentPost } = useSelector((store) => store.posts);
@@ -107,22 +104,19 @@ export default function PostPage() {
     setNewComment({ ...newComment, title: event.target.value });
   };
 
-  // const handleNewCommentButton = (event) => {
-  //     setShowCommentButton(true);
-  //     setCommentButtonEl(event.currentTarget);
-  // };
-
   const handleAddNewComment = (event) => {
     dispatch(addNewComment(newComment));
     setNewComment({ title: "", post_id: id });
     setShowCommentInput(true);
     setShowCommentButton(false);
+    setShowCommentTitleSnackbar(false);
   };
 
   const handleCancelComment = () => {
     setNewComment({ title: "" });
     setShowCommentInput(true);
     setShowCommentButton(false);
+    setShowCommentTitleSnackbar(false);
   };
 
   const handleDeletePost = () => {
@@ -150,23 +144,6 @@ export default function PostPage() {
       throw new Error(error);
     }
     setLiked(false);
-  };
-
-  const handleNavigateBack = () => {
-    try {
-      navigate("/main");
-    } catch (error) {
-      throw new Error(error);
-    }
-  };
-
-  const handleNavigateToProfile = () => {
-    try {
-      dispatch(getUserData());
-      navigate("/profile");
-    } catch (error) {
-      throw new Error(error);
-    }
   };
 
   const handleCommentTitleSnackbarClose = (event, reason) => {
@@ -215,36 +192,8 @@ export default function PostPage() {
             </div>
           ) : null}
 
-          <Tooltip title="Go to Profile">
-            <Button
-              sx={{
-                width: "5em",
-                height: "5em",
-                display: "flex",
-                flexDirection: "column",
-              }}
-              onClick={handleNavigateToProfile}
-            >
-              <AccountCircleIcon></AccountCircleIcon>
-            </Button>
-          </Tooltip>
-
-          <Tooltip title="go back">
-            <Button
-              sx={{
-                width: "5em",
-                height: "5em",
-                display: "flex",
-                flexDirection: "column",
-              }}
-              onClick={handleNavigateBack}
-            >
-              <NavigateBeforeIcon></NavigateBeforeIcon>
-            </Button>
-          </Tooltip>
-
           <Card
-            elevation={3}
+            elevation={1}
             id={currentPost.id}
             sx={{
               display: "flex",
@@ -398,7 +347,6 @@ export default function PostPage() {
                         marginTop: "1em",
                         marginRight: "1em",
                       }}
-                      ref={commentButtonEl}
                     >
                       Add New Comment
                     </Button>

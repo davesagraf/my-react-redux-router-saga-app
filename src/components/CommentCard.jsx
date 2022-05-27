@@ -102,7 +102,7 @@ export const CommentCard = ({ id, entity }) => {
           flexDirection: "column",
           justifyContent: "space-around",
           background: grey[50],
-          height: 180,
+          height: 210,
           width: 700,
           lineHeight: "34px",
           marginBottom: "1em",
@@ -111,22 +111,22 @@ export const CommentCard = ({ id, entity }) => {
         }}
       >
         <CardContent sx={{ marginBottom: "auto" }}>
-          <Typography sx={{ mb: 1.5, fontSize: 13 }} color="text.secondary">
+          <Typography sx={{ mb: 1, fontSize: 13 }} color="text.secondary">
             {"Comment #: " + id}
           </Typography>
 
-          <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
+          <Typography sx={{ fontSize: 16 }} color="text.secondary" gutterBottom>
             {"Title: " + entity.title}
           </Typography>
 
-          <Typography sx={{ mb: 1.5, fontSize: 13 }} color="text.secondary">
+          <Typography sx={{ mb: 1, fontSize: 13 }} color="text.secondary">
             {"Author: " + entity.user_name}
           </Typography>
-          <Typography sx={{ mb: 1.5, fontSize: 13 }} color="text.secondary">
+          <Typography sx={{ mb: 1, fontSize: 13 }} color="text.secondary">
             {"Created At: " +
               moment(entity.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
           </Typography>
-          <Typography sx={{ mb: 1.5, fontSize: 13 }} color="text.secondary">
+          <Typography sx={{ mb: 1, fontSize: 13 }} color="text.secondary">
             {"Updated At: " +
               moment(entity.updatedAt).format("MMMM Do YYYY, h:mm:ss a")}
           </Typography>
@@ -180,14 +180,18 @@ export const CommentCard = ({ id, entity }) => {
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-around",
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  textAlign: "center",
                   background: grey[50],
-                  height: 180,
+                  height: 250,
                   width: 700,
                   lineHeight: "34px",
                   marginBottom: "1em",
                   marginTop: "1em",
                   borderRadius: "0.5em",
-                  position: "absolute",
                 }}
               >
                 <CardContent sx={{ marginBottom: "auto" }}>
