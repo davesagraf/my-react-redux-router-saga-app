@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   deletePost,
   getCurrentPost,
   addNewComment,
-  deleteComment,
   addLike,
   removeLike,
 } from "../actions/postAction";
@@ -12,20 +12,19 @@ import { getUserData } from "../actions/userAction";
 import {
   Box,
   Button,
-  Container,
   Card,
   CardContent,
   CardActions,
-  Grid,
+  Container,
   IconButton,
+  Input,
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useParams, useNavigate } from "react-router-dom";
-import { NewCommentInput } from "../components/NewCommentInput";
 import { EditForm } from "../components/EditForm";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import CloseIcon from "@mui/icons-material/Close";
 import CommentIcon from "@mui/icons-material/Comment";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import EditIcon from "@mui/icons-material/Edit";
@@ -33,9 +32,11 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 
-import { grey, lightBlue } from "@mui/material/colors";
+import { lightBlue } from "@mui/material/colors";
 import moment from "moment";
 import { CommentCard } from "../components/CommentCard";
+import { ClickAwayListener as CommentTitleClickAway } from "@mui/base";
+import { Snackbar as CommentTitleSnackbar } from "@mui/material";
 
 export default function PostPage() {
   const dispatch = useDispatch();
@@ -44,8 +45,19 @@ export default function PostPage() {
   const [changePost, setChangePost] = useState(false);
 
   const [liked, setLiked] = useState(false);
-  
+
   const [showComments, setShowComments] = useState(false);
+
+  const [showCommentInput, setShowCommentInput] = useState(true);
+
+  const [showCommentButton, setShowCommentButton] = useState(false);
+
+  const [showCommentTitleSnackbar, setShowCommentTitleSnackbar] =
+    useState(false);
+
+  const [commentTitleEl, setCommentTitleEl] = useState(null);
+
+  const [commentButtonEl, setCommentButtonEl] = useState(null);
 
   const { id } = useParams();
   const { currentPost } = useSelector((store) => store.posts);
@@ -66,14 +78,51 @@ export default function PostPage() {
     setShowComments(!showComments);
   };
 
+  const handleCommentTitleInput = (event) => {
+    setCommentTitleEl(event.currentTarget);
+    setShowCommentButton(true);
+    if (event.key === "Enter") {
+      dispatch(addNewComment(newComment));
+      setNewComment({ title: "", post_id: id });
+      setShowCommentInput(true);
+      setShowCommentButton(false);
+    }
+  };
+
+  const handleClearCommentTitleInput = () => {
+    const commentTitleInput = document.getElementById("new-comment-title");
+    commentTitleInput.value = "";
+    setNewComment({ ...newComment, title: "" });
+    setShowCommentButton(false);
+  };
+
+  const handleShowCommentTitleSnackbar = () => {
+    setTimeout(() => {
+      setShowCommentTitleSnackbar(true);
+    }, 3000);
+  };
+
   const handleNewCommentTitle = (event) => {
     event.preventDefault();
     setNewComment({ ...newComment, title: event.target.value });
   };
 
-  const handleAddNewComment = () => {
+  // const handleNewCommentButton = (event) => {
+  //     setShowCommentButton(true);
+  //     setCommentButtonEl(event.currentTarget);
+  // };
+
+  const handleAddNewComment = (event) => {
     dispatch(addNewComment(newComment));
     setNewComment({ title: "", post_id: id });
+    setShowCommentInput(true);
+    setShowCommentButton(false);
+  };
+
+  const handleCancelComment = () => {
+    setNewComment({ title: "" });
+    setShowCommentInput(true);
+    setShowCommentButton(false);
   };
 
   const handleDeletePost = () => {
@@ -85,23 +134,18 @@ export default function PostPage() {
     }
   };
 
-  const handleLike = (event) => {
-    event.preventDefault();
-    const postId = event.target.id;
+  const handleLike = () => {
     try {
-      dispatch(addLike(postId));
+      dispatch(addLike(currentPost.id));
     } catch (error) {
       throw new Error(error);
     }
     setLiked(true);
   };
 
-  const handleUnlike = (event) => {
-    event.preventDefault();
-    const postId = event.target.id;
-
+  const handleUnlike = () => {
     try {
-      dispatch(removeLike(postId));
+      dispatch(removeLike(currentPost.id));
     } catch (error) {
       throw new Error(error);
     }
@@ -125,6 +169,26 @@ export default function PostPage() {
     }
   };
 
+  const handleCommentTitleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowCommentTitleSnackbar(false);
+  };
+
+  const commentTitleSnackbarAction = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleCommentTitleSnackbarClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
   return (
     <>
       <Container
@@ -139,6 +203,18 @@ export default function PostPage() {
             width: "100%",
           }}
         >
+          {showCommentTitleSnackbar ? (
+            <div>
+              <CommentTitleSnackbar
+                open={showCommentTitleSnackbar}
+                autoHideDuration={4000}
+                onClose={handleCommentTitleSnackbarClose}
+                message={`🙂 like your comment? 👉 press Enter to post`}
+                action={commentTitleSnackbarAction}
+              />
+            </div>
+          ) : null}
+
           <Tooltip title="Go to Profile">
             <Button
               sx={{
@@ -209,7 +285,9 @@ export default function PostPage() {
                     sx={{ mb: 1.5, fontSize: 14 }}
                     color="text.secondary"
                   >
-                  {`Created at: ${moment(currentPost.createdAt).format("MMMM Do YYYY, h:mm:ss a")}`}
+                    {`Created at: ${moment(currentPost.createdAt).format(
+                      "MMMM Do YYYY, h:mm:ss a"
+                    )}`}
                   </Typography>
                 </>
               ) : (
@@ -218,16 +296,15 @@ export default function PostPage() {
             </CardContent>
             <CardActions>
               <Tooltip title="click to see comments">
-                <IconButton
-                  onClick={handleShowComments}
-                  id={currentPost.id}
-                >
+                <IconButton onClick={handleShowComments} id={currentPost.id}>
                   <CommentIcon></CommentIcon>
                 </IconButton>
               </Tooltip>
               <Tooltip title="Edit Post">
                 <IconButton
-                  onClick={() => {setChangePost(!changePost);}}
+                  onClick={() => {
+                    setChangePost(!changePost);
+                  }}
                   variant="contained"
                   id={currentPost.id}
                 >
@@ -268,59 +345,82 @@ export default function PostPage() {
             </CardActions>
           </Card>
 
-          {comments ? (
-            comments.map((comment, index) => (
-              <>
-                <CommentCard
-                  entity={comment}
-                  key={index}
-                  id={comment.id}
-                ></CommentCard>
-              </>
-            ))
-          ) : (
-            <Typography
-              sx={{ fontSize: 18 }}
-              color="text.secondary"
-              gutterBottom
-            >
-              No comments here yet.
-            </Typography>
-          )}
+          {showComments ? (
+            <>
+              {comments ? (
+                comments.map((comment, index) => (
+                  <>
+                    <CommentCard
+                      entity={comment}
+                      key={index}
+                      id={comment.id}
+                    ></CommentCard>
+                  </>
+                ))
+              ) : (
+                <Typography
+                  sx={{ fontSize: 18 }}
+                  color="text.secondary"
+                  gutterBottom
+                >
+                  No comments here yet.
+                </Typography>
+              )}
 
-          <Grid
-            item
-            sx={{
-              width: "44%",
-              display: "flex",
-              flexDirection: "column",
-              marginLeft: "33%",
-            }}
-          >
-            <Typography
-              sx={{ fontSize: 18 }}
-              color="text.secondary"
-              gutterBottom
-            >
-              Enter new comment
-            </Typography>
+              {showCommentInput ? (
+                <CommentTitleClickAway
+                  onClickAway={handleClearCommentTitleInput}
+                >
+                  <Input
+                    sx={{ width: 500, marginTop: "1em", marginBottom: "5em" }}
+                    placeholder="Leave a comment here"
+                    onClick={(e) => handleCommentTitleInput(e)}
+                    onChange={(e) => {
+                      handleNewCommentTitle(e);
+                      handleShowCommentTitleSnackbar();
+                    }}
+                    id={"new-comment-title"}
+                    value={newComment.title}
+                    onKeyPress={(e) => handleCommentTitleInput(e)}
+                    inputRef={commentTitleEl}
+                  />
+                </CommentTitleClickAway>
+              ) : null}
 
-            <NewCommentInput
-              value={newComment.title}
-              handleEnter={handleNewCommentTitle}
-              label={"new comment title"}
-            ></NewCommentInput>
+              {showCommentButton ? (
+                <>
+                  <Tooltip title="add comment">
+                    <Button
+                      onClick={handleAddNewComment}
+                      variant="contained"
+                      sx={{
+                        width: "13em",
+                        marginTop: "1em",
+                        marginRight: "1em",
+                      }}
+                      ref={commentButtonEl}
+                    >
+                      Add New Comment
+                    </Button>
+                  </Tooltip>
 
-            <Tooltip title="add comment">
-              <Button
-                onClick={handleAddNewComment}
-                variant="contained"
-                sx={{ width: "15em" }}
-              >
-                Add New Comment
-              </Button>
-            </Tooltip>
-          </Grid>
+                  <Tooltip title="cancel comment">
+                    <Button
+                      onClick={handleCancelComment}
+                      variant="contained"
+                      sx={{
+                        width: "13em",
+                        marginTop: "1em",
+                        marginLeft: "1em",
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </Tooltip>
+                </>
+              ) : null}
+            </>
+          ) : null}
         </Box>
       </Container>
     </>

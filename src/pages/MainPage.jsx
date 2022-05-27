@@ -373,13 +373,9 @@ export default function MainPage() {
                           }}
                         >
                           <CommentCard
+                            entity={newComment}
                             key={index}
                             id={newComment.id}
-                            post_id={newComment.post_id}
-                            title={newComment.title}
-                            user_name={newComment.user_name}
-                            createdAt={newComment.createdAt}
-                            updatedAt={newComment.updatedAt}
                           ></CommentCard>
                         </Grid>
                       ))
