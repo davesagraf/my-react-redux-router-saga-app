@@ -14,10 +14,10 @@ import {
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
-export const EditCommentForm = ({id, entiny, setChange }) => {
+export const EditCommentForm = ({id, entity, setChange }) => {
   const dispatch = useDispatch();
   const [editedComment, setEditedComment] = useState({
-    title: entiny.title,
+    title: entity.title,
   });
 
   const [openModal, setOpenModal] = useState(true);
@@ -36,20 +36,6 @@ export const EditCommentForm = ({id, entiny, setChange }) => {
     setOpenModal(false);
   }
 
-  const handleEditComment = () => {
-    try {
-      dispatch(
-        editComment({
-          id: id,
-          title: editedComment.title,
-          post_id: entiny.post_id,
-        })
-      );
-      return setChange(false);
-    } catch (error) {
-      throw new Error(error);
-    }
-  };
 
   return (
     <>

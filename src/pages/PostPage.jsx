@@ -24,7 +24,6 @@ import {
 import { useParams, useNavigate } from "react-router-dom";
 import { NewCommentInput } from "../components/NewCommentInput";
 import { EditForm } from "../components/EditForm";
-import { EditCommentForm } from "../components/EditCommentForm";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CommentIcon from "@mui/icons-material/Comment";
@@ -41,9 +40,11 @@ import { CommentCard } from "../components/CommentCard";
 export default function PostPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [changePost, setChangePost] = useState(false);
-  const [changeComment, setChangeComment] = useState(false);
+
   const [liked, setLiked] = useState(false);
+  
   const [showComments, setShowComments] = useState(false);
 
   const { id } = useParams();
@@ -79,17 +80,6 @@ export default function PostPage() {
     try {
       dispatch(deletePost(id));
       navigate("/main");
-    } catch (error) {
-      throw new Error(error);
-    }
-  };
-
-  const handleDeleteComment = (event) => {
-    const thisCommentId = event.target.id;
-    const postId = id;
-    try {
-      dispatch(deleteComment(thisCommentId, postId));
-      dispatch(getCurrentPost(id));
     } catch (error) {
       throw new Error(error);
     }
@@ -281,48 +271,11 @@ export default function PostPage() {
           {comments ? (
             comments.map((comment, index) => (
               <>
-                {!changeComment ? (
-                  <>
-                    <CommentCard
-                      key={index}
-                      id={comment.id}
-                      post_id={comment.post_id}
-                      title={comment.title}
-                      user_name={comment.user_name}
-                      createdAt={comment.createdAt}
-                      updateAt={comment.updatedAt}
-                    ></CommentCard>
-                    <CardActions>
-                      <Tooltip title="Edit Comment">
-                        <IconButton
-                          onClick={() => {setChangeComment(!changeComment);}}
-                          variant="contained"
-                          id={comment.id}
-                        >
-                          <EditIcon id={comment.id}></EditIcon>
-                        </IconButton>
-                      </Tooltip>
-
-                      <Tooltip title="Delete Comment">
-                        <IconButton
-                          onClick={handleDeleteComment}
-                          variant="contained"
-                          id={comment.id}
-                        >
-                          <DeleteForeverRoundedIcon
-                            id={comment.id}
-                          ></DeleteForeverRoundedIcon>
-                        </IconButton>
-                      </Tooltip>
-                    </CardActions>
-                  </>
-                ) : (
-                  <EditCommentForm
-                    id={comment.id}
-                    entiny={comment}
-                    setChange={setChangeComment}
-                  />
-                )}
+                <CommentCard
+                  entity={comment}
+                  key={index}
+                  id={comment.id}
+                ></CommentCard>
               </>
             ))
           ) : (
