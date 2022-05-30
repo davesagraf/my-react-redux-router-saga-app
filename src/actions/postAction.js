@@ -9,6 +9,9 @@ export const EDIT_COMMENT = "EDIT_COMMENT"
 export const GET_POST_COMMENTS = "GET_POST_COMMENTS"
 export const ADD_LIKE = "ADD_LIKE"
 export const REMOVE_LIKE = "REMOVE_LIKE"
+export const ADD_COMMENT_LIKE = "ADD_COMMENT_LIKE"
+export const REMOVE_COMMENT_LIKE = "REMOVE_COMMENT_LIKE"
+export const GET_COMMENT_LIKES = "GET_COMMENT_LIKES"
 
 
 export const getAllPosts = () => {
@@ -88,5 +91,29 @@ export const removeLike = (postId) => {
   return {
     type: REMOVE_LIKE,
     postId
+  }
+}
+
+//get comment likes
+export const getCommentLikes = (commentId) => {
+  return {
+    type: GET_COMMENT_LIKES,
+    commentId
+  }
+}
+
+//add comment like
+export const addCommentLike = (commentId) => {
+  return {
+    type: ADD_COMMENT_LIKE,
+    commentId
+  }
+}
+
+//remove comment like
+export const removeCommentLike = (commentId) => {
+  return {
+    type: REMOVE_COMMENT_LIKE,
+    commentId
   }
 }

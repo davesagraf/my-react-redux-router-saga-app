@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Card,
   CardContent,
@@ -17,6 +17,9 @@ import {
   editComment,
   deleteComment,
   getCurrentPost,
+  getCommentLikes,
+  addCommentLike,
+  removeCommentLike
 } from "../actions/postAction";
 
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
@@ -25,7 +28,10 @@ import Modal from "@mui/material/Modal";
 import Backdrop from "@mui/material/Backdrop";
 import { ClickAwayListener as ModalBackdropClickAway } from "@mui/base";
 
-export const CommentCard = ({ id, entity }) => {
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+
+export const CommentCard = ({ id, entity, likes }) => {
   const dispatch = useDispatch();
   const [editedComment, setEditedComment] = useState({
     title: entity.title,
@@ -38,6 +44,8 @@ export const CommentCard = ({ id, entity }) => {
   const [changeComment, setChangeComment] = useState(false);
 
   const [commentEl, setCommentEl] = useState(null);
+
+  const [commentLiked, setCommentLiked] = useState(false);
 
   const handleEditCommentTitle = (event) => {
     event.preventDefault();
@@ -92,11 +100,32 @@ export const CommentCard = ({ id, entity }) => {
     }
   };
 
+  const handleAddCommentLike = () => {
+    const thisCommentId = entity.id;
+    try {
+      dispatch(addCommentLike(thisCommentId));
+      dispatch(getCommentLikes(thisCommentId));
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  const handleRemoveCommentLike = () => {
+    const thisCommentId = entity.id;
+    try {
+      dispatch(removeCommentLike(thisCommentId));
+      dispatch(getCommentLikes(thisCommentId));
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
   return (
     <>
       <Card
         elevation={3}
         id={id}
+        liked={commentLiked ? true : false}
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -154,6 +183,27 @@ export const CommentCard = ({ id, entity }) => {
               ></DeleteForeverRoundedIcon>
             </IconButton>
           </Tooltip>
+          {!commentLiked ? (
+                <Tooltip title="Like Comment">
+                  <IconButton
+                    onClick={() => {handleAddCommentLike(); setCommentLiked(true)}}
+                    variant="contained"
+                    id={entity.id}
+                  >
+                    <ThumbUpOutlinedIcon></ThumbUpOutlinedIcon>
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <Tooltip title="Unlike Comment">
+                  <IconButton
+                    onClick={() => {handleRemoveCommentLike(); setCommentLiked(false)}}
+                    variant="contained"
+                    id={entity.id}
+                  >
+                    <ThumbUpIcon></ThumbUpIcon>
+                  </IconButton>
+                </Tooltip>
+              )}
         </CardActions>
       </Card>
 
