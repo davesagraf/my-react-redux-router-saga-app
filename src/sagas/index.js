@@ -11,7 +11,11 @@ import {
   EDIT_COMMENT,
   ADD_LIKE,
   REMOVE_LIKE,
-  GET_POST_COMMENTS
+  GET_POST_COMMENTS,
+  ADD_COMMENT_LIKE,
+  REMOVE_COMMENT_LIKE,
+  GET_COMMENT_LIKES,
+  GET_FAV_POSTS
 } from "../actions/postAction";
 
 const baseUrl = "http://localhost:8000";
@@ -388,6 +392,115 @@ function* fetchGetPostComments(payload) {
   }
 }
 
+
+export function* getCommentLikesSaga() {
+  yield takeEvery(GET_COMMENT_LIKES, fetchGetCommentLikes);
+}
+
+function* fetchGetCommentLikes(payload) {
+  const commentId = payload.commentId
+
+  let bearerToken = localStorage.getItem("Authorization").valueOf();
+
+  try {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `${bearerToken}`,
+        "Content-Type": "application/json",
+      },
+      redirect: "follow",
+    };
+
+    const commentLikes = yield fetch(
+      `${baseUrl}/comments/comment/likes/${commentId}`,
+      requestOptions
+    ).then((response) => response.json());
+
+    yield put({ type: "SUCCESS_GET_COMMENT_LIKES", payload: commentLikes });
+  } catch (error) {
+    yield put({ type: "ERRORS", payload: error });
+  }
+}
+
+export function* addCommentLikeSaga() {
+  yield takeEvery(ADD_COMMENT_LIKE, fetchAddCommentLike);
+}
+
+function* fetchAddCommentLike(payload) {
+  const commentId = payload.commentId;
+
+  let bearerToken = localStorage.getItem("Authorization").valueOf();
+
+  const requestOptions = {
+    method: "PUT",
+    headers: {
+      Authorization: `${bearerToken}`,
+      "Content-Type": "application/json",
+    },
+    redirect: "follow",
+  };
+
+  yield fetch(`${baseUrl}/comments/like/${commentId}`, requestOptions).then((response) =>
+    response.json()
+  );
+}
+
+export function* removeCommentLikeSaga() {
+  yield takeEvery(REMOVE_COMMENT_LIKE, fetchAddRemoveLike);
+}
+
+function* fetchAddRemoveLike(payload) {
+  const commentId = payload.commentId;
+
+  let bearerToken = localStorage.getItem("Authorization").valueOf();
+
+  const requestOptions = {
+    method: "PUT",
+    headers: {
+      Authorization: `${bearerToken}`,
+      "Content-Type": "application/json",
+    },
+    redirect: "follow",
+  };
+
+  yield fetch(`${baseUrl}/comments/unlike/${commentId}`, requestOptions).then((response) =>
+    response.json()
+  );
+}
+
+
+export function* getFavPosts() {
+  yield takeEvery(GET_FAV_POSTS, fetchGetFavPosts);
+}
+
+function* fetchGetFavPosts() {
+  let bearerToken = localStorage.getItem("Authorization").valueOf();
+
+  try {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `${bearerToken}`,
+        "Content-Type": "application/json",
+      },
+      redirect: "follow",
+    };
+
+    const favPosts = yield fetch(`${baseUrl}/posts/fav`, requestOptions)
+      .then((response) => response.json())
+      .catch((error) => {
+        throw error;
+      });
+
+    favPosts.reverse();
+
+    return yield put({ type: "SUCCESS_FAV_POSTS", payload: favPosts });
+  } catch (error) {
+    yield put({ type: "ERRORS", payload: error });
+  }
+}
+
 export function* rootSaga() {
   yield all([
     signUp(),
@@ -403,6 +516,10 @@ export function* rootSaga() {
     editComment(),
     addLikeSaga(),
     removeLikeSaga(),
-    getPostCommentsSaga()
+    getPostCommentsSaga(),
+    getCommentLikesSaga(),
+    addCommentLikeSaga(),
+    removeCommentLikeSaga(),
+    getFavPosts()
   ]);
 }

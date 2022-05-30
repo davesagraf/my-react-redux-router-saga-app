@@ -7,6 +7,7 @@ import {
   addNewComment,
   addLike,
   removeLike,
+  getPostComments
 } from "../actions/postAction";
 import { getUserData } from "../actions/userAction";
 import {
@@ -63,6 +64,7 @@ export default function PostPage() {
   useEffect(() => {
     dispatch(getCurrentPost(id));
     dispatch(getUserData());
+    dispatch(getPostComments(id));
   }, [liked, dispatch, id]);
 
   const [newComment, setNewComment] = useState({
@@ -244,7 +246,7 @@ export default function PostPage() {
             </CardContent>
             <CardActions>
               <Tooltip title="click to see comments">
-                <IconButton onClick={handleShowComments} id={currentPost.id}>
+                <IconButton onClick={handleShowComments} id={currentPost.id} >
                   <CommentIcon></CommentIcon>
                 </IconButton>
               </Tooltip>

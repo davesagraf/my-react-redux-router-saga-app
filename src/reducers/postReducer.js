@@ -8,6 +8,8 @@ const initialState = {
     showComments: false
   },
   currentPostComments: [],
+  commentLikes: [],
+  favPosts: [],
   errors: "",
   loading: false,
 };
@@ -18,6 +20,10 @@ export const postReducer = (state = initialState, action) => {
       return { ...state, loading: true };
     case "SUCCESS":
       return { ...state, posts: action.payload, loading: false };
+    case "FAV_POSTS":
+      return { ...state, favPosts: action.payload, loading: true }; 
+    case "SUCCESS_FAV_POSTS":
+      return { ...state, favPosts: action.payload, loading: false };  
     case "ERROR":
       return { ...state, error: action.payload, loading: false };
     case "SET_POST":
@@ -41,7 +47,15 @@ export const postReducer = (state = initialState, action) => {
     case "GET_POST_COMMENTS":
       return {...state, comments: action.payload, loading: true }
     case "SUCCESS_GET_POST_COMMENTS":
-      return {...state, currentPostComments: action.payload, loading: false}  
+      return {...state, currentPostComments: action.payload, loading: false} 
+    case "ADD_COMMENT_LIKE":
+      return {...state };
+    case "REMOVE_COMMENT_LIKE":
+      return {...state };
+    case "GET_COMMENT_LIKES":
+      return {...state, commentLikes: action.payload, loading: true }
+    case "SUCCESS_GET_COMMENT_LIKES":
+      return {...state, commentLikes: action.payload, loading: false }  
     default:
       return { ...state };
   }

@@ -8,6 +8,7 @@ import MainPage from "./pages/MainPage";
 import PostPage from "./pages/PostPage";
 
 import AppNavBar from "./components/AppNavBar";
+import FavPosts from "./pages/FavPosts";
 
 export const App = () => {
   const auth = localStorage.getItem("Authorization");
@@ -34,6 +35,7 @@ export const App = () => {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/main"
             element={
@@ -42,11 +44,21 @@ export const App = () => {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/post/:id"
             element={
               <ProtectedRoute>
                 <PostPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/favs"
+            element={
+              <ProtectedRoute>
+                <FavPosts />
               </ProtectedRoute>
             }
           />

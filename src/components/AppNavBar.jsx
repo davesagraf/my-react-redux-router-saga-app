@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -235,7 +235,7 @@ export default function AppNavBar() {
             onChange={handleTabChange}
             orientation="vertical"
           >
-            <Tab icon={<FavoriteIcon />} aria-label="favorite" />
+            <Tab icon={<FavoriteIcon/>} label="Favorites" aria-label="favorite" value="/favs" to="/favs" component={Link}/>
             <Tab icon={<NotificationsIcon />} aria-label="notifications" />
           </Tabs>
         </Popover>
