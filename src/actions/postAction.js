@@ -12,6 +12,7 @@ export const REMOVE_LIKE = "REMOVE_LIKE"
 export const ADD_COMMENT_LIKE = "ADD_COMMENT_LIKE"
 export const REMOVE_COMMENT_LIKE = "REMOVE_COMMENT_LIKE"
 export const GET_COMMENT_LIKES = "GET_COMMENT_LIKES"
+export const GET_FAV_POSTS = "GET_FAV_POSTS"
 
 
 export const getAllPosts = () => {
@@ -19,6 +20,12 @@ export const getAllPosts = () => {
       type: GET_ALL_POSTS
     };
   };
+
+export const getFavPosts = () => {
+  return {
+    type: GET_FAV_POSTS
+  };
+};
 
 export const addNewPost = (newPost) => {
   return {

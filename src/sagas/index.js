@@ -14,7 +14,8 @@ import {
   GET_POST_COMMENTS,
   ADD_COMMENT_LIKE,
   REMOVE_COMMENT_LIKE,
-  GET_COMMENT_LIKES
+  GET_COMMENT_LIKES,
+  GET_FAV_POSTS
 } from "../actions/postAction";
 
 const baseUrl = "http://localhost:8000";
@@ -468,6 +469,38 @@ function* fetchAddRemoveLike(payload) {
   );
 }
 
+
+export function* getFavPosts() {
+  yield takeEvery(GET_FAV_POSTS, fetchGetFavPosts);
+}
+
+function* fetchGetFavPosts() {
+  let bearerToken = localStorage.getItem("Authorization").valueOf();
+
+  try {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `${bearerToken}`,
+        "Content-Type": "application/json",
+      },
+      redirect: "follow",
+    };
+
+    const favPosts = yield fetch(`${baseUrl}/posts/fav`, requestOptions)
+      .then((response) => response.json())
+      .catch((error) => {
+        throw error;
+      });
+
+    favPosts.reverse();
+
+    return yield put({ type: "SUCCESS_FAV_POSTS", payload: favPosts });
+  } catch (error) {
+    yield put({ type: "ERRORS", payload: error });
+  }
+}
+
 export function* rootSaga() {
   yield all([
     signUp(),
@@ -486,6 +519,7 @@ export function* rootSaga() {
     getPostCommentsSaga(),
     getCommentLikesSaga(),
     addCommentLikeSaga(),
-    removeCommentLikeSaga()
+    removeCommentLikeSaga(),
+    getFavPosts()
   ]);
 }

@@ -9,6 +9,7 @@ const initialState = {
   },
   currentPostComments: [],
   commentLikes: [],
+  favPosts: [],
   errors: "",
   loading: false,
 };
@@ -19,6 +20,10 @@ export const postReducer = (state = initialState, action) => {
       return { ...state, loading: true };
     case "SUCCESS":
       return { ...state, posts: action.payload, loading: false };
+    case "FAV_POSTS":
+      return { ...state, favPosts: action.payload, loading: true }; 
+    case "SUCCESS_FAV_POSTS":
+      return { ...state, favPosts: action.payload, loading: false };  
     case "ERROR":
       return { ...state, error: action.payload, loading: false };
     case "SET_POST":

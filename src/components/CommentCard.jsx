@@ -31,11 +31,19 @@ import { ClickAwayListener as ModalBackdropClickAway } from "@mui/base";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 
-export const CommentCard = ({ id, entity, likes }) => {
+export const CommentCard = ({ id, entity }) => {
   const dispatch = useDispatch();
   const [editedComment, setEditedComment] = useState({
     title: entity.title,
   });
+
+  const [commentLiked, setCommentLiked] = useState(false);
+
+  useEffect(() => {
+    dispatch(getCommentLikes(id));
+  }, [commentLiked, dispatch, id]);
+
+  const { commentLikes } = useSelector((store) => store.posts );
 
   const [openModal, setOpenModal] = useState(true);
 
@@ -44,8 +52,6 @@ export const CommentCard = ({ id, entity, likes }) => {
   const [changeComment, setChangeComment] = useState(false);
 
   const [commentEl, setCommentEl] = useState(null);
-
-  const [commentLiked, setCommentLiked] = useState(false);
 
   const handleEditCommentTitle = (event) => {
     event.preventDefault();
@@ -104,7 +110,7 @@ export const CommentCard = ({ id, entity, likes }) => {
     const thisCommentId = entity.id;
     try {
       dispatch(addCommentLike(thisCommentId));
-      dispatch(getCommentLikes(thisCommentId));
+      // dispatch(getCommentLikes(thisCommentId));
     } catch (error) {
       throw new Error(error);
     }
@@ -114,7 +120,7 @@ export const CommentCard = ({ id, entity, likes }) => {
     const thisCommentId = entity.id;
     try {
       dispatch(removeCommentLike(thisCommentId));
-      dispatch(getCommentLikes(thisCommentId));
+      // dispatch(getCommentLikes(thisCommentId));
     } catch (error) {
       throw new Error(error);
     }
@@ -183,7 +189,7 @@ export const CommentCard = ({ id, entity, likes }) => {
               ></DeleteForeverRoundedIcon>
             </IconButton>
           </Tooltip>
-          {!commentLiked ? (
+          {!commentLiked || !commentLikes ? (
                 <Tooltip title="Like Comment">
                   <IconButton
                     onClick={() => {handleAddCommentLike(); setCommentLiked(true)}}
