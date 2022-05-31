@@ -6,11 +6,11 @@ import Tooltip from "@mui/material/Tooltip";
 import { NewPostInput } from "../components/NewPostInput";
 import { editPost } from "../actions/postAction";
 
-export const EditForm = ({ entiny, setChange }) => {
+export const EditForm = ({ entity, setChange }) => {
   const dispatch = useDispatch();
   const [editedPost, setEditedPost] = useState({
-    title: entiny.title,
-    description: entiny.description,
+    title: entity.title,
+    description: entity.description,
   });
 
   const handleEditPostTitle = (event) => {
@@ -27,7 +27,7 @@ export const EditForm = ({ entiny, setChange }) => {
     try {
       dispatch(
         editPost({
-          id: entiny.id,
+          id: entity.id,
           title: editedPost.title,
           description: editedPost.description,
         })
@@ -47,10 +47,10 @@ export const EditForm = ({ entiny, setChange }) => {
           display: "flex",
           flexDirection: "column",
           marginLeft: "25%",
-          transform: "translateY(-3em)",
+          transform: "translateY(0.5em)",
         }}
       >
-        <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
+        <Typography sx={{ fontSize: 16 }} color="text.secondary" gutterBottom>
           Edit post
         </Typography>
 

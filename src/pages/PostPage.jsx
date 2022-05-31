@@ -11,6 +11,7 @@ import {
 } from "../actions/postAction";
 import { getUserData } from "../actions/userAction";
 import {
+  Badge,
   Box,
   Button,
   Card,
@@ -241,7 +242,7 @@ export default function PostPage() {
                   </Typography>
                 </>
               ) : (
-                <EditForm entiny={currentPost} setChange={setChangePost} />
+                <EditForm entity={currentPost} setChange={setChangePost} />
               )}
             </CardContent>
             <CardActions>
@@ -278,7 +279,9 @@ export default function PostPage() {
                     variant="contained"
                     id={currentPost.id}
                   >
+                    <Badge badgeContent={likes ? likes.length : null } color="primary">
                     <ThumbUpOutlinedIcon></ThumbUpOutlinedIcon>
+                    </Badge>
                   </IconButton>
                 </Tooltip>
               ) : (
@@ -288,7 +291,9 @@ export default function PostPage() {
                     variant="contained"
                     id={currentPost.id}
                   >
+                    <Badge badgeContent={likes.length} color="primary">
                     <ThumbUpIcon></ThumbUpIcon>
+                    </Badge>
                   </IconButton>
                 </Tooltip>
               )}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNewPost,
+  deletePost,
   getAllPosts,
   getPostComments,
 } from "../actions/postAction";
@@ -32,6 +33,7 @@ import { ClickAwayListener as PostDescClickAway } from "@mui/base";
 import { Snackbar as PostTitleSnackbar } from "@mui/material";
 import { Snackbar as PostDescSnackbar } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 
 export default function MainPage() {
   const dispatch = useDispatch();
@@ -76,7 +78,9 @@ export default function MainPage() {
       setPostDescEl(event.currentTarget);
       setShowPostInput(false);
       setPostTitleEl(null);
-      if(showPostTitleSnackbar) {setShowPostTitleSnackbar(false);}
+      if (showPostTitleSnackbar) {
+        setShowPostTitleSnackbar(false);
+      }
     }
   };
 
@@ -84,14 +88,18 @@ export default function MainPage() {
     const postTitleInput = document.getElementById("new-post-title");
     postTitleInput.value = "";
     setNewPost({ ...newPost, title: "" });
-    if(showPostTitleSnackbar) {setShowPostTitleSnackbar(false);}
+    if (showPostTitleSnackbar) {
+      setShowPostTitleSnackbar(false);
+    }
   };
 
   const handleClearPostDescInput = () => {
     const postDescInput = document.getElementById("new-post-description");
     postDescInput.value = "";
     setNewPost({ ...newPost, description: "" });
-    if(showPostDescSnackbar) {setShowPostDescSnackbar(false);}
+    if (showPostDescSnackbar) {
+      setShowPostDescSnackbar(false);
+    }
   };
 
   const handleShowPostTitleSnackbar = () => {
@@ -121,7 +129,9 @@ export default function MainPage() {
       setShowPostButton(true);
       setPostDescEl(null);
       setPostButtonEl(event.currentTarget);
-      if(showPostDescSnackbar) {setShowPostDescSnackbar(false);}
+      if (showPostDescSnackbar) {
+        setShowPostDescSnackbar(false);
+      }
     }
   };
 
@@ -136,6 +146,15 @@ export default function MainPage() {
     setNewPost({ title: "", description: "" });
     setShowPostInput(true);
     setShowPostButton(false);
+  };
+
+  const handleDeletePost = (event) => {
+    try {
+      dispatch(deletePost(event.target.id));
+      dispatch(getAllPosts());
+    } catch (error) {
+      throw new Error(error);
+    }
   };
 
   const handleShowComments = () => {
@@ -258,7 +277,7 @@ export default function MainPage() {
 
           {showPostButton ? (
             <>
-              <Tooltip title="add post">
+              <Tooltip title="Add Post">
                 <Button
                   onClick={handleAddNewPost}
                   variant="contained"
@@ -268,8 +287,8 @@ export default function MainPage() {
                   Add New Post
                 </Button>
               </Tooltip>
-          
-              <Tooltip title="cancel post">
+
+              <Tooltip title="Cancel Post">
                 <Button
                   onClick={handleCancelPost}
                   variant="contained"
@@ -303,43 +322,51 @@ export default function MainPage() {
                     background: lightBlue[50],
                     height: 250,
                     width: 500,
-                    lineHeight: "60px",
-                    marginBottom: "2.5em",
-                    marginTop: "2.5em",
+                    lineHeight: "34px",
+                    marginBottom: "1em",
+                    marginTop: "1em",
                     borderRadius: "0.5em",
                   }}
                 >
                   <CardContent sx={{ marginBottom: "auto" }}>
                     <Typography
-                      sx={{ fontSize: 24 }}
+                      sx={{ fontSize: 25 }}
                       color="text.secondary"
                       gutterBottom
                     >
                       {`Title: ${post.title}`}
                     </Typography>
                     <Typography
-                      sx={{ mb: 1.5, fontSize: 14 }}
+                      sx={{ mb: 1, fontSize: 16 }}
                       color="text.secondary"
                     >
                       {`Description: ${post.description}`}
                     </Typography>
                     <Typography
-                      sx={{ mb: 1.5, fontSize: 14 }}
+                      sx={{ mb: 1, fontSize: 16 }}
                       color="text.secondary"
                     >
                       {`Author: ${post.user_name}`}
                     </Typography>
                     <Typography
-                      sx={{ mb: 1.5, fontSize: 14 }}
+                      sx={{mt: 1, mb: 0.1, fontSize: 13 }}
                       color="text.secondary"
                     >
                       {`Created at: ${moment(post.createdAt).format(
                         "MMMM Do YYYY, h:mm:ss a"
                       )}`}
                     </Typography>
+                    <Typography
+                      sx={{ mt: 1, mb: 0.1, fontSize: 13 }}
+                      color="text.secondary"
+                    >
+                      {`Updated at: ${moment(post.updatedAt).format(
+                        "MMMM Do YYYY, h:mm:ss a"
+                      )}`}
+                    </Typography>
                   </CardContent>
                   <CardActions>
-                    <Tooltip title="click to read more">
+                    <Tooltip title="Read More">
                       <IconButton
                         onClick={() => {
                           navigate(`/post/${post.id}`);
@@ -349,7 +376,7 @@ export default function MainPage() {
                         <ReadMoreIcon></ReadMoreIcon>
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title="click to see comments">
+                    <Tooltip title="See Comments">
                       <IconButton
                         onClick={() => {
                           handleShowComments();
@@ -360,13 +387,19 @@ export default function MainPage() {
                         <CommentIcon></CommentIcon>
                       </IconButton>
                     </Tooltip>
+                    <Tooltip title="Delete Post">
+                      <IconButton
+                        onClick={handleDeletePost}
+                        variant="contained"
+                        id={post.id}
+                      >
+                        <DeleteForeverRoundedIcon></DeleteForeverRoundedIcon>
+                      </IconButton>
+                    </Tooltip>
                   </CardActions>
                 </Card>
 
-                {showComments
-                  ? currentPostComments
-                      .filter((comment) => comment.post_id === post.id)
-                      .map((newComment, index) => (
+                {showComments ? currentPostComments.filter((comment) => comment.post_id === post.id).map((newComment, index) => (
                         <Grid
                           item
                           sx={{

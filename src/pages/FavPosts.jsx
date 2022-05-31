@@ -79,43 +79,51 @@ export default function FavPosts() {
                     background: lightBlue[50],
                     height: 250,
                     width: 500,
-                    lineHeight: "60px",
-                    marginBottom: "2.5em",
-                    marginTop: "2.5em",
+                    lineHeight: "34px",
+                    marginBottom: "1em",
+                    marginTop: "1em",
                     borderRadius: "0.5em",
                   }}
                 >
                   <CardContent sx={{ marginBottom: "auto" }}>
                     <Typography
-                      sx={{ fontSize: 24 }}
+                      sx={{ fontSize: 25 }}
                       color="text.secondary"
                       gutterBottom
                     >
                       {`Title: ${post.title}`}
                     </Typography>
                     <Typography
-                      sx={{ mb: 1.5, fontSize: 14 }}
+                      sx={{ mb: 1, fontSize: 16 }}
                       color="text.secondary"
                     >
                       {`Description: ${post.description}`}
                     </Typography>
                     <Typography
-                      sx={{ mb: 1.5, fontSize: 14 }}
+                      sx={{ mb: 1, fontSize: 16 }}
                       color="text.secondary"
                     >
                       {`Author: ${post.user_name}`}
                     </Typography>
                     <Typography
-                      sx={{ mb: 1.5, fontSize: 14 }}
+                      sx={{ mt: 1, mb: 0.1, fontSize: 13 }}
                       color="text.secondary"
                     >
                       {`Created at: ${moment(post.createdAt).format(
                         "MMMM Do YYYY, h:mm:ss a"
                       )}`}
                     </Typography>
+                    <Typography
+                      sx={{ mt: 1, mb: 0.1, fontSize: 13 }}
+                      color="text.secondary"
+                    >
+                      {`Updated at: ${moment(post.updatedAt).format(
+                        "MMMM Do YYYY, h:mm:ss a"
+                      )}`}
+                    </Typography>
                   </CardContent>
                   <CardActions>
-                    <Tooltip title="click to read more">
+                    <Tooltip title="Read More">
                       <IconButton
                         onClick={() => {
                           navigate(`/post/${post.id}`);
@@ -125,7 +133,7 @@ export default function FavPosts() {
                         <ReadMoreIcon></ReadMoreIcon>
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title="click to see comments">
+                    <Tooltip title="See Comments">
                       <IconButton
                         onClick={() => {
                           handleShowComments();

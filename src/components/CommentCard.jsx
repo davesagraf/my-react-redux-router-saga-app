@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  Badge,
   Card,
   CardContent,
   CardActions,
@@ -114,6 +115,7 @@ export const CommentCard = ({ id, entity }) => {
     } catch (error) {
       throw new Error(error);
     }
+    setCommentLiked(true);
   };
 
   const handleRemoveCommentLike = () => {
@@ -124,6 +126,7 @@ export const CommentCard = ({ id, entity }) => {
     } catch (error) {
       throw new Error(error);
     }
+    setCommentLiked(false);
   };
 
   return (
@@ -131,18 +134,17 @@ export const CommentCard = ({ id, entity }) => {
       <Card
         elevation={3}
         id={id}
-        liked={commentLiked ? true : false}
         sx={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-around",
           background: grey[50],
-          height: 210,
+          height: 195,
           width: 700,
-          lineHeight: "34px",
-          marginBottom: "1em",
-          marginTop: "1em",
-          borderRadius: "0.5em",
+          lineHeight: "13px",
+          marginBottom: "0.5em",
+          marginTop: "0.5em",
+          borderRadius: "0.7em",
         }}
       >
         <CardContent sx={{ marginBottom: "auto" }}>
@@ -154,19 +156,19 @@ export const CommentCard = ({ id, entity }) => {
             {"Title: " + entity.title}
           </Typography>
 
-          <Typography sx={{ mb: 1, fontSize: 13 }} color="text.secondary">
+          <Typography sx={{ mb: 1, fontSize: 16 }} color="text.secondary">
             {"Author: " + entity.user_name}
           </Typography>
-          <Typography sx={{ mb: 1, fontSize: 13 }} color="text.secondary">
+          <Typography sx={{ mt:1, mb: 0.1, fontSize: 13 }} color="text.secondary">
             {"Created At: " +
               moment(entity.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
           </Typography>
-          <Typography sx={{ mb: 1, fontSize: 13 }} color="text.secondary">
+          <Typography sx={{ mt:1, mb: 0.1, fontSize: 13 }} color="text.secondary">
             {"Updated At: " +
               moment(entity.updatedAt).format("MMMM Do YYYY, h:mm:ss a")}
           </Typography>
         </CardContent>
-        <CardActions>
+        <CardActions sx={{ mb: 1}}>
           <Tooltip title="Edit Comment">
             <IconButton
               onClick={handleChangeComment}
@@ -192,21 +194,25 @@ export const CommentCard = ({ id, entity }) => {
           {!commentLiked || !commentLikes ? (
                 <Tooltip title="Like Comment">
                   <IconButton
-                    onClick={() => {handleAddCommentLike(); setCommentLiked(true)}}
+                    onClick={handleAddCommentLike}
                     variant="contained"
                     id={entity.id}
                   >
+                     <Badge badgeContent={commentLikes ? commentLikes.filter((like) => like.comment_id === entity.id).length : null } color="primary">
                     <ThumbUpOutlinedIcon></ThumbUpOutlinedIcon>
+                    </Badge>
                   </IconButton>
                 </Tooltip>
               ) : (
                 <Tooltip title="Unlike Comment">
                   <IconButton
-                    onClick={() => {handleRemoveCommentLike(); setCommentLiked(false)}}
+                    onClick={handleRemoveCommentLike}
                     variant="contained"
                     id={entity.id}
                   >
+                    <Badge badgeContent={commentLikes.length} color="primary">
                     <ThumbUpIcon></ThumbUpIcon>
+                    </Badge>
                   </IconButton>
                 </Tooltip>
               )}
