@@ -25,6 +25,17 @@ export const SignIn = () => {
     setUserData({ ...userData, password: event.target.value });
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      setTimeout(() => {
+        navigate('/main')
+        window.location.reload()
+      }, 1000)
+      dispatch(logIn(userData));
+      dispatch(authSuccess(userData));
+    }   
+  }
+
   const handleLogin = () => {
     setTimeout(() => {
       navigate('/main')
@@ -69,6 +80,7 @@ export const SignIn = () => {
           <InputOutlined
             label={"Password"}
             handleEnter={handleEnterPassword}
+            handleKeyPress={handleKeyPress}
             type="password"
             id="password"
             name="pass"
