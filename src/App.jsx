@@ -6,7 +6,6 @@ import { SignUp } from "./pages/SignUp";
 import { HomePage } from "./pages/HomePage";
 import MainPage from "./pages/MainPage";
 import PostPage from "./pages/PostPage";
-
 import AppNavBar from "./components/AppNavBar";
 import FavPosts from "./pages/FavPosts";
 
@@ -62,6 +61,17 @@ export const App = () => {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="*"
+            element={
+              <ProtectedRoute>
+                <MainPage />
+              </ProtectedRoute>
+            }
+          />
+
+        <Route path="*" element={<HomePage />} />
         </Routes>
       </BrowserRouter>
     </>
