@@ -5,6 +5,7 @@ import {
   deletePost,
   getAllPosts,
   getPostComments,
+  getAllCommentLikes
 } from "../actions/postAction";
 import {
   Box,
@@ -42,6 +43,7 @@ export default function MainPage() {
   useEffect(() => {
     dispatch(getAllPosts());
     dispatch(getUserData());
+    dispatch(getAllCommentLikes());
   }, [dispatch]);
 
   const [newPost, setNewPost] = useState({
@@ -68,6 +70,8 @@ export default function MainPage() {
   const { posts } = useSelector((store) => store.posts);
 
   const { currentPostComments } = useSelector((store) => store.posts);
+
+  const { allCommentLikes } = useSelector((store) => store.posts);
 
   const handlePostTitleInput = (event) => {
     setPostTitleEl(event.currentTarget);
@@ -413,6 +417,7 @@ export default function MainPage() {
                             entity={newComment}
                             key={index}
                             id={newComment.id}
+                            allCommentLikes={allCommentLikes}
                           ></CommentCard>
                         </Grid>
                       ))

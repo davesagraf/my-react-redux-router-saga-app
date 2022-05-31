@@ -20,7 +20,8 @@ import {
   getCurrentPost,
   getCommentLikes,
   addCommentLike,
-  removeCommentLike
+  removeCommentLike,
+  getAllCommentLikes
 } from "../actions/postAction";
 
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
@@ -32,7 +33,7 @@ import { ClickAwayListener as ModalBackdropClickAway } from "@mui/base";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 
-export const CommentCard = ({ id, entity }) => {
+export const CommentCard = ({ id, entity, allCommentLikes }) => {
   const dispatch = useDispatch();
   const [editedComment, setEditedComment] = useState({
     title: entity.title,
@@ -44,7 +45,7 @@ export const CommentCard = ({ id, entity }) => {
     dispatch(getCommentLikes(id));
   }, [commentLiked, dispatch, id]);
 
-  const { commentLikes } = useSelector((store) => store.posts );
+  const { commentLikes } = useSelector((store) => store.posts);
 
   const [openModal, setOpenModal] = useState(true);
 
@@ -110,23 +111,27 @@ export const CommentCard = ({ id, entity }) => {
   const handleAddCommentLike = () => {
     const thisCommentId = entity.id;
     try {
-      dispatch(addCommentLike(thisCommentId));
-      // dispatch(getCommentLikes(thisCommentId));
+      dispatch(getCommentLikes(thisCommentId));
+      if (commentLikes.length === 0) {
+        dispatch(addCommentLike(thisCommentId));
+        return setCommentLiked(true);
+      }
     } catch (error) {
       throw new Error(error);
     }
-    setCommentLiked(true);
   };
 
   const handleRemoveCommentLike = () => {
     const thisCommentId = entity.id;
     try {
-      dispatch(removeCommentLike(thisCommentId));
-      // dispatch(getCommentLikes(thisCommentId));
+      dispatch(getCommentLikes(thisCommentId));
+      if (commentLikes.length !== 0) {
+        dispatch(removeCommentLike(thisCommentId));
+        return setCommentLiked(false);
+      }
     } catch (error) {
       throw new Error(error);
     }
-    setCommentLiked(false);
   };
 
   return (
@@ -191,14 +196,14 @@ export const CommentCard = ({ id, entity }) => {
               ></DeleteForeverRoundedIcon>
             </IconButton>
           </Tooltip>
-          {!commentLiked || !commentLikes ? (
+          {!commentLiked && allCommentLikes.filter((like) => like.comment_id === entity.id).length === 0 ? ( 
                 <Tooltip title="Like Comment">
                   <IconButton
                     onClick={handleAddCommentLike}
                     variant="contained"
                     id={entity.id}
                   >
-                     <Badge badgeContent={commentLikes ? commentLikes.filter((like) => like.comment_id === entity.id).length : null } color="primary">
+                     <Badge badgeContent={allCommentLikes ? allCommentLikes.filter((like) => like.comment_id === entity.id).length : null} color="primary">
                     <ThumbUpOutlinedIcon></ThumbUpOutlinedIcon>
                     </Badge>
                   </IconButton>
@@ -210,7 +215,7 @@ export const CommentCard = ({ id, entity }) => {
                     variant="contained"
                     id={entity.id}
                   >
-                    <Badge badgeContent={commentLikes.length} color="primary">
+                    <Badge badgeContent={allCommentLikes.length} color="primary">
                     <ThumbUpIcon></ThumbUpIcon>
                     </Badge>
                   </IconButton>
@@ -286,7 +291,7 @@ export const CommentCard = ({ id, entity }) => {
             </Modal>
           </Backdrop>
         </>
-      ) : null  }
+      ) : null }
     </>
   );
 };

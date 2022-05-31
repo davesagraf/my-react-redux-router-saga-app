@@ -22,7 +22,12 @@ import CommentIcon from "@mui/icons-material/Comment";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import moment from "moment";
 
-import { getAllPosts, getPostComments } from "../actions/postAction";
+import {
+  getAllPosts,
+  getPostComments,
+  getAllCommentLikes,
+} from "../actions/postAction";
+import { CommentCard } from "../components/CommentCard";
 
 export const ProfilePage = () => {
   const auth = localStorage.getItem("Authorization");
@@ -40,9 +45,12 @@ export const ProfilePage = () => {
 
   const { currentPostComments } = useSelector((store) => store.posts);
 
+  const { allCommentLikes } = useSelector((store) => store.posts);
+
   useEffect(() => {
     dispatch(getUserData());
     dispatch(getAllPosts());
+    dispatch(getAllCommentLikes());
   }, [dispatch]);
 
   const userId = currentUser.id;
@@ -141,84 +149,105 @@ export const ProfilePage = () => {
                 }}
               >
                 {userPosts.map((post, index) => (
-                  <Card
-                    elevation={3}
-                    id={post.id}
-                    key={index}
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-around",
-                      background: lightBlue[50],
-                      height: 250,
-                      width: 500,
-                      lineHeight: "34px",
-                      marginBottom: "1em",
-                      marginTop: "1em",
-                      borderRadius: "0.5em",
-                    }}
-                  >
-                    <CardContent sx={{ marginBottom: "auto" }}>
-                      <Typography
-                        sx={{ fontSize: 25 }}
-                        color="text.secondary"
-                        gutterBottom
-                      >
-                        {`Title: ${post.title}`}
-                      </Typography>
-                      <Typography
-                        sx={{mb: 1, fontSize: 16 }}
-                        color="text.secondary"
-                      >
-                        {`Description: ${post.description}`}
-                      </Typography>
-                      <Typography
-                        sx={{ mb: 1, fontSize: 16 }}
-                        color="text.secondary"
-                      >
-                        {`Author: ${post.user_name}`}
-                      </Typography>
-                      <Typography
-                        sx={{ mt: 1, mb: 0.1, fontSize: 13 }}
-                        color="text.secondary"
-                      >
-                        {`Created At: ${moment(post.createdAt).format(
-                          "MMMM Do YYYY, h:mm:ss a"
-                        )}`}
-                      </Typography>
-                      <Typography
-                        sx={{ mt: 1, mb: 0.1, fontSize: 13 }}
-                        color="text.secondary"
-                      >
-                        {`Updated At: ${moment(post.updatedAt).format(
-                          "MMMM Do YYYY, h:mm:ss a"
-                        )}`}
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Tooltip title="click to read more">
-                        <IconButton
-                          onClick={() => {
-                            navigate(`/post/${post.id}`);
-                          }}
-                          id={post.id}
+                  <>
+                    <Card
+                      elevation={3}
+                      id={post.id}
+                      key={index}
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-around",
+                        background: lightBlue[50],
+                        height: 250,
+                        width: 500,
+                        lineHeight: "34px",
+                        marginBottom: "1em",
+                        marginTop: "1em",
+                        borderRadius: "0.5em",
+                      }}
+                    >
+                      <CardContent sx={{ marginBottom: "auto" }}>
+                        <Typography
+                          sx={{ fontSize: 25 }}
+                          color="text.secondary"
+                          gutterBottom
                         >
-                          <ReadMoreIcon></ReadMoreIcon>
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="click to see comments">
-                        <IconButton
-                          onClick={() => {
-                            handleShowComments();
-                            dispatch(getPostComments(post.id));
-                          }}
-                          id={post.id}
+                          {`Title: ${post.title}`}
+                        </Typography>
+                        <Typography
+                          sx={{ mb: 1, fontSize: 16 }}
+                          color="text.secondary"
                         >
-                          <CommentIcon></CommentIcon>
-                        </IconButton>
-                      </Tooltip>
-                    </CardActions>
-                  </Card>
+                          {`Description: ${post.description}`}
+                        </Typography>
+                        <Typography
+                          sx={{ mb: 1, fontSize: 16 }}
+                          color="text.secondary"
+                        >
+                          {`Author: ${post.user_name}`}
+                        </Typography>
+                        <Typography
+                          sx={{ mt: 1, mb: 0.1, fontSize: 13 }}
+                          color="text.secondary"
+                        >
+                          {`Created At: ${moment(post.createdAt).format(
+                            "MMMM Do YYYY, h:mm:ss a"
+                          )}`}
+                        </Typography>
+                        <Typography
+                          sx={{ mt: 1, mb: 0.1, fontSize: 13 }}
+                          color="text.secondary"
+                        >
+                          {`Updated At: ${moment(post.updatedAt).format(
+                            "MMMM Do YYYY, h:mm:ss a"
+                          )}`}
+                        </Typography>
+                      </CardContent>
+                      <CardActions>
+                        <Tooltip title="click to read more">
+                          <IconButton
+                            onClick={() => {
+                              navigate(`/post/${post.id}`);
+                            }}
+                            id={post.id}
+                          >
+                            <ReadMoreIcon></ReadMoreIcon>
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="click to see comments">
+                          <IconButton
+                            onClick={() => {
+                              handleShowComments();
+                              dispatch(getPostComments(post.id));
+                            }}
+                            id={post.id}
+                          >
+                            <CommentIcon></CommentIcon>
+                          </IconButton>
+                        </Tooltip>
+                      </CardActions>
+                    </Card>
+                    {showComments ? currentPostComments.filter((comment) => comment.post_id === post.id).map((newComment, index) => (
+                            <Grid
+                              item
+                              sx={{
+                                width: "50em",
+                                display: "flex",
+                                flexDirection: "column",
+                                cursor: "pointer",
+                              }}
+                            >
+                              <CommentCard
+                                entity={newComment}
+                                key={index}
+                                id={newComment.id}
+                                allCommentLikes={allCommentLikes}
+                              ></CommentCard>
+                            </Grid>
+                          ))
+                      : null}
+                  </>
                 ))}
               </Grid>
             </>
