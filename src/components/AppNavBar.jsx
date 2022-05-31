@@ -45,7 +45,7 @@ export default function AppNavBar() {
 
   const [sideBarAnchorEl, setSideBarAnchorEl] = useState(null);
 
-  const [tabValue, setTabValue] = useState(0);
+  const [tabValue, setTabValue] = useState(1);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
