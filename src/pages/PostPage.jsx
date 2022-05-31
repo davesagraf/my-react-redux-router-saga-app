@@ -7,7 +7,8 @@ import {
   addNewComment,
   addLike,
   removeLike,
-  getPostComments
+  getPostComments,
+  getAllCommentLikes
 } from "../actions/postAction";
 import { getUserData } from "../actions/userAction";
 import {
@@ -61,11 +62,13 @@ export default function PostPage() {
   const { currentPost } = useSelector((store) => store.posts);
   const { comments } = currentPost;
   const { likes } = currentPost;
+  const { allCommentLikes } = useSelector((store) => store.posts);
 
   useEffect(() => {
     dispatch(getCurrentPost(id));
     dispatch(getUserData());
     dispatch(getPostComments(id));
+    dispatch(getAllCommentLikes());
   }, [liked, dispatch, id]);
 
   const [newComment, setNewComment] = useState({
@@ -309,6 +312,7 @@ export default function PostPage() {
                       entity={comment}
                       key={index}
                       id={comment.id}
+                      allCommentLikes={allCommentLikes}
                     ></CommentCard>
                   </>
                 ))

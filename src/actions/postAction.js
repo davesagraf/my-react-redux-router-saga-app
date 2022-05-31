@@ -13,6 +13,7 @@ export const ADD_COMMENT_LIKE = "ADD_COMMENT_LIKE"
 export const REMOVE_COMMENT_LIKE = "REMOVE_COMMENT_LIKE"
 export const GET_COMMENT_LIKES = "GET_COMMENT_LIKES"
 export const GET_FAV_POSTS = "GET_FAV_POSTS"
+export const GET_ALL_COMMENT_LIKES = "GET_ALL_COMMENT_LIKES"
 
 
 export const getAllPosts = () => {
@@ -124,3 +125,9 @@ export const removeCommentLike = (commentId) => {
     commentId
   }
 }
+
+export const getAllCommentLikes = () => {
+  return {
+    type: GET_ALL_COMMENT_LIKES
+  };
+};

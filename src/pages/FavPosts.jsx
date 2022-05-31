@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getFavPosts,
-  getPostComments
+  getPostComments,
+  getAllCommentLikes
 } from "../actions/postAction";
 import {
   Box,
@@ -30,6 +31,7 @@ export default function FavPosts() {
   useEffect(() => {
     dispatch(getFavPosts());
     dispatch(getUserData());
+    dispatch(getAllCommentLikes());
   }, [dispatch]);
 
 
@@ -38,6 +40,8 @@ export default function FavPosts() {
   const { favPosts } = useSelector((store) => store.posts);
 
   const { currentPostComments } = useSelector((store) => store.posts);
+
+  const { allCommentLikes } = useSelector((store) => store.posts);
 
   const handleShowComments = () => {
     setShowComments(!showComments);
@@ -164,6 +168,7 @@ export default function FavPosts() {
                             entity={newComment}
                             key={index}
                             id={newComment.id}
+                            allCommentLikes={allCommentLikes}
                           ></CommentCard>
                         </Grid>
                       ))
