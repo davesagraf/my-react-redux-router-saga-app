@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 
 import Tooltip from "@mui/material/Tooltip";
 import { NewCommentInput } from "../components/NewCommentInput";
-import { editComment } from "../actions/postAction";
+import { editComment } from "../actions/commentAction";
 import Modal from '@mui/material/Modal';
 import Backdrop from '@mui/material/Backdrop';
 import {

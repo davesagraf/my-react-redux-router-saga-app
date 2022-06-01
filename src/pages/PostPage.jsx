@@ -4,13 +4,19 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   deletePost,
   getCurrentPost,
-  addNewComment,
   addLike,
   removeLike,
-  getPostComments,
-  getAllCommentLikes
 } from "../actions/postAction";
+
+import {
+  addNewComment,
+  getPostComments,
+  getAllCommentLikes,
+  getAllComments
+} from "../actions/commentAction";
+
 import { getUserData } from "../actions/userAction";
+
 import {
   Badge,
   Box,
@@ -60,14 +66,17 @@ export default function PostPage() {
 
   const { id } = useParams();
   const { currentPost } = useSelector((store) => store.posts);
-  const { comments } = currentPost;
   const { likes } = currentPost;
-  const { allCommentLikes } = useSelector((store) => store.posts);
+
+  const { comments } = useSelector((store) => store.comments);
+
+  const { allCommentLikes } = useSelector((store) => store.comments);
 
   useEffect(() => {
     dispatch(getCurrentPost(id));
     dispatch(getUserData());
     dispatch(getPostComments(id));
+    dispatch(getAllComments());
     dispatch(getAllCommentLikes());
   }, [liked, dispatch, id]);
 
@@ -306,12 +315,12 @@ export default function PostPage() {
           {showComments ? (
             <>
               {comments ? (
-                comments.map((comment, index) => (
+                comments.filter((comment) => comment.post_id === id).map((thisComment) => (
                   <>
                     <CommentCard
-                      entity={comment}
-                      key={index}
-                      id={comment.id}
+                      entity={thisComment}
+                      key={thisComment.id}
+                      id={thisComment.id}
                       allCommentLikes={allCommentLikes}
                     ></CommentCard>
                   </>

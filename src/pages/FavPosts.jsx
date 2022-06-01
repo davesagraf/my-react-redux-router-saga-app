@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getFavPosts,
+  getFavPosts
+} from "../actions/postAction";
+
+
+import {
   getPostComments,
   getAllCommentLikes
-} from "../actions/postAction";
+} from "../actions/commentAction";
+
 import {
   Box,
   Typography,

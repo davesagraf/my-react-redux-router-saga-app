@@ -23,10 +23,14 @@ import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import moment from "moment";
 
 import {
-  getAllPosts,
+  getAllPosts
+} from "../actions/postAction";
+
+import {
   getPostComments,
   getAllCommentLikes,
-} from "../actions/postAction";
+} from "../actions/commentAction";
+
 import { CommentCard } from "../components/CommentCard";
 
 export const ProfilePage = () => {

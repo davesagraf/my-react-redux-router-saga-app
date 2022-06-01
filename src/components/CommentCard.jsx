@@ -15,14 +15,17 @@ import moment from "moment";
 
 import { NewCommentInput } from "../components/NewCommentInput";
 import {
+  getCurrentPost
+} from "../actions/postAction";
+
+import {
   editComment,
   deleteComment,
-  getCurrentPost,
   getCommentLikes,
   addCommentLike,
   removeCommentLike,
   getAllCommentLikes
-} from "../actions/postAction";
+} from "../actions/commentAction";
 
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import EditIcon from "@mui/icons-material/Edit";
@@ -203,7 +206,7 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
                     variant="contained"
                     id={entity.id}
                   >
-                     <Badge badgeContent={allCommentLikes ? allCommentLikes.filter((like) => like.comment_id === entity.id).length : null} color="primary">
+                     <Badge badgeContent={commentLikes ? commentLikes.length : null} color="primary">
                     <ThumbUpOutlinedIcon></ThumbUpOutlinedIcon>
                     </Badge>
                   </IconButton>

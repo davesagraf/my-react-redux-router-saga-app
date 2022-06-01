@@ -3,10 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addNewPost,
   deletePost,
-  getAllPosts,
+  getAllPosts
+} from "../actions/postAction";
+
+import {
   getPostComments,
   getAllCommentLikes
-} from "../actions/postAction";
+} from "../actions/commentAction";
+
 import {
   Box,
   Button,
