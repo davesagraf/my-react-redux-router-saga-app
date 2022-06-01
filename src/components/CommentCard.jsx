@@ -21,10 +21,9 @@ import {
 import {
   editComment,
   deleteComment,
-  getCommentLikes,
   addCommentLike,
   removeCommentLike,
-  getAllCommentLikes
+  getCommentLikes
 } from "../actions/commentAction";
 
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
@@ -48,8 +47,6 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
     dispatch(getCommentLikes(id));
   }, [commentLiked, dispatch, id]);
 
-  const { commentLikes } = useSelector((store) => store.posts);
-
   const [openModal, setOpenModal] = useState(true);
 
   const [openBackdrop, setOpenBackdrop] = useState(true);
@@ -57,6 +54,8 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
   const [changeComment, setChangeComment] = useState(false);
 
   const [commentEl, setCommentEl] = useState(null);
+
+  const { commentLikes} = useSelector((store) => store.comments);
 
   const handleEditCommentTitle = (event) => {
     event.preventDefault();
@@ -218,7 +217,7 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
                     variant="contained"
                     id={entity.id}
                   >
-                    <Badge badgeContent={allCommentLikes.length} color="primary">
+                    <Badge badgeContent={commentLikes ? commentLikes.length : null} color="primary">
                     <ThumbUpIcon></ThumbUpIcon>
                     </Badge>
                   </IconButton>

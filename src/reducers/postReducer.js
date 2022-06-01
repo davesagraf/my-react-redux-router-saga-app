@@ -18,11 +18,7 @@ export const postReducer = (state = initialState, action) => {
     case "LOADING":
       return { ...state, loading: true };
     case "SUCCESS":
-      return { ...state, posts: action.payload, loading: false };
-    case "FAV_POSTS":
-      return { ...state, favPosts: action.payload, loading: true }; 
-    case "SUCCESS_FAV_POSTS":
-      return { ...state, favPosts: action.payload, loading: false };  
+      return { ...state, posts: action.payload, loading: false };  
     case "ERROR":
       return { ...state, error: action.payload, loading: false };
     case "SET_POST":
@@ -36,7 +32,11 @@ export const postReducer = (state = initialState, action) => {
     case "ADD_LIKE":
       return {...state };
     case "REMOVE_LIKE":
-      return {...state } ; 
+      return {...state };
+    case "FAV_POSTS":
+      return { ...state, favPosts: action.payload, loading: true }; 
+    case "SUCCESS_FAV_POSTS":
+      return { ...state, favPosts: action.payload, loading: false }; 
     default:
       return { ...state };
   }

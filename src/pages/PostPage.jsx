@@ -10,9 +10,8 @@ import {
 
 import {
   addNewComment,
-  getPostComments,
   getAllCommentLikes,
-  getAllComments
+  getPostComments
 } from "../actions/commentAction";
 
 import { getUserData } from "../actions/userAction";
@@ -70,13 +69,14 @@ export default function PostPage() {
 
   const { comments } = useSelector((store) => store.comments);
 
-  const { allCommentLikes } = useSelector((store) => store.comments);
+  const { currentPostComments } = useSelector((store) => store.comments);
+
+  const { allCommentLikes} = useSelector((store) => store.comments);
 
   useEffect(() => {
     dispatch(getCurrentPost(id));
     dispatch(getUserData());
     dispatch(getPostComments(id));
-    dispatch(getAllComments());
     dispatch(getAllCommentLikes());
   }, [liked, dispatch, id]);
 
@@ -314,13 +314,13 @@ export default function PostPage() {
 
           {showComments ? (
             <>
-              {comments ? (
-                comments.filter((comment) => comment.post_id === id).map((thisComment) => (
+              {currentPostComments ? (
+                currentPostComments.map((comment) => (
                   <>
                     <CommentCard
-                      entity={thisComment}
-                      key={thisComment.id}
-                      id={thisComment.id}
+                      entity={comment}
+                      key={comment.id}
+                      id={comment.id}
                       allCommentLikes={allCommentLikes}
                     ></CommentCard>
                   </>

@@ -3,7 +3,7 @@ const initialState = {
     currentComment: {
       title: "",
       content: null,
-      likes: [],
+      commentLikes: [],
       loading: false
     },
     commentLikes: [],
