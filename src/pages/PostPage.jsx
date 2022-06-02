@@ -10,8 +10,7 @@ import {
 } from "../actions/postAction";
 
 import {
-  addNewComment,
-  getAllCommentLikes,
+  addNewComment
 } from "../actions/commentAction";
 
 import { getUserData } from "../actions/userAction";
@@ -58,22 +57,19 @@ export default function PostPage() {
 
   const [showCommentButton, setShowCommentButton] = useState(false);
 
-  const [showCommentTitleSnackbar, setShowCommentTitleSnackbar] =
-    useState(false);
+  const [showCommentTitleSnackbar, setShowCommentTitleSnackbar] = useState(false);
 
   const [commentTitleEl, setCommentTitleEl] = useState(null);
 
   const { id } = useParams();
   const { currentPost } = useSelector((store) => store.posts);
   const { likes } = currentPost;
-
   const { currentPostComments } = useSelector((store) => store.posts);
 
   useEffect(() => {
     dispatch(getCurrentPost(id));
     dispatch(getUserData());
     dispatch(getPostComments(id));
-    dispatch(getAllCommentLikes());
   }, [liked, dispatch, id]);
 
   const [newComment, setNewComment] = useState({
@@ -114,8 +110,10 @@ export default function PostPage() {
     setNewComment({ ...newComment, title: event.target.value });
   };
 
-  const handleAddNewComment = (event) => {
+  const handleAddNewComment = () => {
     dispatch(addNewComment(newComment));
+    dispatch(getCurrentPost(id));
+    dispatch(getPostComments(id));
     setNewComment({ title: "", post_id: id });
     setShowCommentInput(true);
     setShowCommentButton(false);

@@ -14,8 +14,8 @@ const initialState = {
 
 export const postReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "GET_ALL_POSTS":
-      return { ...state, loadindPosts: action.payload, loading: true };
+    case "LOADING":
+      return { ...state, loading: true };
     case "SUCCESS_GET_ALL_POSTS":
       return { ...state, posts: action.payload, loading: false };  
     case "ERROR":

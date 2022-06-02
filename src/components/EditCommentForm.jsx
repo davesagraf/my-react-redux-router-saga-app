@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 
 import Tooltip from "@mui/material/Tooltip";
 import { NewCommentInput } from "../components/NewCommentInput";
@@ -14,8 +13,7 @@ import {
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
-export const EditCommentForm = ({id, entity, setChange }) => {
-  const dispatch = useDispatch();
+export const EditCommentForm = ({ entity }) => {
   const [editedComment, setEditedComment] = useState({
     title: entity.title,
   });
@@ -35,7 +33,6 @@ export const EditCommentForm = ({id, entity, setChange }) => {
   const handleCloseModal = () => {
     setOpenModal(false);
   }
-
 
   return (
     <>
