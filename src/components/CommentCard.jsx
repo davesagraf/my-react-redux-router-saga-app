@@ -15,7 +15,8 @@ import moment from "moment";
 
 import { NewCommentInput } from "../components/NewCommentInput";
 import {
-  getCurrentPost
+  getCurrentPost,
+  getPostComments
 } from "../actions/postAction";
 
 import {
@@ -24,7 +25,6 @@ import {
   addCommentLike,
   removeCommentLike,
   getCommentLikes,
-  getPostComments
 } from "../actions/commentAction";
 
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";

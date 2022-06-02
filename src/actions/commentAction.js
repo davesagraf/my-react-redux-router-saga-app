@@ -1,7 +1,6 @@
 export const SET_COMMENT = "SET_COMMENT"
 export const DELETE_COMMENT = "DELETE_COMMENT"
 export const EDIT_COMMENT = "EDIT_COMMENT"
-export const GET_POST_COMMENTS = "GET_POST_COMMENTS"
 export const ADD_COMMENT_LIKE = "ADD_COMMENT_LIKE"
 export const REMOVE_COMMENT_LIKE = "REMOVE_COMMENT_LIKE"
 export const GET_COMMENT_LIKES = "GET_COMMENT_LIKES"
@@ -26,14 +25,6 @@ export const addNewComment = (newComment) => {
     return {
       type: EDIT_COMMENT,
       updatedComment
-    }
-  }
-  
-  //
-  export const getPostComments = (postId) => {
-    return {
-      type: GET_POST_COMMENTS,
-      postId
     }
   }
   

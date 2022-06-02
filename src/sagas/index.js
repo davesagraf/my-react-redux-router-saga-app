@@ -9,20 +9,19 @@ import {
   ADD_LIKE,
   REMOVE_LIKE,
   GET_FAV_POSTS,
+  GET_POST_COMMENTS,
 } from "../actions/postAction";
 
 import {
   SET_COMMENT,
   DELETE_COMMENT,
   EDIT_COMMENT,
-  GET_POST_COMMENTS,
   ADD_COMMENT_LIKE,
   REMOVE_COMMENT_LIKE,
   GET_COMMENT_LIKES,
   GET_ALL_COMMENT_LIKES,
   GET_ALL_COMMENTS
 } from "../actions/commentAction";
-
 
 const baseUrl = "http://localhost:8000";
 
@@ -125,9 +124,9 @@ function* postsAsync() {
 
     posts.reverse();
 
-    return yield put({ type: "SUCCESS", payload: posts });
+    return yield put({ type: "SUCCESS_GET_ALL_POSTS", payload: posts });
   } catch (error) {
-    yield put({ type: "ERRORS", payload: error });
+    yield put({ type: "ERROR", payload: error });
   }
 }
 

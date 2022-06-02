@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addNewPost,
   deletePost,
-  getAllPosts
+  getAllPosts,
+  getPostComments
 } from "../actions/postAction";
 
 import {
-  getPostComments,
   getAllCommentLikes
 } from "../actions/commentAction";
 
@@ -47,7 +47,6 @@ export default function MainPage() {
   useEffect(() => {
     dispatch(getAllPosts());
     dispatch(getUserData());
-    dispatch(getAllCommentLikes());
   }, [dispatch]);
 
   const [newPost, setNewPost] = useState({
@@ -74,8 +73,6 @@ export default function MainPage() {
   const { posts } = useSelector((store) => store.posts);
 
   const { currentPostComments } = useSelector((store) => store.posts);
-
-  const { allCommentLikes } = useSelector((store) => store.posts);
 
   const handlePostTitleInput = (event) => {
     setPostTitleEl(event.currentTarget);
@@ -317,12 +314,12 @@ export default function MainPage() {
               cursor: "pointer",
             }}
           >
-            {posts.map((post, index) => (
+            {posts.map((post) => (
               <>
                 <Card
                   elevation={3}
                   id={post.id}
-                  key={index}
+                  key={post.id}
                   sx={{
                     display: "flex",
                     flexDirection: "column",
@@ -419,9 +416,9 @@ export default function MainPage() {
                         >
                           <CommentCard
                             entity={newComment}
-                            key={index}
+                            key={newComment.id}
                             id={newComment.id}
-                            allCommentLikes={allCommentLikes}
+                            commentLikes={newComment.likes}
                           ></CommentCard>
                         </Grid>
                       ))

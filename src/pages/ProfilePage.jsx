@@ -23,11 +23,11 @@ import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import moment from "moment";
 
 import {
-  getAllPosts
+  getAllPosts,
+  getPostComments
 } from "../actions/postAction";
 
 import {
-  getPostComments,
   getAllCommentLikes,
 } from "../actions/commentAction";
 
@@ -49,12 +49,9 @@ export const ProfilePage = () => {
 
   const { currentPostComments } = useSelector((store) => store.posts);
 
-  const { allCommentLikes } = useSelector((store) => store.posts);
-
   useEffect(() => {
     dispatch(getUserData());
     dispatch(getAllPosts());
-    dispatch(getAllCommentLikes());
   }, [dispatch]);
 
   const userId = currentUser.id;
@@ -233,24 +230,22 @@ export const ProfilePage = () => {
                       </CardActions>
                     </Card>
                     {showComments ? currentPostComments.filter((comment) => comment.post_id === post.id).map((newComment, index) => (
-                            <Grid
-                              item
-                              sx={{
-                                width: "50em",
-                                display: "flex",
-                                flexDirection: "column",
-                                cursor: "pointer",
-                              }}
-                            >
-                              <CommentCard
-                                entity={newComment}
-                                key={index}
-                                id={newComment.id}
-                                allCommentLikes={allCommentLikes}
-                              ></CommentCard>
-                            </Grid>
-                          ))
-                      : null}
+                    <Grid
+                      item
+                      sx={{
+                        width: "50em",
+                        display: "flex",
+                        flexDirection: "column",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <CommentCard
+                        entity={newComment}
+                        key={newComment.id}
+                        id={newComment.id}
+                        commentLikes={newComment.likes}
+                      ></CommentCard>
+                    </Grid>)) : null}
                   </>
                 ))}
               </Grid>

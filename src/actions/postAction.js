@@ -6,6 +6,7 @@ export const EDIT_POST = "EDIT_POST"
 export const ADD_LIKE = "ADD_LIKE"
 export const REMOVE_LIKE = "REMOVE_LIKE"
 export const GET_FAV_POSTS = "GET_FAV_POSTS"
+export const GET_POST_COMMENTS = "GET_POST_COMMENTS"
 
 
 export const getAllPosts = () => {
@@ -19,6 +20,14 @@ export const getFavPosts = () => {
     type: GET_FAV_POSTS
   };
 };
+
+//
+export const getPostComments = (postId) => {
+  return {
+    type: GET_POST_COMMENTS,
+    postId
+  }
+}
 
 export const addNewPost = (newPost) => {
   return {

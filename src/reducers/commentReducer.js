@@ -1,14 +1,7 @@
 const initialState = {
     comments: [],
-    currentComment: {
-      title: "",
-      content: null,
-      commentLikes: [],
-      loading: false
-    },
     commentLikes: [],
     allCommentLikes: [],
-    currentPostComments: [],
     errors: "",
     loading: false,
   };
@@ -24,11 +17,7 @@ const initialState = {
       case "GET_ALL_COMMENTS":
         return {...state, comments: action.payload, loading: true }
       case "SUCCESS_GET_ALL_COMMENTS":
-        return {...state, comments: action.payload, loading: false }
-      case "GET_POST_COMMENTS":
-        return {...state, currentPostComments: action.payload, loading: true }
-      case "SUCCESS_GET_POST_COMMENTS":
-        return {...state, currentPostComments: action.payload, loading: false}   
+        return {...state, comments: action.payload, loading: false }  
       case "GET_ALL_COMMENT_LIKES":
         return {...state, allCommentLikes: action.payload, loading: true }
       case "SUCCESS_GET_ALL_COMMENT_LIKES":

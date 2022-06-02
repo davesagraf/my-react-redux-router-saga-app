@@ -6,12 +6,12 @@ import {
   getCurrentPost,
   addLike,
   removeLike,
+  getPostComments
 } from "../actions/postAction";
 
 import {
   addNewComment,
   getAllCommentLikes,
-  getPostComments
 } from "../actions/commentAction";
 
 import { getUserData } from "../actions/userAction";
@@ -67,7 +67,7 @@ export default function PostPage() {
   const { currentPost } = useSelector((store) => store.posts);
   const { likes } = currentPost;
 
-  const { currentPostComments } = useSelector((store) => store.comments);
+  const { currentPostComments } = useSelector((store) => store.posts);
 
   useEffect(() => {
     dispatch(getCurrentPost(id));
