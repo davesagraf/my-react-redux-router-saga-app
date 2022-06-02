@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch  } from "react-redux";
 import {
   Badge,
   Card,
@@ -23,7 +23,8 @@ import {
   deleteComment,
   addCommentLike,
   removeCommentLike,
-  getCommentLikes
+  getCommentLikes,
+  getPostComments
 } from "../actions/commentAction";
 
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
@@ -35,17 +36,15 @@ import { ClickAwayListener as ModalBackdropClickAway } from "@mui/base";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 
-export const CommentCard = ({ id, entity, allCommentLikes }) => {
+export const CommentCard = ({ id, entity, commentLikes }) => {
   const dispatch = useDispatch();
   const [editedComment, setEditedComment] = useState({
     title: entity.title,
   });
 
-  const [commentLiked, setCommentLiked] = useState(false);
-
   useEffect(() => {
     dispatch(getCommentLikes(id));
-  }, [commentLiked, dispatch, id]);
+  }, [commentLikes, dispatch, id]);
 
   const [openModal, setOpenModal] = useState(true);
 
@@ -55,7 +54,9 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
 
   const [commentEl, setCommentEl] = useState(null);
 
-  const { commentLikes} = useSelector((store) => store.comments);
+  const [like, setLike] = useState(commentLikes.length)
+
+  const [commentLiked, setCommentLiked] = useState(false);
 
   const handleEditCommentTitle = (event) => {
     event.preventDefault();
@@ -93,7 +94,8 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
         })
       );
       dispatch(getCurrentPost(postId));
-      return setChangeComment(false);
+      dispatch(getPostComments(postId));
+      setChangeComment(false);
     } catch (error) {
       throw new Error(error);
     }
@@ -105,6 +107,7 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
     try {
       dispatch(deleteComment(thisCommentId, postId));
       dispatch(getCurrentPost(postId));
+      dispatch(getPostComments(postId));
     } catch (error) {
       throw new Error(error);
     }
@@ -113,11 +116,11 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
   const handleAddCommentLike = () => {
     const thisCommentId = entity.id;
     try {
+      dispatch(addCommentLike(thisCommentId));
       dispatch(getCommentLikes(thisCommentId));
-      if (commentLikes.length === 0) {
-        dispatch(addCommentLike(thisCommentId));
-        return setCommentLiked(true);
-      }
+      setLike(like + 1)
+      setCommentLiked(true);
+      
     } catch (error) {
       throw new Error(error);
     }
@@ -126,11 +129,11 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
   const handleRemoveCommentLike = () => {
     const thisCommentId = entity.id;
     try {
+      dispatch(removeCommentLike(thisCommentId));
       dispatch(getCommentLikes(thisCommentId));
-      if (commentLikes.length !== 0) {
-        dispatch(removeCommentLike(thisCommentId));
-        return setCommentLiked(false);
-      }
+      setLike(like - 1)
+      setCommentLiked(false);
+    
     } catch (error) {
       throw new Error(error);
     }
@@ -198,14 +201,14 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
               ></DeleteForeverRoundedIcon>
             </IconButton>
           </Tooltip>
-          {!commentLiked && allCommentLikes.filter((like) => like.comment_id === entity.id).length === 0 ? ( 
+          {!commentLiked && !like ? ( 
                 <Tooltip title="Like Comment">
                   <IconButton
                     onClick={handleAddCommentLike}
                     variant="contained"
                     id={entity.id}
                   >
-                     <Badge badgeContent={commentLikes ? commentLikes.length : null} color="primary">
+                     <Badge badgeContent={like} color="primary">
                     <ThumbUpOutlinedIcon></ThumbUpOutlinedIcon>
                     </Badge>
                   </IconButton>
@@ -217,7 +220,7 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
                     variant="contained"
                     id={entity.id}
                   >
-                    <Badge badgeContent={commentLikes ? commentLikes.length : null} color="primary">
+                    <Badge badgeContent={like} color="primary">
                     <ThumbUpIcon></ThumbUpIcon>
                     </Badge>
                   </IconButton>

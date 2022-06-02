@@ -4,10 +4,8 @@ import {
   getFavPosts
 } from "../actions/postAction";
 
-
 import {
-  getPostComments,
-  getAllCommentLikes
+  getAllComments
 } from "../actions/commentAction";
 
 import {
@@ -36,17 +34,14 @@ export default function FavPosts() {
   useEffect(() => {
     dispatch(getFavPosts());
     dispatch(getUserData());
-    dispatch(getAllCommentLikes());
+    dispatch(getAllComments());
   }, [dispatch]);
-
 
   const [showComments, setShowComments] = useState(false);
 
   const { favPosts } = useSelector((store) => store.posts);
 
-  const { currentPostComments } = useSelector((store) => store.posts);
-
-  const { allCommentLikes } = useSelector((store) => store.posts);
+  const { comments } = useSelector((store) => store.comments);
 
   const handleShowComments = () => {
     setShowComments(!showComments);
@@ -146,7 +141,6 @@ export default function FavPosts() {
                       <IconButton
                         onClick={() => {
                           handleShowComments();
-                          dispatch(getPostComments(post.id));
                         }}
                         id={post.id}
                       >
@@ -156,10 +150,7 @@ export default function FavPosts() {
                   </CardActions>
                 </Card>
 
-                {showComments
-                  ? currentPostComments
-                      .filter((comment) => comment.post_id === post.id)
-                      .map((newComment, index) => (
+                {showComments ? comments.filter((comment) => comment.post_id === post.id).map((newComment, index) => (
                         <Grid
                           item
                           sx={{
@@ -173,7 +164,7 @@ export default function FavPosts() {
                             entity={newComment}
                             key={index}
                             id={newComment.id}
-                            allCommentLikes={allCommentLikes}
+                            commentLikes={newComment.likes}
                           ></CommentCard>
                         </Grid>
                       ))

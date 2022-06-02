@@ -67,11 +67,7 @@ export default function PostPage() {
   const { currentPost } = useSelector((store) => store.posts);
   const { likes } = currentPost;
 
-  const { comments } = useSelector((store) => store.comments);
-
   const { currentPostComments } = useSelector((store) => store.comments);
-
-  const { allCommentLikes} = useSelector((store) => store.comments);
 
   useEffect(() => {
     dispatch(getCurrentPost(id));
@@ -321,7 +317,7 @@ export default function PostPage() {
                       entity={comment}
                       key={comment.id}
                       id={comment.id}
-                      allCommentLikes={allCommentLikes}
+                      commentLikes={comment.likes}
                     ></CommentCard>
                   </>
                 ))
