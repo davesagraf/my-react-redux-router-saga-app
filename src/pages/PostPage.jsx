@@ -86,6 +86,8 @@ export default function PostPage() {
     setShowCommentButton(true);
     if (event.key === "Enter") {
       dispatch(addNewComment(newComment));
+      dispatch(getCurrentPost(id));
+      dispatch(getPostComments(id));
       setNewComment({ title: "", post_id: id });
       setShowCommentInput(true);
       setShowCommentButton(false);
