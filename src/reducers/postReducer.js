@@ -7,6 +7,7 @@ const initialState = {
     likes: []
   },
   currentPostComments: [],
+  allPostLikes: [],
   favPosts: [],
   errors: "",
   loading: false,
@@ -39,7 +40,11 @@ export const postReducer = (state = initialState, action) => {
     case "FAV_POSTS":
       return { ...state, favPosts: action.payload, loading: true }; 
     case "SUCCESS_FAV_POSTS":
-      return { ...state, favPosts: action.payload, loading: false }; 
+      return { ...state, favPosts: action.payload, loading: false };
+    case "GET_ALL_POST_LIKES":
+      return { ...state, allPostLikes: action.payload, loading: true }; 
+    case "SUCCESS_GET_ALL_POST_LIKES":
+      return { ...state, allPostLikes: action.payload, loading: false };  
     default:
       return { ...state };
   }

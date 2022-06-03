@@ -10,6 +10,7 @@ import {
   REMOVE_LIKE,
   GET_FAV_POSTS,
   GET_POST_COMMENTS,
+  GET_ALL_POST_LIKES
 } from "../actions/postAction";
 
 import {
@@ -478,7 +479,6 @@ function* fetchAddRemoveLike(payload) {
   return yield put({type: "SUCCESS_GET_COMMENT_LIKES", payload: commentId});
 }
 
-
 export function* getFavPosts() {
   yield takeEvery(GET_FAV_POSTS, fetchGetFavPosts);
 }
@@ -569,6 +569,37 @@ function* fetchGetAllComments() {
   }
 }
 
+export function* getAllPostLikesSaga() {
+  yield takeEvery(GET_ALL_POST_LIKES, fetchGetAllPostLikes);
+}
+
+function* fetchGetAllPostLikes() {
+  let bearerToken = localStorage.getItem("Authorization").valueOf();
+
+  try {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `${bearerToken}`,
+        "Content-Type": "application/json",
+      },
+      redirect: "follow",
+    };
+
+    const allPostLikes = yield fetch(`${baseUrl}/posts/all/likes`, requestOptions)
+      .then((response) => response.json())
+      .catch((error) => {
+        throw error;
+      });
+
+    allPostLikes.reverse();
+
+    return yield put({ type: "SUCCESS_GET_ALL_POST_LIKES", payload: allPostLikes });
+  } catch (error) {
+    yield put({ type: "ERRORS", payload: error });
+  }
+}
+
 export function* rootSaga() {
   yield all([
     signUp(),
@@ -590,6 +621,7 @@ export function* rootSaga() {
     removeCommentLikeSaga(),
     getFavPosts(),
     getAllCommentLikesSaga(),
-    getAllCommentsSaga()
+    getAllCommentsSaga(),
+    getAllPostLikesSaga()
   ]);
 }

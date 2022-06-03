@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { useDispatch  } from "react-redux";
 import {
   Badge,
@@ -36,7 +37,7 @@ import { ClickAwayListener as ModalBackdropClickAway } from "@mui/base";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 
-export const CommentCard = ({ id, entity, commentLikes }) => {
+const CommentCard = ({ id, entity, commentLikes }) => {
   const dispatch = useDispatch();
   const [editedComment, setEditedComment] = useState({
     title: entity.title,
@@ -300,3 +301,11 @@ export const CommentCard = ({ id, entity, commentLikes }) => {
     </>
   );
 };
+
+CommentCard.propTypes = {
+  id: PropTypes.number,
+  entity: PropTypes.object,
+  commentLikes: PropTypes.array
+}
+
+export default CommentCard;

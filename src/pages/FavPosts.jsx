@@ -24,7 +24,7 @@ import moment from "moment";
 import { lightBlue } from "@mui/material/colors";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import CommentIcon from "@mui/icons-material/Comment";
-import { CommentCard } from "../components/CommentCard";
+import CommentCard  from "../components/CommentCard";
 import { getUserData } from "../actions/userAction";
 
 export default function FavPosts() {
@@ -151,24 +151,24 @@ export default function FavPosts() {
                 </Card>
 
                 {showComments ? comments.filter((comment) => comment.post_id === post.id).map((newComment, index) => (
-                        <Grid
-                          item
-                          sx={{
-                            width: "50em",
-                            display: "flex",
-                            flexDirection: "column",
-                            cursor: "pointer",
-                          }}
-                        >
-                          <CommentCard
-                            entity={newComment}
-                            key={index}
-                            id={newComment.id}
-                            commentLikes={newComment.likes}
-                          ></CommentCard>
-                        </Grid>
-                      ))
-                  : null}
+                  <Grid
+                    item
+                    key={index}
+                    sx={{
+                      width: "50em",
+                      display: "flex",
+                      flexDirection: "column",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <CommentCard
+                      entity={newComment}
+                      key={newComment.id}
+                      id={newComment.id}
+                      commentLikes={newComment.likes}
+                    ></CommentCard>
+                  </Grid>
+                )) : null}
               </>
             ))}
           </Grid>

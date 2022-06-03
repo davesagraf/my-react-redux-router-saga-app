@@ -39,7 +39,7 @@ import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 
 import { lightBlue } from "@mui/material/colors";
 import moment from "moment";
-import { CommentCard } from "../components/CommentCard";
+import CommentCard from "../components/CommentCard";
 import { ClickAwayListener as CommentTitleClickAway } from "@mui/base";
 import { Snackbar as CommentTitleSnackbar } from "@mui/material";
 
@@ -65,6 +65,7 @@ export default function PostPage() {
   const { currentPost } = useSelector((store) => store.posts);
   const { likes } = currentPost;
   const { currentPostComments } = useSelector((store) => store.posts);
+  const { allPostLikes } = useSelector((store) => store.posts);
 
   useEffect(() => {
     dispatch(getCurrentPost(id));

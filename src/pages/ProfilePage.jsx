@@ -24,7 +24,7 @@ import moment from "moment";
 
 import { getAllPosts, getPostComments } from "../actions/postAction";
 
-import { CommentCard } from "../components/CommentCard";
+import CommentCard from "../components/CommentCard";
 
 export const ProfilePage = () => {
   const auth = localStorage.getItem("Authorization");
@@ -222,28 +222,25 @@ export const ProfilePage = () => {
                         </Tooltip>
                       </CardActions>
                     </Card>
-                    {showComments
-                      ? currentPostComments
-                          .filter((comment) => comment.post_id === post.id)
-                          .map((newComment) => (
-                            <Grid
-                              item
-                              sx={{
-                                width: "50em",
-                                display: "flex",
-                                flexDirection: "column",
-                                cursor: "pointer",
-                              }}
-                            >
-                              <CommentCard
-                                entity={newComment}
-                                key={newComment.id}
-                                id={newComment.id}
-                                commentLikes={newComment.likes}
-                              ></CommentCard>
-                            </Grid>
-                          ))
-                      : null}
+                    {showComments ? currentPostComments.filter((comment) => comment.post_id === post.id).map((newComment, index) => (
+                      <Grid
+                        item
+                        key={index}
+                        sx={{
+                          width: "50em",
+                          display: "flex",
+                          flexDirection: "column",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <CommentCard
+                          entity={newComment}
+                          key={newComment.id}
+                          id={newComment.id}
+                          commentLikes={newComment.likes}
+                        ></CommentCard>
+                      </Grid>
+                    )) : null}
                   </>
                 ))}
               </Grid>
