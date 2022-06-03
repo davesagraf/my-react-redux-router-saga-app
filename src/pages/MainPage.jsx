@@ -5,8 +5,13 @@ import {
   deletePost,
   getAllPosts,
   getPostComments,
-  getAllCommentLikes
+  getAllPostLikes
 } from "../actions/postAction";
+
+import {
+  getAllCommentLikes
+} from "../actions/commentAction";
+
 import {
   Box,
   Button,
@@ -25,7 +30,7 @@ import moment from "moment";
 import { lightBlue } from "@mui/material/colors";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import CommentIcon from "@mui/icons-material/Comment";
-import { CommentCard } from "../components/CommentCard";
+import CommentCard  from "../components/CommentCard";
 import { getUserData } from "../actions/userAction";
 
 import { ClickAwayListener as PostTitleClickAway } from "@mui/base";
@@ -43,7 +48,7 @@ export default function MainPage() {
   useEffect(() => {
     dispatch(getAllPosts());
     dispatch(getUserData());
-    dispatch(getAllCommentLikes());
+    dispatch(getAllPostLikes());
   }, [dispatch]);
 
   const [newPost, setNewPost] = useState({
@@ -71,7 +76,7 @@ export default function MainPage() {
 
   const { currentPostComments } = useSelector((store) => store.posts);
 
-  const { allCommentLikes } = useSelector((store) => store.posts);
+  const { allPostLikes } = useSelector((store) => store.posts);
 
   const handlePostTitleInput = (event) => {
     setPostTitleEl(event.currentTarget);
@@ -313,12 +318,12 @@ export default function MainPage() {
               cursor: "pointer",
             }}
           >
-            {posts.map((post, index) => (
+            {posts.map((post) => (
               <>
                 <Card
                   elevation={3}
                   id={post.id}
-                  key={index}
+                  key={post.id}
                   sx={{
                     display: "flex",
                     flexDirection: "column",
@@ -404,24 +409,24 @@ export default function MainPage() {
                 </Card>
 
                 {showComments ? currentPostComments.filter((comment) => comment.post_id === post.id).map((newComment, index) => (
-                        <Grid
-                          item
-                          sx={{
-                            width: "50em",
-                            display: "flex",
-                            flexDirection: "column",
-                            cursor: "pointer",
-                          }}
-                        >
-                          <CommentCard
-                            entity={newComment}
-                            key={index}
-                            id={newComment.id}
-                            allCommentLikes={allCommentLikes}
-                          ></CommentCard>
-                        </Grid>
-                      ))
-                  : null}
+                  <Grid
+                    item
+                    key={index}
+                    sx={{
+                      width: "50em",
+                      display: "flex",
+                      flexDirection: "column",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <CommentCard
+                      entity={newComment}
+                      key={newComment.id}
+                      id={newComment.id}
+                      commentLikes={newComment.likes}
+                    ></CommentCard>
+                  </Grid>
+                )) : null}
               </>
             ))}
           </Grid>

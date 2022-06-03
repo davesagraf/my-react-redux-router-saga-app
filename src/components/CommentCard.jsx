@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
+import { useDispatch  } from "react-redux";
 import {
   Badge,
   Card,
@@ -15,14 +16,17 @@ import moment from "moment";
 
 import { NewCommentInput } from "../components/NewCommentInput";
 import {
+  getCurrentPost,
+  getPostComments
+} from "../actions/postAction";
+
+import {
   editComment,
   deleteComment,
-  getCurrentPost,
-  getCommentLikes,
   addCommentLike,
   removeCommentLike,
-  getAllCommentLikes
-} from "../actions/postAction";
+  getCommentLikes,
+} from "../actions/commentAction";
 
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import EditIcon from "@mui/icons-material/Edit";
@@ -33,19 +37,15 @@ import { ClickAwayListener as ModalBackdropClickAway } from "@mui/base";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 
-export const CommentCard = ({ id, entity, allCommentLikes }) => {
+const CommentCard = ({ id, entity, commentLikes }) => {
   const dispatch = useDispatch();
   const [editedComment, setEditedComment] = useState({
     title: entity.title,
   });
 
-  const [commentLiked, setCommentLiked] = useState(false);
-
   useEffect(() => {
     dispatch(getCommentLikes(id));
-  }, [commentLiked, dispatch, id]);
-
-  const { commentLikes } = useSelector((store) => store.posts);
+  }, [commentLikes, dispatch, id]);
 
   const [openModal, setOpenModal] = useState(true);
 
@@ -54,6 +54,10 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
   const [changeComment, setChangeComment] = useState(false);
 
   const [commentEl, setCommentEl] = useState(null);
+
+  const [like, setLike] = useState(commentLikes.length)
+
+  const [commentLiked, setCommentLiked] = useState(false);
 
   const handleEditCommentTitle = (event) => {
     event.preventDefault();
@@ -91,7 +95,8 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
         })
       );
       dispatch(getCurrentPost(postId));
-      return setChangeComment(false);
+      dispatch(getPostComments(postId));
+      setChangeComment(false);
     } catch (error) {
       throw new Error(error);
     }
@@ -103,6 +108,7 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
     try {
       dispatch(deleteComment(thisCommentId, postId));
       dispatch(getCurrentPost(postId));
+      dispatch(getPostComments(postId));
     } catch (error) {
       throw new Error(error);
     }
@@ -111,11 +117,11 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
   const handleAddCommentLike = () => {
     const thisCommentId = entity.id;
     try {
+      dispatch(addCommentLike(thisCommentId));
       dispatch(getCommentLikes(thisCommentId));
-      if (commentLikes.length === 0) {
-        dispatch(addCommentLike(thisCommentId));
-        return setCommentLiked(true);
-      }
+      setLike(like + 1)
+      setCommentLiked(true);
+      
     } catch (error) {
       throw new Error(error);
     }
@@ -124,11 +130,11 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
   const handleRemoveCommentLike = () => {
     const thisCommentId = entity.id;
     try {
+      dispatch(removeCommentLike(thisCommentId));
       dispatch(getCommentLikes(thisCommentId));
-      if (commentLikes.length !== 0) {
-        dispatch(removeCommentLike(thisCommentId));
-        return setCommentLiked(false);
-      }
+      setLike(like - 1)
+      setCommentLiked(false);
+    
     } catch (error) {
       throw new Error(error);
     }
@@ -196,14 +202,14 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
               ></DeleteForeverRoundedIcon>
             </IconButton>
           </Tooltip>
-          {!commentLiked && allCommentLikes.filter((like) => like.comment_id === entity.id).length === 0 ? ( 
+          {!commentLiked && !like ? ( 
                 <Tooltip title="Like Comment">
                   <IconButton
                     onClick={handleAddCommentLike}
                     variant="contained"
                     id={entity.id}
                   >
-                     <Badge badgeContent={allCommentLikes ? allCommentLikes.filter((like) => like.comment_id === entity.id).length : null} color="primary">
+                     <Badge badgeContent={like} color="primary">
                     <ThumbUpOutlinedIcon></ThumbUpOutlinedIcon>
                     </Badge>
                   </IconButton>
@@ -215,7 +221,7 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
                     variant="contained"
                     id={entity.id}
                   >
-                    <Badge badgeContent={allCommentLikes.length} color="primary">
+                    <Badge badgeContent={like} color="primary">
                     <ThumbUpIcon></ThumbUpIcon>
                     </Badge>
                   </IconButton>
@@ -295,3 +301,11 @@ export const CommentCard = ({ id, entity, allCommentLikes }) => {
     </>
   );
 };
+
+CommentCard.propTypes = {
+  id: PropTypes.number,
+  entity: PropTypes.object,
+  commentLikes: PropTypes.array
+}
+
+export default CommentCard;

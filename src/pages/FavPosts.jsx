@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getFavPosts,
-  getPostComments,
-  getAllCommentLikes
+  getFavPosts
 } from "../actions/postAction";
+
+import {
+  getAllComments
+} from "../actions/commentAction";
+
 import {
   Box,
   Typography,
@@ -21,7 +24,7 @@ import moment from "moment";
 import { lightBlue } from "@mui/material/colors";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import CommentIcon from "@mui/icons-material/Comment";
-import { CommentCard } from "../components/CommentCard";
+import CommentCard  from "../components/CommentCard";
 import { getUserData } from "../actions/userAction";
 
 export default function FavPosts() {
@@ -31,17 +34,14 @@ export default function FavPosts() {
   useEffect(() => {
     dispatch(getFavPosts());
     dispatch(getUserData());
-    dispatch(getAllCommentLikes());
+    dispatch(getAllComments());
   }, [dispatch]);
-
 
   const [showComments, setShowComments] = useState(false);
 
   const { favPosts } = useSelector((store) => store.posts);
 
-  const { currentPostComments } = useSelector((store) => store.posts);
-
-  const { allCommentLikes } = useSelector((store) => store.posts);
+  const { comments } = useSelector((store) => store.comments);
 
   const handleShowComments = () => {
     setShowComments(!showComments);
@@ -141,7 +141,6 @@ export default function FavPosts() {
                       <IconButton
                         onClick={() => {
                           handleShowComments();
-                          dispatch(getPostComments(post.id));
                         }}
                         id={post.id}
                       >
@@ -151,28 +150,25 @@ export default function FavPosts() {
                   </CardActions>
                 </Card>
 
-                {showComments
-                  ? currentPostComments
-                      .filter((comment) => comment.post_id === post.id)
-                      .map((newComment, index) => (
-                        <Grid
-                          item
-                          sx={{
-                            width: "50em",
-                            display: "flex",
-                            flexDirection: "column",
-                            cursor: "pointer",
-                          }}
-                        >
-                          <CommentCard
-                            entity={newComment}
-                            key={index}
-                            id={newComment.id}
-                            allCommentLikes={allCommentLikes}
-                          ></CommentCard>
-                        </Grid>
-                      ))
-                  : null}
+                {showComments ? comments.filter((comment) => comment.post_id === post.id).map((newComment, index) => (
+                  <Grid
+                    item
+                    key={index}
+                    sx={{
+                      width: "50em",
+                      display: "flex",
+                      flexDirection: "column",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <CommentCard
+                      entity={newComment}
+                      key={newComment.id}
+                      id={newComment.id}
+                      commentLikes={newComment.likes}
+                    ></CommentCard>
+                  </Grid>
+                )) : null}
               </>
             ))}
           </Grid>

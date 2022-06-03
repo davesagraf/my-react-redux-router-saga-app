@@ -4,13 +4,17 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   deletePost,
   getCurrentPost,
-  addNewComment,
   addLike,
   removeLike,
-  getPostComments,
-  getAllCommentLikes
+  getPostComments
 } from "../actions/postAction";
+
+import {
+  addNewComment
+} from "../actions/commentAction";
+
 import { getUserData } from "../actions/userAction";
+
 import {
   Badge,
   Box,
@@ -35,7 +39,7 @@ import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 
 import { lightBlue } from "@mui/material/colors";
 import moment from "moment";
-import { CommentCard } from "../components/CommentCard";
+import CommentCard from "../components/CommentCard";
 import { ClickAwayListener as CommentTitleClickAway } from "@mui/base";
 import { Snackbar as CommentTitleSnackbar } from "@mui/material";
 
@@ -53,22 +57,20 @@ export default function PostPage() {
 
   const [showCommentButton, setShowCommentButton] = useState(false);
 
-  const [showCommentTitleSnackbar, setShowCommentTitleSnackbar] =
-    useState(false);
+  const [showCommentTitleSnackbar, setShowCommentTitleSnackbar] = useState(false);
 
   const [commentTitleEl, setCommentTitleEl] = useState(null);
 
   const { id } = useParams();
   const { currentPost } = useSelector((store) => store.posts);
-  const { comments } = currentPost;
   const { likes } = currentPost;
-  const { allCommentLikes } = useSelector((store) => store.posts);
+  const { currentPostComments } = useSelector((store) => store.posts);
+  const { allPostLikes } = useSelector((store) => store.posts);
 
   useEffect(() => {
     dispatch(getCurrentPost(id));
     dispatch(getUserData());
     dispatch(getPostComments(id));
-    dispatch(getAllCommentLikes());
   }, [liked, dispatch, id]);
 
   const [newComment, setNewComment] = useState({
@@ -85,6 +87,8 @@ export default function PostPage() {
     setShowCommentButton(true);
     if (event.key === "Enter") {
       dispatch(addNewComment(newComment));
+      dispatch(getCurrentPost(id));
+      dispatch(getPostComments(id));
       setNewComment({ title: "", post_id: id });
       setShowCommentInput(true);
       setShowCommentButton(false);
@@ -109,8 +113,10 @@ export default function PostPage() {
     setNewComment({ ...newComment, title: event.target.value });
   };
 
-  const handleAddNewComment = (event) => {
+  const handleAddNewComment = () => {
     dispatch(addNewComment(newComment));
+    dispatch(getCurrentPost(id));
+    dispatch(getPostComments(id));
     setNewComment({ title: "", post_id: id });
     setShowCommentInput(true);
     setShowCommentButton(false);
@@ -305,14 +311,14 @@ export default function PostPage() {
 
           {showComments ? (
             <>
-              {comments ? (
-                comments.map((comment, index) => (
+              {currentPostComments ? (
+                currentPostComments.map((comment) => (
                   <>
                     <CommentCard
                       entity={comment}
-                      key={index}
+                      key={comment.id}
                       id={comment.id}
-                      allCommentLikes={allCommentLikes}
+                      commentLikes={comment.likes}
                     ></CommentCard>
                   </>
                 ))

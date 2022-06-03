@@ -6,18 +6,23 @@ import {
   DELETE_POST,
   GET_CURRENT_POST,
   EDIT_POST,
+  ADD_LIKE,
+  REMOVE_LIKE,
+  GET_FAV_POSTS,
+  GET_POST_COMMENTS,
+  GET_ALL_POST_LIKES
+} from "../actions/postAction";
+
+import {
   SET_COMMENT,
   DELETE_COMMENT,
   EDIT_COMMENT,
-  ADD_LIKE,
-  REMOVE_LIKE,
-  GET_POST_COMMENTS,
   ADD_COMMENT_LIKE,
   REMOVE_COMMENT_LIKE,
   GET_COMMENT_LIKES,
-  GET_FAV_POSTS,
-  GET_ALL_COMMENT_LIKES
-} from "../actions/postAction";
+  GET_ALL_COMMENT_LIKES,
+  GET_ALL_COMMENTS
+} from "../actions/commentAction";
 
 const baseUrl = "http://localhost:8000";
 
@@ -120,9 +125,9 @@ function* postsAsync() {
 
     posts.reverse();
 
-    return yield put({ type: "SUCCESS", payload: posts });
+    return yield put({ type: "SUCCESS_GET_ALL_POSTS", payload: posts });
   } catch (error) {
-    yield put({ type: "ERRORS", payload: error });
+    yield put({ type: "ERROR", payload: error });
   }
 }
 
@@ -445,6 +450,8 @@ function* fetchAddCommentLike(payload) {
   yield fetch(`${baseUrl}/comments/like/${commentId}`, requestOptions).then((response) =>
     response.json()
   );
+
+  return yield put({type: "SUCCESS_GET_COMMENT_LIKES", payload: commentId});
 }
 
 export function* removeCommentLikeSaga() {
@@ -468,8 +475,9 @@ function* fetchAddRemoveLike(payload) {
   yield fetch(`${baseUrl}/comments/unlike/${commentId}`, requestOptions).then((response) =>
     response.json()
   );
-}
 
+  return yield put({type: "SUCCESS_GET_COMMENT_LIKES", payload: commentId});
+}
 
 export function* getFavPosts() {
   yield takeEvery(GET_FAV_POSTS, fetchGetFavPosts);
@@ -530,6 +538,68 @@ function* fetchGetAllCommentLikes() {
   }
 }
 
+export function* getAllCommentsSaga() {
+  yield takeEvery(GET_ALL_COMMENTS, fetchGetAllComments);
+}
+
+function* fetchGetAllComments() {
+  let bearerToken = localStorage.getItem("Authorization").valueOf();
+
+  try {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `${bearerToken}`,
+        "Content-Type": "application/json",
+      },
+      redirect: "follow",
+    };
+
+    const comments = yield fetch(`${baseUrl}/comments/all`, requestOptions)
+      .then((response) => response.json())
+      .catch((error) => {
+        throw error;
+      });
+
+    comments.reverse();
+
+    return yield put({ type: "SUCCESS_GET_ALL_COMMENTS", payload: comments });
+  } catch (error) {
+    yield put({ type: "ERRORS", payload: error });
+  }
+}
+
+export function* getAllPostLikesSaga() {
+  yield takeEvery(GET_ALL_POST_LIKES, fetchGetAllPostLikes);
+}
+
+function* fetchGetAllPostLikes() {
+  let bearerToken = localStorage.getItem("Authorization").valueOf();
+
+  try {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `${bearerToken}`,
+        "Content-Type": "application/json",
+      },
+      redirect: "follow",
+    };
+
+    const allPostLikes = yield fetch(`${baseUrl}/posts/all/likes`, requestOptions)
+      .then((response) => response.json())
+      .catch((error) => {
+        throw error;
+      });
+
+    allPostLikes.reverse();
+
+    return yield put({ type: "SUCCESS_GET_ALL_POST_LIKES", payload: allPostLikes });
+  } catch (error) {
+    yield put({ type: "ERRORS", payload: error });
+  }
+}
+
 export function* rootSaga() {
   yield all([
     signUp(),
@@ -550,6 +620,8 @@ export function* rootSaga() {
     addCommentLikeSaga(),
     removeCommentLikeSaga(),
     getFavPosts(),
-    getAllCommentLikesSaga()
+    getAllCommentLikesSaga(),
+    getAllCommentsSaga(),
+    getAllPostLikesSaga()
   ]);
 }
